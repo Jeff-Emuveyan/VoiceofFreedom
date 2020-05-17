@@ -13,6 +13,8 @@ import androidx.navigation.ui.setupWithNavController
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import com.google.android.material.appbar.AppBarLayout
+import kotlinx.android.synthetic.main.app_bar_main.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -38,6 +40,12 @@ class MainActivity : AppCompatActivity() {
                 R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow), drawerLayout)
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+
+
+        toolbar.setTitleTextColor(resources.getColor(R.color.black))
+        toolbar.setTitleTextAppearance(this, R.style.LatoBoldTextAppearance)//change the font
+        toolbar.setBackgroundResource(R.color.white)
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

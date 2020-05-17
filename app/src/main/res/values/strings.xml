@@ -13,4 +13,6 @@
 
     <string name="home_second">Home Second</string>
     <string name="offline_tap_to_try_again">Offline, tap here to try again</string>
+    <string name="sign_up_sign_in">Sign up / Sign in</string>
+    <string name="log_out">Log out</string>
 </resources>

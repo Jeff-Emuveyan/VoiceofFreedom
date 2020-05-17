@@ -6,6 +6,10 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="drawerArrowStyle">@style/DrawerHamburgerIcon</item>
+        <item name="android:actionOverflowButtonStyle">@style/MyThreeDots</item>
+
+
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -16,5 +20,22 @@
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+
+    <style name="LatoBoldTextAppearance">
+        <item name="android:fontFamily">@font/lato_bold</item>
+    </style>
+
+
+    <!--The will change the Drawer Hamburger icon color-->
+    <style name="DrawerHamburgerIcon" parent="Widget.AppCompat.DrawerArrowToggle">
+        <item name="color">@color/black</item>
+    </style>
+
+
+    <!--The will change the three dots menu icon -->
+    <style name="MyThreeDots" parent="@android:style/Widget.Holo.ActionButton.Overflow">
+        <item name="android:src">@drawable/ic_dots</item>
+    </style>
 
 </resources>

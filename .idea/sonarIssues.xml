@@ -33,6 +33,11 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/java/com/bellogate/voiceoffreedom/MainActivity.kt">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/app/src/main/java/com/bellogate/voiceoffreedom/data/Repository.kt">
           <value>
             <set />
@@ -113,7 +118,32 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/res/layout/activity_main.xml">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/app/src/main/res/layout/activity_setup.xml">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/res/layout/app_bar_main.xml">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/res/layout/fragment_home.xml">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/res/layout/nav_header_main.xml">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/res/menu/main.xml">
           <value>
             <set />
           </value>
@@ -129,6 +159,11 @@
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/app/src/main/res/values/strings.xml">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/res/values/styles.xml">
           <value>
             <set />
           </value>

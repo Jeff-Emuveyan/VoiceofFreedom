@@ -3,4 +3,13 @@ package com.bellogate.voiceoffreedom.model
 import androidx.annotation.Keep
 
 @Keep
-data class Admin(val email: String, val timeCreated: String)
+class Admin(){
+
+    lateinit var email: String
+    lateinit var timeCreated: String
+
+    constructor(email: String, timeCreated: String): this(){
+        this.email = email
+        this.timeCreated = timeCreated
+    }
+}

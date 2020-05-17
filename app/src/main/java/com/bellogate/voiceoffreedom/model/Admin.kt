@@ -11,5 +11,6 @@ class Admin(){
     constructor(email: String, timeCreated: String): this(){
         this.email = email
         this.timeCreated = timeCreated
+        
     }
 }

@@ -34,7 +34,7 @@ class SetupActivityViewModel: ViewModel() {
             repository.fetchAllAdmin { success, result ->
                 if (success) {
                     //search through the list of admin and update the user if his email is on the list
-                    updateUser(context, user, result)
+                    updateUser(context, user!!, result)
                 } else {
                     _setUpState.postValue(SetupState.NETWORK_ERROR)
                 }
@@ -49,8 +49,8 @@ class SetupActivityViewModel: ViewModel() {
         val repository = SetupRepository(context)
 
         adminList?.let {
-            for((_, email) in it){
-                if(user.email == email){//update the user to an admin
+            for(admin in it){
+                if(admin.email == user.email){//update the user to an admin
                     user.isAdmin = true
                     repository.updateUser(user)
                 }else{//this means that the present user should not be an admin

@@ -10,5 +10,5 @@ import androidx.room.PrimaryKey
 data class User (@PrimaryKey val id: Int,
                  val name: String,
                  val email: String,
-                 val timeCreated: String,
+                 val timeCreated: Long,
                  var isAdmin: Boolean = false)

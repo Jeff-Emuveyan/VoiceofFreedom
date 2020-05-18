@@ -5,14 +5,14 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.bellogate.voiceoffreedom.data.datasource.network.NetworkHelper
-import com.bellogate.voiceoffreedom.data.setup.SetupRepository
+import com.bellogate.voiceoffreedom.data.setup.SetupBaseRepository
 import com.bellogate.voiceoffreedom.data.setup.SetupState
 import com.bellogate.voiceoffreedom.model.Admin
 import com.bellogate.voiceoffreedom.model.User
+import com.bellogate.voiceoffreedom.ui.MainViewModel
 import kotlinx.coroutines.launch
 
-class SetupActivityViewModel: ViewModel() {
+class SetupActivityViewModel: MainViewModel() {
 
     private val _setUpState = MutableLiveData<SetupState>()
     val setUpState : LiveData<SetupState> = _setUpState
@@ -26,8 +26,8 @@ class SetupActivityViewModel: ViewModel() {
      * If there is, it will fetch all admin from Firebase and check if the email of the user
      * on the device is among that list. If there is no user on the device, nothing happens.
      * */
-    fun checkAndUpdateUserStatus(context: Context) = viewModelScope.launch {
-        val repository = SetupRepository(context)
+    fun checkAndUpdateUserAdminStatus(context: Context) = viewModelScope.launch {
+        val repository = SetupBaseRepository(context)
         //check if there is a user on the local database:
         val user = repository.getUserSynchronously(1)
         if(user != null) {
@@ -35,6 +35,7 @@ class SetupActivityViewModel: ViewModel() {
                 if (success) {
                     //search through the list of admin and update the user if his email is on the list
                     updateUser(context, user!!, result)
+                    _setUpState.postValue(SetupState.COMPLETE)
                 } else {
                     _setUpState.postValue(SetupState.NETWORK_ERROR)
                 }
@@ -46,7 +47,7 @@ class SetupActivityViewModel: ViewModel() {
 
 
     private fun updateUser(context: Context, user: User, adminList: ArrayList<Admin>?) = viewModelScope.launch{
-        val repository = SetupRepository(context)
+        val repository = SetupBaseRepository(context)
 
         adminList?.let {
             for(admin in it){

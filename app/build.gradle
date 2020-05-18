@@ -66,6 +66,9 @@ dependencies {
     // Lifecycles only (without ViewModel or LiveData)
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version"
 
+    //Firebase Auth UI
+    implementation 'com.firebaseui:firebase-ui-auth:4.3.1'
+
     // Saved state module for ViewModel
     implementation "androidx.lifecycle:lifecycle-viewmodel-savedstate:$lifecycle_version"
 

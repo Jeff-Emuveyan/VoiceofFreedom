@@ -4,9 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import androidx.activity.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProviders
 import com.bellogate.voiceoffreedom.MainActivity
 import com.bellogate.voiceoffreedom.R
@@ -49,6 +47,6 @@ class SetupActivity : AppCompatActivity() {
     private fun checkAndUpdateUserStatus() {
         tvNetworkFailure.visibility = View.GONE
         progressBar.visibility = View.VISIBLE
-        setupActivityViewModel.checkAndUpdateUserStatus(this)
+        setupActivityViewModel.checkAndUpdateUserAdminStatus(this)
     }
 }

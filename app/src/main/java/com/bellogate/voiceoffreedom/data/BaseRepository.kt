@@ -4,8 +4,11 @@ import android.content.Context
 import androidx.lifecycle.LiveData
 import com.bellogate.voiceoffreedom.data.datasource.database.AppDatabase
 import com.bellogate.voiceoffreedom.model.User
+import com.google.firebase.auth.FirebaseUser
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
-abstract class Repository(val context: Context) {
+open class BaseRepository(val context: Context) {
 
     val db = AppDatabase.getDatabase(context)
 
@@ -19,5 +22,19 @@ abstract class Repository(val context: Context) {
 
 
     suspend fun updateUser(user: User) = db.userDao().updateUser(user)
+
+
+    /** Saves user to Room database **/
+    fun saveUser(coroutineScope: CoroutineScope, id: Int, newUser: User){
+        coroutineScope.launch {
+            val oldUser = getUserSynchronously(id)
+            if (oldUser == null){
+                db.userDao().saveUser(newUser)
+            }else{
+                db.userDao().updateUser(newUser)
+            }
+
+        }
+    }
 
 }

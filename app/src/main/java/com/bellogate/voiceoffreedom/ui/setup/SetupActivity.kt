@@ -6,7 +6,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import com.bellogate.voiceoffreedom.MainActivity
+import com.bellogate.voiceoffreedom.ui.MainActivity
 import com.bellogate.voiceoffreedom.R
 import com.bellogate.voiceoffreedom.data.setup.SetupState
 import kotlinx.android.synthetic.main.activity_setup.*

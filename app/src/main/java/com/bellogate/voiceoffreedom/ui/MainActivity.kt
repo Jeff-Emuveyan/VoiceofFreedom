@@ -1,14 +1,12 @@
-package com.bellogate.voiceoffreedom
+package com.bellogate.voiceoffreedom.ui
 
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.Gravity
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
@@ -19,10 +17,10 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import com.bellogate.voiceoffreedom.R
 import com.bellogate.voiceoffreedom.data.showSnackMessage
 import com.bellogate.voiceoffreedom.data.showSnackMessageAtTop
 import com.bellogate.voiceoffreedom.model.User
-import com.bellogate.voiceoffreedom.ui.MainViewModel
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.ErrorCodes
 import com.firebase.ui.auth.IdpResponse
@@ -36,7 +34,7 @@ const val  RC_SIGN_IN = 44
 class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
-    private lateinit var viewModel: MainViewModel
+    private lateinit var viewModel: SharedViewModel
     private lateinit var drawerLayout: DrawerLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -56,14 +54,24 @@ class MainActivity : AppCompatActivity() {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         appBarConfiguration = AppBarConfiguration(setOf(
-                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow), drawerLayout)
+            R.id.nav_home,
+            R.id.nav_gallery,
+            R.id.nav_slideshow
+        ), drawerLayout)
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
         toolbar.setTitleTextColor(resources.getColor(R.color.black))
-        toolbar.setTitleTextAppearance(this, R.style.LatoBoldTextAppearance)//change the font
+        toolbar.setTitleTextAppearance(this,
+            R.style.LatoBoldTextAppearance
+        )//change the font
 
-        viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
+        viewModel = ViewModelProviders.of(this).get(SharedViewModel::class.java)
+
+        //we place a constant listener to know when the user has signed out,
+        // So that we can know when to delete the user from db
+        //This will trigger anytime the user sign out. Successfully or not.
+        viewModel.listenForUserSignOut(this)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -83,16 +91,16 @@ class MainActivity : AppCompatActivity() {
                 launchFirebaseAuthentication()
             }
             R.id.logout ->{
-                return true
+                logout()
             }
-
             16908332 ->{
                 drawerLayout.openDrawer(Gravity.LEFT)
             }
-
         }
         return true
     }
+
+    private fun logout() = viewModel.logout(this)
 
 
     /**
@@ -102,7 +110,8 @@ class MainActivity : AppCompatActivity() {
         .createSignInIntentBuilder()
         .setAvailableProviders(viewModel.getAuthProviders())
         .build(),
-        RC_SIGN_IN)
+        RC_SIGN_IN
+    )
 
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

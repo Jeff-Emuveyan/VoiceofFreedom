@@ -3,16 +3,15 @@ package com.bellogate.voiceoffreedom.ui.setup
 import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bellogate.voiceoffreedom.data.setup.SetupBaseRepository
 import com.bellogate.voiceoffreedom.data.setup.SetupState
 import com.bellogate.voiceoffreedom.model.Admin
 import com.bellogate.voiceoffreedom.model.User
-import com.bellogate.voiceoffreedom.ui.MainViewModel
+import com.bellogate.voiceoffreedom.ui.SharedViewModel
 import kotlinx.coroutines.launch
 
-class SetupActivityViewModel: MainViewModel() {
+class SetupActivityViewModel: SharedViewModel() {
 
     private val _setUpState = MutableLiveData<SetupState>()
     val setUpState : LiveData<SetupState> = _setUpState

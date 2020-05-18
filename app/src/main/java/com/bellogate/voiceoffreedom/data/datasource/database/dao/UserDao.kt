@@ -13,7 +13,7 @@ interface UserDao {
     suspend fun saveUser(user: User)
 
     @Query("SELECT * FROM user WHERE id LIKE :id")
-    fun getUser(id: Int): LiveData<User>
+    fun getUser(id: Int): LiveData<User?>
 
     @Query("SELECT * FROM user WHERE id LIKE :id")
     suspend fun getUserSynchronously(id: Int): User?

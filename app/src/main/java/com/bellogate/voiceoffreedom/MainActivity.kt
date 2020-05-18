@@ -5,6 +5,7 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.Gravity
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -36,6 +37,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var viewModel: MainViewModel
+    private lateinit var drawerLayout: DrawerLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,7 +50,7 @@ class MainActivity : AppCompatActivity() {
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show()
         }
-        val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
+        drawerLayout = findViewById(R.id.drawer_layout)
         val navView: NavigationView = findViewById(R.id.nav_view)
         val navController = findNavController(R.id.nav_host_fragment)
         // Passing each menu ID as a set of Ids because each
@@ -58,10 +60,8 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
-
         toolbar.setTitleTextColor(resources.getColor(R.color.black))
         toolbar.setTitleTextAppearance(this, R.style.LatoBoldTextAppearance)//change the font
-        toolbar.setBackgroundResource(R.color.white)
 
         viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
     }
@@ -81,11 +81,15 @@ class MainActivity : AppCompatActivity() {
         when(item?.itemId){
             R.id.sign_up ->{
                 launchFirebaseAuthentication()
-                return true
             }
             R.id.logout ->{
                 return true
             }
+
+            16908332 ->{
+                drawerLayout.openDrawer(Gravity.LEFT)
+            }
+
         }
         return true
     }

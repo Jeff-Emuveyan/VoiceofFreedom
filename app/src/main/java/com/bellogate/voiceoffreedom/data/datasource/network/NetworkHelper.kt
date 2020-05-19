@@ -25,6 +25,9 @@ class NetworkHelper {
                     fetched.invoke(false, null)
                 }
             }
+                .addOnFailureListener {
+                    fetched.invoke(false, null)
+                }
     }
 
 

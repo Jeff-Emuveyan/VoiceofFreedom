@@ -44,4 +44,12 @@
         android:layout_margin="@dimen/fab_margin"
         app:srcCompat="@android:drawable/ic_dialog_email" />
 
+    <TextView
+        android:id="@+id/tvFlavourType"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/black"
+        tools:text="staging"
+        android:textColor="@color/white"/>
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

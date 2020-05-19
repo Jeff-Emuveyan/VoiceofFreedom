@@ -18,6 +18,7 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.bellogate.voiceoffreedom.R
+import com.bellogate.voiceoffreedom.data.isStagingBuild
 import com.bellogate.voiceoffreedom.data.showSnackMessage
 import com.bellogate.voiceoffreedom.data.showSnackMessageAtTop
 import com.bellogate.voiceoffreedom.model.User
@@ -28,6 +29,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
+import kotlinx.android.synthetic.main.app_bar_main.*
 
 const val  RC_SIGN_IN = 44
 
@@ -65,6 +67,10 @@ class MainActivity : AppCompatActivity() {
         toolbar.setTitleTextAppearance(this,
             R.style.LatoBoldTextAppearance
         )//change the font
+
+        if(isStagingBuild()){
+            tvFlavourType.text = resources.getText(R.string.statgin)
+        }
 
         viewModel = ViewModelProviders.of(this).get(SharedViewModel::class.java)
 

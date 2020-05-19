@@ -5,6 +5,7 @@ import android.view.Gravity
 import android.view.View
 import android.widget.FrameLayout
 import androidx.core.content.ContextCompat
+import com.bellogate.voiceoffreedom.BuildConfig
 import com.bellogate.voiceoffreedom.R
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
@@ -30,3 +31,14 @@ fun showSnackMessageAtTop(context: Context, view: View, message: String){
     snackBarView.animationMode = BaseTransientBottomBar.ANIMATION_MODE_FADE
     snackBarView.show()
 }
+
+
+fun isStagingBuild(): Boolean {
+    return BuildConfig.FLAVOR == "staging"
+}
+
+fun isProductionBuild(): Boolean {
+    return BuildConfig.FLAVOR == "production"
+}
+
+

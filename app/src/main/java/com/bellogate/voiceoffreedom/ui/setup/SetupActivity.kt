@@ -21,7 +21,7 @@ class SetupActivity : AppCompatActivity() {
 
         tvNetworkFailure.visibility = View.GONE
         tvNetworkFailure.setOnClickListener{
-            checkAndUpdateUserStatus()
+            checkAndUpdateUserAdminStatus()
         }
 
         setupActivityViewModel = ViewModelProviders.of(this).get(SetupActivityViewModel::class.java)
@@ -41,10 +41,10 @@ class SetupActivity : AppCompatActivity() {
         })
 
 
-        checkAndUpdateUserStatus()
+        checkAndUpdateUserAdminStatus()
     }
 
-    private fun checkAndUpdateUserStatus() {
+    private fun checkAndUpdateUserAdminStatus() {
         tvNetworkFailure.visibility = View.GONE
         progressBar.visibility = View.VISIBLE
         setupActivityViewModel.checkAndUpdateUserAdminStatus(this)

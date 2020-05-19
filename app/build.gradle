@@ -16,6 +16,17 @@ android {
         versionName "1.0"
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        android.applicationVariants.all { variant ->
+
+            def formattedDate = new Date().format('ddMMyyyy-(hh-mm a)')
+            def flavor = variant.flavorName
+
+            variant.outputs.all { output ->
+                def fileName = "VoiceOfFreedom" + "-" + defaultConfig.versionName + "-" + formattedDate + "-" + variant.getName() + ".apk"
+                outputFileName = new File(".", fileName)
+            }
+        }
     }
 
     buildTypes {
@@ -35,6 +46,53 @@ android {
     }
     kotlinOptions {
         jvmTarget = "1.8"
+    }
+
+
+
+    buildTypes {
+        release {
+            minifyEnabled true
+            shrinkResources true
+            debuggable false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            multiDexEnabled = true
+        }
+
+        debug {
+            applicationIdSuffix ".debug"
+            minifyEnabled false
+            shrinkResources false
+            debuggable true
+        }
+    }
+
+
+    signingConfigs {
+        release {
+            keyAlias 'key0'
+            keyPassword 'jeff2468JEFF'
+            storeFile file('/Users/jeffemuveyan/AndroidStudioProjects/VoiceofFreedom/app/vof_key')
+            storePassword 'jeff2468JEFF'
+        }
+
+        debug {
+            keyAlias 'key0'
+            keyPassword 'jeff2468JEFF'
+            storeFile file('/Users/jeffemuveyan/AndroidStudioProjects/VoiceofFreedom/app/vof_key')
+            storePassword 'jeff2468JEFF'
+        }
+    }
+
+
+    productFlavors {
+        flavorDimensions "default"
+
+        production {
+        }
+
+        staging {
+        }
     }
 
 }

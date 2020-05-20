@@ -1,4 +1,4 @@
-package com.bellogate.voiceoffreedom.data
+package com.bellogate.voiceoffreedom.util
 
 import android.content.Context
 import android.view.Gravity

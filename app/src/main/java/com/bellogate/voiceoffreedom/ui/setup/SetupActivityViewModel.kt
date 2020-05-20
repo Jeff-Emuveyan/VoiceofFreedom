@@ -33,7 +33,7 @@ class SetupActivityViewModel: SharedViewModel() {
             repository.fetchAllAdmin { success, result ->
                 if (success) {
                     //search through the list of admin and update the user if his email is on the list
-                    updateUser(context, user!!, result)
+                    updateUserAdminStatus(context, user!!, result)
                     _setUpState.postValue(SetupState.COMPLETE)
                 } else {
                     _setUpState.postValue(SetupState.NETWORK_ERROR)
@@ -45,17 +45,20 @@ class SetupActivityViewModel: SharedViewModel() {
     }
 
 
-    private fun updateUser(context: Context, user: User, adminList: ArrayList<Admin>?) = viewModelScope.launch{
+    /**
+     * This will update the user's admin status in Firebase and Room DB
+     */
+    private fun updateUserAdminStatus(context: Context, user: User, adminList: ArrayList<Admin>?){
         val repository = SetupBaseRepository(context)
 
         adminList?.let {
             for(admin in it){
                 if(admin.email == user.email){//update the user to an admin
                     user.isAdmin = true
-                    repository.updateUser(user)
+                    repository.updateUser(viewModelScope, user)
                 }else{//this means that the present user should not be an admin
                     user.isAdmin = false
-                    repository.updateUser(user)
+                    repository.updateUser(viewModelScope, user)
                 }
             }
         }

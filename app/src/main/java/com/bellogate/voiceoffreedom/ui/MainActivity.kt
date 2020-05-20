@@ -18,9 +18,9 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.bellogate.voiceoffreedom.R
-import com.bellogate.voiceoffreedom.data.isStagingBuild
-import com.bellogate.voiceoffreedom.data.showSnackMessage
-import com.bellogate.voiceoffreedom.data.showSnackMessageAtTop
+import com.bellogate.voiceoffreedom.util.isStagingBuild
+import com.bellogate.voiceoffreedom.util.showSnackMessage
+import com.bellogate.voiceoffreedom.util.showSnackMessageAtTop
 import com.bellogate.voiceoffreedom.model.User
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.ErrorCodes
@@ -134,13 +134,16 @@ class MainActivity : AppCompatActivity() {
         val view = this.window?.decorView?.rootView
 
         if (resultCode == Activity.RESULT_OK) {
+
             // Successfully signed in
             val fireBaseUser = FirebaseAuth.getInstance().currentUser
-            val user = User(1,fireBaseUser?.displayName ?: "You", fireBaseUser!!.email!!,
+            val user = User(1, fireBaseUser?.displayName ?: "You", fireBaseUser!!.email!!,
                 System.currentTimeMillis(), false)
+
             //finally save the user:
             viewModel.saveUser(this, lifecycleScope, 1, user)
             showSnackMessageAtTop(this, view!!, "Login successful!!")
+
         } else {
             // Sign in failed. If response is null the user canceled the
             // sign-in flow using the back button. Otherwise check
@@ -154,9 +157,15 @@ class MainActivity : AppCompatActivity() {
     private fun handleSignInError(response : IdpResponse?) {
         val view = this.window?.decorView?.rootView
         if (response == null){
-            showSnackMessage(view!!, "Cancelled")
+            showSnackMessage(
+                view!!,
+                "Cancelled"
+            )
         }else{
-            showSnackMessage(view!!, ErrorCodes.toFriendlyMessage(response.error!!.errorCode))
+            showSnackMessage(
+                view!!,
+                ErrorCodes.toFriendlyMessage(response.error!!.errorCode)
+            )
         }
     }
 

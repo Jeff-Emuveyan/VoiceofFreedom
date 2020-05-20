@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.Log
 import androidx.lifecycle.LiveData
 import com.bellogate.voiceoffreedom.data.datasource.database.AppDatabase
+import com.bellogate.voiceoffreedom.data.datasource.network.NetworkHelper
 import com.bellogate.voiceoffreedom.model.User
 import com.firebase.ui.auth.AuthUI
 import com.google.firebase.auth.FirebaseAuth
@@ -24,19 +25,31 @@ open class BaseRepository(val context: Context) {
     suspend fun getUserSynchronously(id: Int) = db.userDao().getUserSynchronously(id)
 
 
-    suspend fun updateUser(user: User) = db.userDao().updateUser(user)
-
-
-    /** Saves user to Room database **/
-    fun saveUser(coroutineScope: CoroutineScope, id: Int, newUser: User){
-        coroutineScope.launch {
-            val oldUser = getUserSynchronously(id)
-            if (oldUser == null){
-                db.userDao().saveUser(newUser)
-            }else{
-                db.userDao().updateUser(newUser)
+    /** Updates User to Firebase and later to Room database **/
+    fun updateUser(coroutineScope: CoroutineScope, user: User){
+        NetworkHelper.syncUser(user) {
+            if (it) {
+                coroutineScope.launch {
+                    db.userDao().updateUser(user)
+                }
             }
+        }
+    }
 
+
+    /** Saves user to Firebase and later to Room database **/
+    fun saveUser(coroutineScope: CoroutineScope, id: Int, newUser: User){
+        NetworkHelper.syncUser(newUser){
+            if (it){
+                coroutineScope.launch {
+                    val oldUser = getUserSynchronously(id)
+                    if (oldUser == null){
+                        db.userDao().saveUser(newUser)
+                    }else{
+                        db.userDao().updateUser(newUser)
+                    }
+                }
+            }
         }
     }
 

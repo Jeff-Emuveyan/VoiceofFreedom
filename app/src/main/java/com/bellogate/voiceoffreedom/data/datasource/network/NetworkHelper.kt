@@ -15,18 +15,18 @@ class NetworkHelper {
         /** Gets all Admin from the database***/
         fun fetchAllAdmin(fetched:(success: Boolean, result: ArrayList<Admin>?) -> Unit) =
             db.collection(ADMIN).get()
-            .addOnCompleteListener {
-                val listOfAdmin = arrayListOf<Admin>()
-                if(it.isSuccessful && it.result != null){
-                    for(document in it.result!!){
-                        val admin = document.toObject(Admin::class.java)
-                        listOfAdmin.add(admin)
+                .addOnCompleteListener {
+                    val listOfAdmin = arrayListOf<Admin>()
+                    if(it.isSuccessful && it.result != null){
+                        for(document in it.result!!){
+                            val admin = document.toObject(Admin::class.java)
+                            listOfAdmin.add(admin)
+                        }
+                        fetched.invoke(true, listOfAdmin)
+                    }else{
+                        fetched.invoke(false, null)
                     }
-                    fetched.invoke(true, listOfAdmin)
-                }else{
-                    fetched.invoke(false, null)
                 }
-            }
                 .addOnFailureListener {
                     fetched.invoke(false, null)
                 }
@@ -42,6 +42,20 @@ class NetworkHelper {
                     saved.invoke(false)
                 }
             }
+        }
+
+
+        /*** Get user from Firestore ***/
+        fun getUser(userEmail: String, user: (User?) -> Unit){
+            db.collection(USER).whereEqualTo("email", userEmail).limit(1)
+                .get().addOnSuccessListener {
+                    for(document in it.documents){//this will only have one document because we set the limit to 1
+                        val userFromFirestore = document.toObject(User::class.java)
+                        user.invoke(userFromFirestore)
+                    }
+                }.addOnFailureListener {
+                    user.invoke(null)
+                }
         }
 
 

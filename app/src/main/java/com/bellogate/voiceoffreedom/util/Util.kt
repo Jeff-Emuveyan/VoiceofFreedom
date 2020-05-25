@@ -10,11 +10,6 @@ import com.bellogate.voiceoffreedom.R
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
 
-/**
- *collection names
- */
-const val ADMIN = "admin"
-
 
 fun showSnackMessage(view: View, message: String){
     Snackbar.make(view, message, Snackbar.LENGTH_LONG).show()

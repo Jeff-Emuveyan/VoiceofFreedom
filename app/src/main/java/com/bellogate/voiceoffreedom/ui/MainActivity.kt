@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.Gravity
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
@@ -167,16 +168,16 @@ class MainActivity : AppCompatActivity() {
         val response = IdpResponse.fromResultIntent(data)
         val view = this.window?.decorView?.rootView
 
-        if (resultCode == Activity.RESULT_OK) {
+        if (resultCode == Activity.RESULT_OK && response != null) {
 
-            // Successfully signed in
-            val fireBaseUser = FirebaseAuth.getInstance().currentUser
-            val user = User(1, fireBaseUser?.displayName ?: "You", fireBaseUser!!.email!!,
-                System.currentTimeMillis(), false)
+            viewModel.handleSuccessfulSignIn(this, response){
+                if(it){
+                    showSnackMessageAtTop(this, view!!, "Login successful!!")
+                }else{
+                  Toast.makeText(this, "Try again...", Toast.LENGTH_LONG).show()
+                }
+            }
 
-            //finally save the user:
-            viewModel.saveUser(this, lifecycleScope, 1, user)
-            showSnackMessageAtTop(this, view!!, "Login successful!!")
 
         } else {
             // Sign in failed. If response is null the user canceled the

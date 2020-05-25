@@ -7,8 +7,11 @@ import androidx.room.PrimaryKey
 
 @Keep
 @Entity(tableName = "user")
-data class User (@PrimaryKey val id: Int,
+class User (@PrimaryKey val id: Int,
                  val name: String,
                  val email: String,
                  val timeCreated: Long,
-                 var isAdmin: Boolean = false)
+                 var isAdmin: Boolean = false){
+
+    constructor(): this(1, "", "", 0)
+}

@@ -10,6 +10,7 @@ import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
@@ -18,10 +19,10 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.bellogate.voiceoffreedom.R
+import com.bellogate.voiceoffreedom.model.User
 import com.bellogate.voiceoffreedom.util.isStagingBuild
 import com.bellogate.voiceoffreedom.util.showSnackMessage
 import com.bellogate.voiceoffreedom.util.showSnackMessageAtTop
-import com.bellogate.voiceoffreedom.model.User
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.ErrorCodes
 import com.firebase.ui.auth.IdpResponse
@@ -31,6 +32,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.app_bar_main.*
 
+
 const val  RC_SIGN_IN = 44
 
 class MainActivity : AppCompatActivity() {
@@ -38,6 +40,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var viewModel: SharedViewModel
     private lateinit var drawerLayout: DrawerLayout
+    private var user: User? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -78,11 +81,42 @@ class MainActivity : AppCompatActivity() {
         // So that we can know when to delete the user from db
         //This will trigger anytime the user sign out. Successfully or not.
         viewModel.listenForUserSignOut(this)
+
+
+        viewModel.getUser(this, 1).observe(this, Observer {
+            //anytime the user has logged in or out, we regulate the menu to show the right items:
+            user = it
+            invalidateOptionsMenu()
+
+        })
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.main, menu)
+
+        if(user == null){
+            //when the app newly starts, the logout menu option should be hidden
+            // but the log in option should be visible:
+
+            //Hide the logOut menu
+            val menuItem = menu.findItem(R.id.logout)
+            menuItem.isVisible = false
+
+            //Show login menu
+            val menuLogIn = menu.findItem(R.id.sign_up)
+            menuLogIn.isVisible = true
+
+        }else{
+            //if there is a user, the user should only be able to logout:
+            //Hide the login menu
+            val menuItem = menu.findItem(R.id.logout)
+            menuItem.isVisible = true
+
+            //Hide login menu
+            val menuLogIn = menu.findItem(R.id.sign_up)
+            menuLogIn.isVisible = false
+        }
         return true
     }
 

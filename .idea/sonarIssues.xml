@@ -28,6 +28,16 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/../Safe/app/build.gradle">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../Safe/app/src/main/java/com/seamfix/bioregistra/fragment/FingerPrintFragment.java">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/.gitignore">
           <value>
             <set />
@@ -219,6 +229,26 @@
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/../br-android-client/app/src/main/java/com/seamfix/bioregistra/control/RichFileUpload.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$USER_HOME$/Documents/in_app_update/app/build.gradle">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$USER_HOME$/Documents/in_app_update/app/src/main/AndroidManifest.xml">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$USER_HOME$/Documents/in_app_update/app/src/main/java/com/voiceoffreedom/jeffemuveyan/voiceoffreedom/MainActivity.kt">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$USER_HOME$/Documents/in_app_update/app/src/main/res/layout/activity_main.xml">
           <value>
             <set />
           </value>

@@ -67,7 +67,11 @@ open class SharedViewModel: ViewModel() {
             //fetch the user's details from Firestore
             BaseRepository(context).getUserFromNetwork(idpResponse.email!!){
 
-                if(it != null){//save the user to local db
+                if(it != null){//save the user to local db:
+                    //Note: this 'saveUser' will first write the user to Firestore before saving it to local db.
+                    //You may be concerned that this will create a duplicate user in Firestore. It will not.
+                    //Firestore will simply replace the old document with this new one since they both
+                    //have the same ID.
                     saveUser(context, viewModelScope, 1, it)
                     saveSuccessful.invoke(true)
                 }else{

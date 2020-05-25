@@ -2,6 +2,7 @@ package com.bellogate.voiceoffreedom.ui
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.app.ProgressDialog
 import android.content.Intent
 import android.os.Bundle
 import android.view.Gravity
@@ -170,12 +171,16 @@ class MainActivity : AppCompatActivity() {
 
         if (resultCode == Activity.RESULT_OK && response != null) {
 
+            val progressDialog = ProgressDialog(this@MainActivity)
+            progressDialog.setTitle("Please wait....")
+            progressDialog.show()
             viewModel.handleSuccessfulSignIn(this, response){
                 if(it){
                     showSnackMessageAtTop(this, view!!, "Login successful!!")
                 }else{
                   Toast.makeText(this, "Try again...", Toast.LENGTH_LONG).show()
                 }
+                progressDialog.dismiss()
             }
 
 

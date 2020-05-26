@@ -23,4 +23,10 @@
         android:name="com.bellogate.voiceoffreedom.ui.slideshow.SlideshowFragment"
         android:label="@string/menu_slideshow"
         tools:layout="@layout/fragment_slideshow" />
+
+    <fragment
+        android:id="@+id/nav_give"
+        android:name="com.bellogate.voiceoffreedom.ui.give.GiveFragment"
+        android:label="@string/give"
+        tools:layout="@layout/give_fragment" />
 </navigation>

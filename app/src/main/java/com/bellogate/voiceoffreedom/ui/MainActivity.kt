@@ -14,7 +14,6 @@ import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
@@ -31,7 +30,6 @@ import com.firebase.ui.auth.IdpResponse
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
-import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.app_bar_main.*
 
 
@@ -92,6 +90,8 @@ class MainActivity : AppCompatActivity() {
             invalidateOptionsMenu()
 
         })
+
+        viewModel.setUpPayStack(this)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

@@ -4,8 +4,12 @@ import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
+import co.paystack.android.PaystackSdk
 import com.bellogate.voiceoffreedom.data.BaseRepository
 import com.bellogate.voiceoffreedom.model.User
+import com.bellogate.voiceoffreedom.util.PRODUCTION_SECRET_KEY
+import com.bellogate.voiceoffreedom.util.STAGING_PUBLIC_KEY
+import com.bellogate.voiceoffreedom.util.isStagingBuild
 import com.bellogate.voiceoffreedom.util.showSnackMessageAtTop
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.IdpResponse
@@ -83,4 +87,14 @@ open class SharedViewModel: ViewModel() {
     }
 
 
+
+    fun setUpPayStack(context: Context){
+        PaystackSdk.initialize(context)
+
+        if(isStagingBuild()){
+            PaystackSdk.setPublicKey(STAGING_PUBLIC_KEY)
+        }else{
+            PaystackSdk.setPublicKey(PRODUCTION_SECRET_KEY);
+        }
+    }
 }

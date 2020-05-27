@@ -2,7 +2,9 @@ package com.bellogate.voiceoffreedom.data.datasource.network
 
 import com.bellogate.voiceoffreedom.util.ADMIN
 import com.bellogate.voiceoffreedom.model.Admin
+import com.bellogate.voiceoffreedom.model.Key
 import com.bellogate.voiceoffreedom.model.User
+import com.bellogate.voiceoffreedom.util.KEY
 import com.bellogate.voiceoffreedom.util.USER
 import com.google.firebase.firestore.FirebaseFirestore
 
@@ -59,6 +61,16 @@ class NetworkHelper {
         }
 
 
-
+        /** Fetch the Public secret key to be used **/
+        fun getKey(response:(success: Boolean, key: Key?)-> Unit){
+            db.collection(KEY).limit(1).get().addOnSuccessListener {
+                for(document in it.documents){//this will only have one document because we set the limit to 1
+                    val key = document.toObject(Key::class.java)
+                    response.invoke(true, key)
+                }
+            }.addOnFailureListener {
+                response.invoke(false, null)
+            }
+        }
     }
 }

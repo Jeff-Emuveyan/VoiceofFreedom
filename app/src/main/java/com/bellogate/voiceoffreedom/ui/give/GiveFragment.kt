@@ -69,8 +69,8 @@ class GiveFragment : Fragment() {
 
 
     private fun fetchSecretKey(context: Context, response:(success: Boolean, secretKey: String?)-> Unit){
-        viewModel.fetchKey(context){success, secretKey ->
-            response.invoke(success, secretKey)
+        viewModel.fetchKey(context){success, key ->
+            response.invoke(success, key)
         }
     }
 }

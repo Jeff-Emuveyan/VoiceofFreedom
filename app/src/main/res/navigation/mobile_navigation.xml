@@ -40,6 +40,6 @@
     <fragment
         android:id="@+id/processCardFragment"
         android:name="com.bellogate.voiceoffreedom.ui.give.ProcessCardFragment"
-        android:label="process_card_fragment"
+        android:label="@string/verify"
         tools:layout="@layout/process_card_fragment" />
 </navigation>

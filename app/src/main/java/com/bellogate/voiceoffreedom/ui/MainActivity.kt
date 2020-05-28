@@ -90,8 +90,6 @@ class MainActivity : AppCompatActivity() {
             invalidateOptionsMenu()
 
         })
-
-        viewModel.setUpPayStack(this)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

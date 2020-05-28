@@ -5,7 +5,7 @@ import com.bellogate.voiceoffreedom.data.BaseRepository
 import com.bellogate.voiceoffreedom.data.datasource.network.NetworkHelper
 import com.bellogate.voiceoffreedom.model.Admin
 
-class SetupBaseRepository(context: Context): BaseRepository(context) {
+class AdminRepository(context: Context): BaseRepository(context) {
 
     /**
      * The aim of this method is to check if there is a user on the device,

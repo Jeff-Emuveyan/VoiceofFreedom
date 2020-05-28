@@ -1,12 +1,20 @@
 package com.bellogate.voiceoffreedom.ui.give
 
-import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.core.widget.doOnTextChanged
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import com.bellogate.voiceoffreedom.R
+import com.bellogate.voiceoffreedom.ui.give.util.CardInputValidator
+import com.bellogate.voiceoffreedom.util.AMOUNT
+import com.bellogate.voiceoffreedom.util.KEY
+import kotlinx.android.synthetic.main.process_card_fragment.*
+
 
 class ProcessCardFragment : Fragment() {
 
@@ -15,6 +23,9 @@ class ProcessCardFragment : Fragment() {
     }
 
     private lateinit var viewModel: ProcessCardViewModel
+    private lateinit var key: String
+    private lateinit var amount: String
+    private val cardInputValidator = CardInputValidator()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -26,7 +37,85 @@ class ProcessCardFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(ProcessCardViewModel::class.java)
-        // TODO: Use the ViewModel
+
+        viewModel.setUpPayStack(requireContext(), key)
+
+        viewModel.getUser(requireContext(), 1).observe(viewLifecycleOwner, Observer {
+            it?.let {
+                tvEmail.setText(it.email)
+                tvEmail.keyListener = null
+            }
+        })
+
+        verifyButton.setOnClickListener {
+            progressBar.visibility = View.VISIBLE
+            verifyButton.visibility = View.INVISIBLE
+
+            validateCardNumber()
+            if(cardInputValidator.allInputFieldsValid){
+
+            }else{
+                Toast.makeText(requireContext(), "Missing or Invalid input", Toast.LENGTH_LONG).show()
+                progressBar.visibility = View.INVISIBLE
+                verifyButton.visibility = View.VISIBLE
+            }
+        }
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        progressBar.visibility = View.INVISIBLE
+
+        //get key and amount
+        val extras: Bundle = requireArguments()
+        key = extras.getString(KEY)!!
+        amount = extras.getString(AMOUNT)!!
+
+        tvAmount.setText(amount)
+        tvAmount.keyListener = null
+
+        tvYear.doOnTextChanged { text, _, _, _ ->
+            if (text.isNullOrEmpty() || text.length < 2){
+                tvYear.error = "Year must be two digits"
+                cardInputValidator.isYearValid = false
+            }
+
+            if (!text.isNullOrEmpty() && text.length == 2){
+                cardInputValidator.isYearValid = true
+            }
+        }
+
+        tvMonth.doOnTextChanged { text, _, _, _ ->
+            if (text.isNullOrEmpty() || text.length < 2){
+                tvMonth.error = "Month must be two digits"
+                cardInputValidator.isMonthValid = false
+            }
+
+            if (!text.isNullOrEmpty() && text.length == 2){
+                cardInputValidator.isMonthValid = true
+            }
+        }
+
+        tvCvv.doOnTextChanged { text, _, _, _ ->
+            if (text.isNullOrEmpty() || text.length < 3){
+                tvCvv.error = "CVV must be three digits"
+                cardInputValidator.isCvvValid = false
+            }
+
+            if (!text.isNullOrEmpty() && text.length == 3){
+                cardInputValidator.isCvvValid = true
+            }
+        }
+    }
+
+
+    private fun validateCardNumber(){
+        if(tvCardNumber.text.isNullOrEmpty()){
+            cardInputValidator.isCardNumberValid = false
+            tvCardNumber.error = "Invalid card number"
+        }else{
+            cardInputValidator.isCardNumberValid = true
+        }
+    }
 }

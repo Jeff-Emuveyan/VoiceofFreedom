@@ -4,8 +4,9 @@ import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.bellogate.voiceoffreedom.data.setup.SetupBaseRepository
+import com.bellogate.voiceoffreedom.data.setup.AdminRepository
 import com.bellogate.voiceoffreedom.data.setup.SetupState
+import com.bellogate.voiceoffreedom.data.setup.UserRepository
 import com.bellogate.voiceoffreedom.model.Admin
 import com.bellogate.voiceoffreedom.model.User
 import com.bellogate.voiceoffreedom.ui.SharedViewModel
@@ -26,11 +27,12 @@ class SetupActivityViewModel: SharedViewModel() {
      * on the device is among that list. If there is no user on the device, nothing happens.
      * */
     fun checkAndUpdateUserAdminStatus(context: Context) = viewModelScope.launch {
-        val repository = SetupBaseRepository(context)
+        val repository = UserRepository(context)
+        val adminRepository = AdminRepository(context)
         //check if there is a user on the local database:
         val user = repository.getUserSynchronously(1)
         if(user != null) {
-            repository.fetchAllAdmin { success, result ->
+            adminRepository.fetchAllAdmin { success, result ->
                 if (success) {
                     //search through the list of admin and update the user if his email is on the list
                     updateUserAdminStatus(context, user!!, result)
@@ -49,7 +51,7 @@ class SetupActivityViewModel: SharedViewModel() {
      * This will update the user's admin status in Firebase and Room DB
      */
     private fun updateUserAdminStatus(context: Context, user: User, adminList: ArrayList<Admin>?){
-        val repository = SetupBaseRepository(context)
+        val repository = UserRepository(context)
 
         adminList?.let {
             for(admin in it){

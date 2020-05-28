@@ -23,4 +23,5 @@
     <string name="naira">₦</string>
     <string name="your_givings">Your givings</string>
     <string name="network_error">Network error, try again</string>
+    <string name="verify">Verify</string>
 </resources>

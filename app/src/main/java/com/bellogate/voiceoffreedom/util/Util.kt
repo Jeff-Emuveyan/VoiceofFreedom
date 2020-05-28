@@ -11,6 +11,8 @@ import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
 
 
+const val AMOUNT = "amount"
+
 fun showSnackMessage(view: View, message: String){
     Snackbar.make(view, message, Snackbar.LENGTH_LONG).show()
 }

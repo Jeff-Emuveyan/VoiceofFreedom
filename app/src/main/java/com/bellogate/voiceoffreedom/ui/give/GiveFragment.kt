@@ -11,6 +11,8 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.bellogate.voiceoffreedom.R
+import com.bellogate.voiceoffreedom.util.AMOUNT
+import com.bellogate.voiceoffreedom.util.KEY
 import kotlinx.android.synthetic.main.give_fragment.*
 
 
@@ -50,9 +52,10 @@ class GiveFragment : Fragment() {
             proceedButton.visibility = View.INVISIBLE
 
             fetchSecretKey(requireContext()) { success, key ->
-                if(success && key != null){
+                if(success && !key.isNullOrEmpty()){
                     val bundle = Bundle()
-                    bundle.putString(key, key)
+                    bundle.putString(KEY, key)
+                    bundle.putString(AMOUNT, editTextAmount.text.toString().trim())
                     findNavController().navigate(R.id.action_nav_give_to_processCardFragment, bundle)
                 }else{
                     progressBar.visibility = View.INVISIBLE

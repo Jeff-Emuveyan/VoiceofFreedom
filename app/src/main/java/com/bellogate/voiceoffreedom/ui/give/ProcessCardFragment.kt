@@ -5,10 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.widget.doAfterTextChanged
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import co.paystack.android.model.Card
 import com.bellogate.voiceoffreedom.R
 import com.bellogate.voiceoffreedom.ui.give.util.CardInputValidator
 import com.bellogate.voiceoffreedom.ui.give.util.CardProcessState
@@ -130,6 +132,10 @@ class ProcessCardFragment : Fragment() {
                 cardInputValidator.cvv = text.toString()
             }
         }
+
+        tvCardNumber.doAfterTextChanged { text ->
+            validateCardNumber()
+        }
     }
 
 
@@ -138,8 +144,14 @@ class ProcessCardFragment : Fragment() {
             cardInputValidator.isCardNumberValid = false
             tvCardNumber.error = "Invalid card number"
         }else{
-            cardInputValidator.isCardNumberValid = true
-            cardInputValidator.cardNumber = tvCardNumber.text.toString()
+            val card = Card(tvCardNumber.text.toString(), 0,0, "")
+            if(!card.validNumber()){
+                cardInputValidator.isCardNumberValid = false
+                tvCardNumber.error = "Invalid card number"
+            }else {
+                cardInputValidator.isCardNumberValid = true
+                cardInputValidator.cardNumber = tvCardNumber.text.toString()
+            }
         }
     }
 }

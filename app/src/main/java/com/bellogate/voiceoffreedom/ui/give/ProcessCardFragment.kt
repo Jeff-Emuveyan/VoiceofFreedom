@@ -11,6 +11,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.bellogate.voiceoffreedom.R
 import com.bellogate.voiceoffreedom.ui.give.util.CardInputValidator
+import com.bellogate.voiceoffreedom.ui.give.util.CardProcessState
 import com.bellogate.voiceoffreedom.util.AMOUNT
 import com.bellogate.voiceoffreedom.util.KEY
 import kotlinx.android.synthetic.main.process_card_fragment.*
@@ -44,22 +45,41 @@ class ProcessCardFragment : Fragment() {
             it?.let {
                 tvEmail.setText(it.email)
                 tvEmail.keyListener = null
+
+                verifyButton.setOnClickListener { _ ->
+                    progressBar.visibility = View.VISIBLE
+                    verifyButton.visibility = View.INVISIBLE
+
+                    validateCardNumber()
+                    if(cardInputValidator.allInputFieldsValid){
+                        viewModel.processCard(requireActivity(),
+                            cardInputValidator.getCard(),
+                            amount.toInt(),
+                            it.email)
+                    }else{
+                        Toast.makeText(requireContext(), "Missing or Invalid input", Toast.LENGTH_LONG).show()
+                        progressBar.visibility = View.INVISIBLE
+                        verifyButton.visibility = View.VISIBLE
+                    }
+                }
             }
         })
 
-        verifyButton.setOnClickListener {
-            progressBar.visibility = View.VISIBLE
-            verifyButton.visibility = View.INVISIBLE
-
-            validateCardNumber()
-            if(cardInputValidator.allInputFieldsValid){
-
-            }else{
-                Toast.makeText(requireContext(), "Missing or Invalid input", Toast.LENGTH_LONG).show()
-                progressBar.visibility = View.INVISIBLE
-                verifyButton.visibility = View.VISIBLE
+        viewModel.cardProcessState.observe(viewLifecycleOwner, Observer {
+            progressBar.visibility = View.INVISIBLE
+            when(it){
+                CardProcessState.SUCCESS ->  Toast.makeText(requireContext(), "Successful!", Toast.LENGTH_LONG).show()
+                CardProcessState.OTP_SENT ->  Toast.makeText(requireContext(), "Enter OTP", Toast.LENGTH_LONG).show()
+                CardProcessState.FAILED ->  {
+                    Toast.makeText(requireContext(), "Failed, try again", Toast.LENGTH_LONG).show()
+                    verifyButton.visibility = View.VISIBLE
+                }
+                CardProcessState.INVALID_CARD -> {
+                    Toast.makeText(requireContext(), "Invalid card", Toast.LENGTH_LONG).show()
+                    verifyButton.visibility = View.VISIBLE
+                }
             }
-        }
+        })
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -83,6 +103,7 @@ class ProcessCardFragment : Fragment() {
 
             if (!text.isNullOrEmpty() && text.length == 2){
                 cardInputValidator.isYearValid = true
+                cardInputValidator.year = text.toString()
             }
         }
 
@@ -94,6 +115,7 @@ class ProcessCardFragment : Fragment() {
 
             if (!text.isNullOrEmpty() && text.length == 2){
                 cardInputValidator.isMonthValid = true
+                cardInputValidator.month = text.toString()
             }
         }
 
@@ -105,6 +127,7 @@ class ProcessCardFragment : Fragment() {
 
             if (!text.isNullOrEmpty() && text.length == 3){
                 cardInputValidator.isCvvValid = true
+                cardInputValidator.cvv = text.toString()
             }
         }
     }
@@ -116,6 +139,7 @@ class ProcessCardFragment : Fragment() {
             tvCardNumber.error = "Invalid card number"
         }else{
             cardInputValidator.isCardNumberValid = true
+            cardInputValidator.cardNumber = tvCardNumber.text.toString()
         }
     }
 }

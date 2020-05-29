@@ -16,6 +16,7 @@ import com.bellogate.voiceoffreedom.ui.give.util.CardInputValidator
 import com.bellogate.voiceoffreedom.ui.give.util.CardProcessState
 import com.bellogate.voiceoffreedom.util.AMOUNT
 import com.bellogate.voiceoffreedom.util.KEY
+import com.bellogate.voiceoffreedom.util.showAlertForSuccessfulPayment
 import kotlinx.android.synthetic.main.process_card_fragment.*
 
 
@@ -70,7 +71,10 @@ class ProcessCardFragment : Fragment() {
         viewModel.cardProcessState.observe(viewLifecycleOwner, Observer {
             progressBar.visibility = View.INVISIBLE
             when(it){
-                CardProcessState.SUCCESS ->  Toast.makeText(requireContext(), "Successful!", Toast.LENGTH_LONG).show()
+                CardProcessState.SUCCESS ->  {
+                    Toast.makeText(requireContext(), "Successful!", Toast.LENGTH_LONG).show()
+                    showAlertForSuccessfulPayment()
+                }
                 CardProcessState.OTP_SENT ->  Toast.makeText(requireContext(), "Enter OTP", Toast.LENGTH_LONG).show()
                 CardProcessState.FAILED ->  {
                     Toast.makeText(requireContext(), "Failed, try again", Toast.LENGTH_LONG).show()

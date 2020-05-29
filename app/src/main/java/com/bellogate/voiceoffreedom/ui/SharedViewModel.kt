@@ -1,6 +1,7 @@
 package com.bellogate.voiceoffreedom.ui
 
 import android.content.Context
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bellogate.voiceoffreedom.data.BaseRepository
@@ -35,6 +36,8 @@ open class SharedViewModel: ViewModel() {
 
     fun logout(context: Context) = UserRepository(context).logout()
 
+
+    val startSignInProcess = MutableLiveData<Boolean>()
 
     /**
      * Used to know whether the user has signed out

@@ -64,9 +64,18 @@ class NetworkHelper {
         /** Fetch the Public secret key to be used **/
         fun getKey(response:(success: Boolean, key: Key?)-> Unit){
             db.collection(KEY).limit(1).get().addOnSuccessListener {
+
+                if(it.documents.isNullOrEmpty() || it.documents.size == 0){
+                    response.invoke(false, null)
+                    return@addOnSuccessListener
+                }
+
                 for(document in it.documents){//this will only have one document because we set the limit to 1
                     val key = document.toObject(Key::class.java)
                     response.invoke(true, key)
+                }
+                if(it.documents.isNullOrEmpty() || it.documents.size == 0){
+                    response.invoke(false, null)
                 }
             }.addOnFailureListener {
                 response.invoke(false, null)

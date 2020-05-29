@@ -83,7 +83,12 @@ class MainActivity : AppCompatActivity() {
             //anytime the user has logged in or out, we regulate the menu to show the right items:
             user = it
             invalidateOptionsMenu()
+        })
 
+        viewModel.startSignInProcess.observe(this, Observer {
+            if(it){
+                launchFirebaseAuthentication()
+            }
         })
     }
 
@@ -142,12 +147,16 @@ class MainActivity : AppCompatActivity() {
     /**
      * Uses firebase UI auth to sign up a user
      * ***/
-    private fun launchFirebaseAuthentication() = startActivityForResult(AuthUI.getInstance()
-        .createSignInIntentBuilder()
-        .setAvailableProviders(viewModel.getAuthProviders())
-        .build(),
-        RC_SIGN_IN
-    )
+    private fun launchFirebaseAuthentication() {
+        startActivityForResult(
+            AuthUI.getInstance()
+                .createSignInIntentBuilder()
+                .setAvailableProviders(viewModel.getAuthProviders())
+                .build(),
+            RC_SIGN_IN
+        )
+        viewModel.startSignInProcess.value = false
+    }
 
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

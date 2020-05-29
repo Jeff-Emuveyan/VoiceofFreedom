@@ -67,15 +67,11 @@ class NetworkHelper {
 
                 if(it.documents.isNullOrEmpty() || it.documents.size == 0){
                     response.invoke(false, null)
-                    return@addOnSuccessListener
-                }
-
-                for(document in it.documents){//this will only have one document because we set the limit to 1
-                    val key = document.toObject(Key::class.java)
-                    response.invoke(true, key)
-                }
-                if(it.documents.isNullOrEmpty() || it.documents.size == 0){
-                    response.invoke(false, null)
+                }else {
+                    for (document in it.documents) {//this will only have one document because we set the limit to 1
+                        val key = document.toObject(Key::class.java)
+                        response.invoke(true, key)
+                    }
                 }
             }.addOnFailureListener {
                 response.invoke(false, null)

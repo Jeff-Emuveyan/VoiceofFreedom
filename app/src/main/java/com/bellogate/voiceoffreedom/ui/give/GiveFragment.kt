@@ -12,6 +12,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.bellogate.voiceoffreedom.R
+import com.bellogate.voiceoffreedom.model.User
 import com.bellogate.voiceoffreedom.ui.SharedViewModel
 import com.bellogate.voiceoffreedom.util.AMOUNT
 import com.bellogate.voiceoffreedom.util.KEY
@@ -40,32 +41,7 @@ class GiveFragment : Fragment() {
         sharedViewModel = ViewModelProviders.of(requireActivity()).get(SharedViewModel::class.java)
 
         viewModel.getUser(requireContext(), 1).observe(viewLifecycleOwner, Observer {
-
-            if(it != null){
-                proceedButton.text = "Proceed"
-                proceedButton.setOnClickListener{
-                    progressBar.visibility = View.VISIBLE
-                    proceedButton.visibility = View.INVISIBLE
-
-                    fetchSecretKey(requireContext()) { success, key ->
-                        if(success && !key.isNullOrEmpty()){
-                            val bundle = Bundle()
-                            bundle.putString(KEY, key)
-                            bundle.putString(AMOUNT, editTextAmount.text.toString().trim())
-                            findNavController().navigate(R.id.action_nav_give_to_processCardFragment, bundle)
-                        }else{
-                            progressBar.visibility = View.INVISIBLE
-                            proceedButton.visibility = View.VISIBLE
-                            Toast.makeText(requireContext(), resources.getText(R.string.network_error), Toast.LENGTH_LONG).show()
-                        }
-                    }
-                }
-            }else{
-                proceedButton.text = "Sign in / Sign up"
-                proceedButton.setOnClickListener{
-                    sharedViewModel.startSignInProcess.value = true
-                }
-            }
+            setUpUI(it)
         })
     }
 
@@ -78,6 +54,29 @@ class GiveFragment : Fragment() {
         editTextAmount.doOnTextChanged { text, start, count, after ->
             tvAmount.text = "${resources.getText(R.string.naira)}${text}"
             proceedButton.isEnabled = enableProceedButton(text)
+            signInButton.isEnabled = enableProceedButton(text)
+        }
+
+        proceedButton.setOnClickListener{
+            progressBar.visibility = View.VISIBLE
+            proceedButton.visibility = View.INVISIBLE
+
+            fetchSecretKey(requireContext()) { success, key ->
+                if(success && !key.isNullOrEmpty()){
+                    val bundle = Bundle()
+                    bundle.putString(KEY, key)
+                    bundle.putString(AMOUNT, editTextAmount.text.toString().trim())
+                    findNavController().navigate(R.id.action_nav_give_to_processCardFragment, bundle)
+                }else{
+                    progressBar.visibility = View.INVISIBLE
+                    proceedButton.visibility = View.VISIBLE
+                    Toast.makeText(requireContext(), resources.getText(R.string.network_error), Toast.LENGTH_LONG).show()
+                }
+            }
+        }
+
+        signInButton.setOnClickListener {
+            sharedViewModel.startSignInProcess.value = true
         }
     }
 
@@ -90,4 +89,16 @@ class GiveFragment : Fragment() {
             response.invoke(success, key)
         }
     }
+
+    private fun setUpUI(user: User?){
+
+        if(user != null){
+            proceedButton.visibility = View.VISIBLE
+            signInButton.visibility = View.INVISIBLE
+        }else{
+            proceedButton.visibility = View.INVISIBLE
+            signInButton.visibility = View.VISIBLE
+        }
+    }
+
 }

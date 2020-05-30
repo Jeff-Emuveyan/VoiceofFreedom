@@ -13,18 +13,6 @@
     </fragment>
 
     <fragment
-        android:id="@+id/nav_gallery"
-        android:name="com.bellogate.voiceoffreedom.ui.gallery.GalleryFragment"
-        android:label="@string/menu_gallery"
-        tools:layout="@layout/fragment_gallery" />
-
-    <fragment
-        android:id="@+id/nav_slideshow"
-        android:name="com.bellogate.voiceoffreedom.ui.slideshow.SlideshowFragment"
-        android:label="@string/menu_slideshow"
-        tools:layout="@layout/fragment_slideshow" />
-
-    <fragment
         android:id="@+id/nav_give"
         android:name="com.bellogate.voiceoffreedom.ui.give.GiveFragment"
         android:label="@string/give"
@@ -42,4 +30,10 @@
         android:name="com.bellogate.voiceoffreedom.ui.give.ProcessCardFragment"
         android:label="@string/verify"
         tools:layout="@layout/process_card_fragment" />
+
+    <fragment
+        android:id="@+id/nav_devotional"
+        android:name="com.bellogate.voiceoffreedom.ui.devotional.DevotionalFragment"
+        android:label="devotional_fragment"
+        tools:layout="@layout/devotional_fragment" />
 </navigation>

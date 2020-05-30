@@ -32,7 +32,7 @@ class ProcessCardViewModel : ViewModel() {
         if (card.isValid) { // charge card
             val charge = Charge()
             charge.card = card //sets the card to charge
-            charge.amount = amount
+            charge.amount = amount * 100// converting from KOBO to naira
             charge.email = email //customer's email
 
             PaystackSdk.chargeCard(activity, charge, object : Paystack.TransactionCallback {

@@ -18,8 +18,8 @@ import com.bellogate.voiceoffreedom.util.isStagingBuild
 class ProcessCardViewModel : ViewModel() {
 
 
-    private val _cardProcessState = MutableLiveData<CardProcessState>()
-    val cardProcessState : LiveData<CardProcessState> = _cardProcessState
+    private val _cardProcessState = MutableLiveData<Pair<CardProcessState, String?>>()
+    val cardProcessState : LiveData<Pair<CardProcessState, String?>> = _cardProcessState
 
     /****
      *Returns a LiveData User object that all Fragments can observe
@@ -39,23 +39,23 @@ class ProcessCardViewModel : ViewModel() {
                 override fun onSuccess(transaction: Transaction?) { // This is called only after transaction is deemed successful.
                     // Retrieve the transaction, and send its reference to your server
                     // for verification.
-                    _cardProcessState.value = CardProcessState.SUCCESS
+                    _cardProcessState.value = CardProcessState.SUCCESS to null
                 }
 
                 override fun beforeValidate(transaction: Transaction?) { // This is called only before requesting OTP.
                     // Save reference so you may send to server. If
                     // error occurs with OTP, you should still verify on server.
-                    _cardProcessState.value = CardProcessState.OTP_SENT
+                    _cardProcessState.value = CardProcessState.OTP_SENT to null
                 }
 
                 override fun onError(error: Throwable?, transaction: Transaction?) {
                     //handle error here
-                    _cardProcessState.value = CardProcessState.FAILED
+                    _cardProcessState.value = CardProcessState.FAILED to error?.message
                 }
             })
 
         }else{
-            _cardProcessState.value = CardProcessState.INVALID_CARD
+            _cardProcessState.value = CardProcessState.INVALID_CARD to "Invalid card"
         }
     }
 

@@ -1,6 +1,7 @@
 package com.bellogate.voiceoffreedom.util
 
 import android.content.Context
+import android.content.DialogInterface
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -66,5 +67,16 @@ fun Fragment.showAlertForSuccessfulPayment(){
     }
 
 }
+
+
+fun Fragment.showAlert(title: String, message: String){
+    val alertBuilder: AlertDialog.Builder = AlertDialog.Builder(this.requireContext())
+    alertBuilder.setTitle(title)
+    alertBuilder.setMessage(message)
+    alertBuilder.setPositiveButton("Close"
+    ) { _, _ -> }
+    alertBuilder.show()
+}
+
 
 

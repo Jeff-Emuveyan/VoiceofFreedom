@@ -1,7 +1,8 @@
 package com.bellogate.voiceoffreedom.util
 
+import android.app.DatePickerDialog
 import android.content.Context
-import android.content.DialogInterface
+import android.graphics.Bitmap
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -15,6 +16,9 @@ import com.bellogate.voiceoffreedom.BuildConfig
 import com.bellogate.voiceoffreedom.R
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
+import java.text.DateFormatSymbols
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 const val AMOUNT = "amount"
@@ -76,6 +80,35 @@ fun Fragment.showAlert(title: String, message: String){
     alertBuilder.setPositiveButton("Close"
     ) { _, _ -> }
     alertBuilder.show()
+}
+
+
+fun getSimpleDateFormat(timestampValue: Long,simpleDateFormat: String?): String {
+    val dateValue = Date(timestampValue)
+    val dateFormat = SimpleDateFormat(simpleDateFormat, Locale.ENGLISH)
+    val symbols = DateFormatSymbols(Locale.getDefault())
+    dateFormat.dateFormatSymbols = symbols
+    return dateFormat.format(dateValue)
+}
+
+
+fun todayDate(dateInMilliSeconds: Long) = getSimpleDateFormat(dateInMilliSeconds, "dd-MMM-yyyy")
+
+fun showDatePickerDialog(context: Context, listener: DatePickerDialog.OnDateSetListener) {
+    val calendar = Calendar.getInstance()
+    val year = calendar[Calendar.YEAR]
+    val month = calendar[Calendar.MONTH]
+    val day = calendar[Calendar.DAY_OF_MONTH]
+    val datePickerTag = "Select date"
+    val maximumDate = Calendar.getInstance()
+    maximumDate[Calendar.YEAR] = year
+    maximumDate[Calendar.MONTH] = month
+    maximumDate[Calendar.DAY_OF_MONTH] = day
+    val datePickerDialog = DatePickerDialog(context, listener, year, month, day)
+    datePickerDialog.datePicker.maxDate = maximumDate.timeInMillis
+    datePickerDialog.datePicker.tag = datePickerTag
+    datePickerDialog.setTitle(datePickerTag)
+    datePickerDialog.show()
 }
 
 

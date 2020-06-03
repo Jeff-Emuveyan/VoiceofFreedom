@@ -27,4 +27,9 @@
     <string name="your_transfer_was_successful">Your transfer was successful</string>
     <string name="successful">Successful</string>
     <string name="devotional">Devotional</string>
+    <string name="retry">Retry</string>
+    <string name="no_data_found_for_selected_date">No devotional found for selected date</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

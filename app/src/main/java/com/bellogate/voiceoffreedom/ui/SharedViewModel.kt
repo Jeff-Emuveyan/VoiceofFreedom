@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bellogate.voiceoffreedom.data.BaseRepository
-import com.bellogate.voiceoffreedom.data.setup.UserRepository
+import com.bellogate.voiceoffreedom.data.UserRepository
 import com.bellogate.voiceoffreedom.model.User
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.IdpResponse
@@ -27,14 +27,18 @@ open class SharedViewModel: ViewModel() {
     /****
      *Returns a LiveData User object that all Fragments can observe
      */
-    fun getUser(context: Context, id: Int) = UserRepository(context).getUser(id)
+    fun getUser(context: Context, id: Int) = UserRepository(
+        context
+    ).getUser(id)
 
 
     fun saveUser(context: Context, coroutineScope: CoroutineScope, id: Int, newUser: User) =
         UserRepository(context).saveUser(coroutineScope, id, newUser)
 
 
-    fun logout(context: Context) = UserRepository(context).logout()
+    fun logout(context: Context) = UserRepository(
+        context
+    ).logout()
 
 
     val startSignInProcess = MutableLiveData<Boolean>()
@@ -45,7 +49,8 @@ open class SharedViewModel: ViewModel() {
     fun listenForUserSignOut(context: Context) = BaseRepository(context).listenForUserSignOut {
         if (!it){//user has Signed Out
             //delete user from db:
-            UserRepository(context).deleteUser(viewModelScope, 1)
+            UserRepository(context)
+                .deleteUser(viewModelScope, 1)
         }
     }
 

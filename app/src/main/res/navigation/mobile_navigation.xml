@@ -34,6 +34,17 @@
     <fragment
         android:id="@+id/nav_devotional"
         android:name="com.bellogate.voiceoffreedom.ui.devotional.DevotionalFragment"
-        android:label="devotional_fragment"
-        tools:layout="@layout/devotional_fragment" />
+        android:label="@string/devotional"
+        tools:layout="@layout/devotional_fragment" >
+        <action
+            android:id="@+id/action_nav_devotional_to_fullScreenFragment"
+            app:destination="@id/fullScreenFragment"
+            app:exitAnim="@anim/fui_slide_out_left"
+            app:popEnterAnim="@android:anim/slide_in_left" />
+    </fragment>
+    <fragment
+        android:id="@+id/fullScreenFragment"
+        android:name="com.bellogate.voiceoffreedom.ui.devotional.FullScreenFragment"
+        android:label="Enlarge"
+        tools:layout="@layout/fragment_full_screen" />
 </navigation>

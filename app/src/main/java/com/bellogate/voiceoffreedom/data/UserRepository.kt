@@ -1,4 +1,4 @@
-package com.bellogate.voiceoffreedom.data.setup
+package com.bellogate.voiceoffreedom.data
 
 import android.content.Context
 import androidx.lifecycle.LiveData

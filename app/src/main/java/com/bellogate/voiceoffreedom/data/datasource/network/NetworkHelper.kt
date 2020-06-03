@@ -2,30 +2,33 @@ package com.bellogate.voiceoffreedom.data.datasource.network
 
 import com.bellogate.voiceoffreedom.util.ADMIN
 import com.bellogate.voiceoffreedom.model.Admin
+import com.bellogate.voiceoffreedom.model.Devotional
 import com.bellogate.voiceoffreedom.model.Key
 import com.bellogate.voiceoffreedom.model.User
+import com.bellogate.voiceoffreedom.ui.devotional.util.UIState
+import com.bellogate.voiceoffreedom.util.DEVOTIONAL
 import com.bellogate.voiceoffreedom.util.KEY
 import com.bellogate.voiceoffreedom.util.USER
 import com.google.firebase.firestore.FirebaseFirestore
 
 class NetworkHelper {
 
-    companion object{
+    companion object {
 
         private var db: FirebaseFirestore = FirebaseFirestore.getInstance()
 
         /** Gets all Admin from the database***/
-        fun fetchAllAdmin(fetched:(success: Boolean, result: ArrayList<Admin>?) -> Unit) =
+        fun fetchAllAdmin(fetched: (success: Boolean, result: ArrayList<Admin>?) -> Unit) =
             db.collection(ADMIN).get()
                 .addOnCompleteListener {
                     val listOfAdmin = arrayListOf<Admin>()
-                    if(it.isSuccessful && it.result != null){
-                        for(document in it.result!!){
+                    if (it.isSuccessful && it.result != null) {
+                        for (document in it.result!!) {
                             val admin = document.toObject(Admin::class.java)
                             listOfAdmin.add(admin)
                         }
                         fetched.invoke(true, listOfAdmin)
-                    }else{
+                    } else {
                         fetched.invoke(false, null)
                     }
                 }
@@ -34,24 +37,24 @@ class NetworkHelper {
                 }
 
 
-
         /** Syncs a User to Firebase */
-        fun syncUser(user: User, saved: (saved: Boolean) -> Unit){
-            db.collection(USER).document(user.timeCreated.toString()).set(user).addOnCompleteListener {
-                if(it.isSuccessful){
-                    saved.invoke(true)
-                }else{
-                    saved.invoke(false)
+        fun syncUser(user: User, saved: (saved: Boolean) -> Unit) {
+            db.collection(USER).document(user.timeCreated.toString()).set(user)
+                .addOnCompleteListener {
+                    if (it.isSuccessful) {
+                        saved.invoke(true)
+                    } else {
+                        saved.invoke(false)
+                    }
                 }
-            }
         }
 
 
         /*** Get user from Firestore ***/
-        fun getUser(userEmail: String, user: (User?) -> Unit){
+        fun getUser(userEmail: String, user: (User?) -> Unit) {
             db.collection(USER).whereEqualTo("email", userEmail).limit(1)
                 .get().addOnSuccessListener {
-                    for(document in it.documents){//this will only have one document because we set the limit to 1
+                    for (document in it.documents) {//this will only have one document because we set the limit to 1
                         val userFromFirestore = document.toObject(User::class.java)
                         user.invoke(userFromFirestore)
                     }
@@ -62,12 +65,12 @@ class NetworkHelper {
 
 
         /** Fetch the Public secret key to be used **/
-        fun getKey(response:(success: Boolean, key: Key?)-> Unit){
+        fun getKey(response: (success: Boolean, key: Key?) -> Unit) {
             db.collection(KEY).limit(1).get().addOnSuccessListener {
 
-                if(it.documents.isNullOrEmpty() || it.documents.size == 0){
+                if (it.documents.isNullOrEmpty() || it.documents.size == 0) {
                     response.invoke(false, null)
-                }else {
+                } else {
                     for (document in it.documents) {//this will only have one document because we set the limit to 1
                         val key = document.toObject(Key::class.java)
                         response.invoke(true, key)
@@ -77,5 +80,28 @@ class NetworkHelper {
                 response.invoke(false, null)
             }
         }
+
+
+        fun getDevotionalByDate(dateToFind: String, response: (UIState, Devotional?) -> Unit) {
+            db.collection(DEVOTIONAL).whereEqualTo("dateInSimpleFormat", dateToFind)
+                .limit(1).get().addOnSuccessListener {
+
+                    if (it.documents.isNullOrEmpty() || it.documents.size == 0) {
+                        //search was successful but no devotional matched that 'timeInMilliSeconds'
+                        response.invoke(UIState.NO_DATA_FOR_SELECTED_DATE, null)
+                    } else {
+                        for (document in it.documents) {//this will only have one document because we set the limit to 1
+                            val devotional = document.toObject(Devotional::class.java)
+                            if (devotional != null) {
+                                response.invoke(UIState.FOUND, devotional)
+                            }
+                        }
+                    }
+
+                }.addOnFailureListener {
+                    response.invoke(UIState.FAILED_TO_LOAD, null)
+                }
+        }
+
     }
 }

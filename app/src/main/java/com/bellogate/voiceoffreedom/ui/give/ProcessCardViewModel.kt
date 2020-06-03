@@ -2,7 +2,6 @@ package com.bellogate.voiceoffreedom.ui.give
 
 import android.app.Activity
 import android.content.Context
-import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -11,9 +10,8 @@ import co.paystack.android.PaystackSdk
 import co.paystack.android.Transaction
 import co.paystack.android.model.Card
 import co.paystack.android.model.Charge
-import com.bellogate.voiceoffreedom.data.setup.UserRepository
+import com.bellogate.voiceoffreedom.data.UserRepository
 import com.bellogate.voiceoffreedom.ui.give.util.CardProcessState
-import com.bellogate.voiceoffreedom.util.isStagingBuild
 
 class ProcessCardViewModel : ViewModel() {
 
@@ -24,7 +22,9 @@ class ProcessCardViewModel : ViewModel() {
     /****
      *Returns a LiveData User object that all Fragments can observe
      */
-    fun getUser(context: Context, id: Int) = UserRepository(context).getUser(id)
+    fun getUser(context: Context, id: Int) = UserRepository(
+        context
+    ).getUser(id)
 
 
     fun processCard(activity: Activity, card: Card, amount: Int, email: String){

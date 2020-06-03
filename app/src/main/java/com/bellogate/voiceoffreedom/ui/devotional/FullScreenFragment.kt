@@ -6,6 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.bellogate.voiceoffreedom.R
+import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.devotional_fragment.*
 
 
 class FullScreenFragment : Fragment() {
@@ -22,6 +24,13 @@ class FullScreenFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val extras: Bundle = requireArguments()
+        var imageUrl = extras.getString("imageUrl")!!
+
+        if(!imageUrl.isNullOrEmpty()){
+            Picasso.get().load(imageUrl).placeholder(R.drawable.dummy_devotional)
+                .error(R.drawable.ic_broken_image).into(imageView)
+        }
 
     }
 }

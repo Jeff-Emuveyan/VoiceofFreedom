@@ -29,6 +29,7 @@ class DevotionalFragment : Fragment(), OnDateSetListener {
 
     private lateinit var viewModel: DevotionalViewModel
     private var date: String = ""
+    private var imageUrl : String? = ""
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -62,11 +63,15 @@ class DevotionalFragment : Fragment(), OnDateSetListener {
         }
 
         imageView.setOnClickListener {
-            findNavController().navigate(R.id.action_nav_devotional_to_fullScreenFragment)
+            val bundle = Bundle()
+            bundle.putString("imageUrl", imageUrl)
+            findNavController().navigate(R.id.action_nav_devotional_to_fullScreenFragment, bundle)
         }
     }
 
     private fun setUpUIState(uiState: UIState, date: String, imageUrl: String?){
+        this.imageUrl = imageUrl
+
         when(uiState){
             UIState.LOADING -> {
                 shimmer.showShimmer(true)

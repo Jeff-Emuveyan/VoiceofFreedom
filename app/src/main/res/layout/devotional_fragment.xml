@@ -62,7 +62,7 @@
         android:textColor="@color/red"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/shimmer" />
+        app:layout_constraintTop_toBottomOf="@+id/buttonDate" />
 
     <TextView
         android:id="@+id/textView6"
@@ -90,13 +90,13 @@
         android:id="@+id/tvNoDataFoundForDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/red"
-        android:text="@string/no_data_found_for_selected_date"
         android:fontFamily="@font/lato_bold"
+        android:text="@string/no_data_found_for_selected_date"
+        android:textColor="@color/red"
         app:layout_constraintBottom_toTopOf="@+id/textView7"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/shimmer" />
+        app:layout_constraintTop_toBottomOf="@+id/buttonRetry" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

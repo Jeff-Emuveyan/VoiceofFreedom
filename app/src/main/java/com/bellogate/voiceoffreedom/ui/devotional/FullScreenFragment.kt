@@ -5,8 +5,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
 import com.bellogate.voiceoffreedom.R
 import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.devotional_fragment.*
 
 

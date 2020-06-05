@@ -368,6 +368,11 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/../br-android-client/app/src/main/java/com/seamfix/bioregistra/control/RichFileUpload.java">
           <value>
             <set />

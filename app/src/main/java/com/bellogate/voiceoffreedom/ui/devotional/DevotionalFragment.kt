@@ -17,8 +17,10 @@ import com.bellogate.voiceoffreedom.ui.devotional.util.UIState
 import com.bellogate.voiceoffreedom.util.getSimpleDateFormat
 import com.bellogate.voiceoffreedom.util.showDatePickerDialog
 import com.bellogate.voiceoffreedom.util.todayDate
+import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.devotional_fragment.*
+import java.lang.Exception
 import java.util.*
 
 class DevotionalFragment : Fragment(), OnDateSetListener {
@@ -71,28 +73,34 @@ class DevotionalFragment : Fragment(), OnDateSetListener {
 
     private fun setUpUIState(uiState: UIState, date: String, imageUrl: String?){
         this.imageUrl = imageUrl
+        buttonDate.text = date
 
         when(uiState){
             UIState.LOADING -> {
                 shimmer.showShimmer(true)
                 shimmer.startShimmer()
                 buttonRetry.visibility = View.INVISIBLE
-                buttonDate.visibility = View.VISIBLE
-                buttonDate.text = date
                 tvNoDataFoundForDate.visibility = View.INVISIBLE
             }
             UIState.FOUND -> {
-                shimmer.stopShimmer()
-                shimmer.hideShimmer()
                 if(imageUrl != null){
                     Picasso.get().load(imageUrl).placeholder(R.drawable.dummy_devotional)
-                        .error(R.drawable.ic_broken_image).into(imageView)
+                        .error(R.drawable.ic_broken_image).into(imageView, object : Callback {
+                            override fun onError(e: Exception?) {
+                                shimmer.stopShimmer()
+                                shimmer.hideShimmer()
+                                imageView.setImageResource(R.drawable.ic_broken_image)
+                                Toast.makeText(requireContext(), "Failed to load image", Toast.LENGTH_LONG).show()
+                            }
+                            override fun onSuccess() {
+                                shimmer.stopShimmer()
+                                shimmer.hideShimmer()
+                            }
+                        })
                 }else{
                     imageView.setImageResource(R.drawable.dummy_devotional)
                 }
                 buttonRetry.visibility = View.INVISIBLE
-                buttonDate.visibility = View.VISIBLE
-                buttonDate.text = date
                 tvNoDataFoundForDate.visibility = View.INVISIBLE
             }
             UIState.FAILED_TO_LOAD ->{
@@ -100,8 +108,6 @@ class DevotionalFragment : Fragment(), OnDateSetListener {
                 shimmer.hideShimmer()
                 imageView.setImageResource(R.drawable.dummy_devotional)
                 buttonRetry.visibility = View.VISIBLE
-                buttonDate.visibility = View.INVISIBLE
-                buttonDate.text = date
                 Toast.makeText(requireContext(), "Failed, try again", Toast.LENGTH_LONG).show()
                 tvNoDataFoundForDate.visibility = View.INVISIBLE
             }
@@ -110,8 +116,6 @@ class DevotionalFragment : Fragment(), OnDateSetListener {
                 shimmer.hideShimmer()
                 imageView.setImageResource(R.drawable.dummy_devotional)
                 buttonRetry.visibility = View.VISIBLE
-                buttonDate.visibility = View.INVISIBLE
-                buttonDate.text = date
                 tvNoDataFoundForDate.visibility = View.VISIBLE
             }
 

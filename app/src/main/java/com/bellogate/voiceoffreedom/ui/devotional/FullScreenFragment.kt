@@ -26,8 +26,8 @@ class FullScreenFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val extras: Bundle = requireArguments()
-        var imageUrl = extras.getString("imageUrl")!!
+        val extras: Bundle? = requireArguments()
+        var imageUrl = extras?.getString("imageUrl")!!
 
         if(!imageUrl.isNullOrEmpty()){
             Picasso.get().load(imageUrl).placeholder(R.drawable.dummy_devotional)

@@ -32,6 +32,7 @@ class DevotionalFragment : Fragment(), OnDateSetListener {
     private lateinit var viewModel: DevotionalViewModel
     private var date: String = ""
     private var imageUrl : String? = ""
+    private var imageHasSuccessfullyLoaded = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -56,6 +57,8 @@ class DevotionalFragment : Fragment(), OnDateSetListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        imageHasSuccessfullyLoaded = false
+
         buttonRetry.setOnClickListener{
             this getDevotionalByDate date
         }
@@ -65,15 +68,20 @@ class DevotionalFragment : Fragment(), OnDateSetListener {
         }
 
         imageView.setOnClickListener {
-            val bundle = Bundle()
-            bundle.putString("imageUrl", imageUrl)
-            findNavController().navigate(R.id.action_nav_devotional_to_fullScreenFragment, bundle)
+            if(imageHasSuccessfullyLoaded) {
+                val bundle = Bundle()
+                bundle.putString("imageUrl", imageUrl)
+                findNavController().navigate(R.id.action_nav_devotional_to_fullScreenFragment, bundle)
+            }else{
+                Toast.makeText(requireContext(), "No image to show", Toast.LENGTH_LONG).show()
+            }
         }
     }
 
     private fun setUpUIState(uiState: UIState, date: String, imageUrl: String?){
         this.imageUrl = imageUrl
         buttonDate.text = date
+        imageHasSuccessfullyLoaded = false
 
         when(uiState){
             UIState.LOADING -> {
@@ -91,10 +99,12 @@ class DevotionalFragment : Fragment(), OnDateSetListener {
                                 shimmer.hideShimmer()
                                 imageView.setImageResource(R.drawable.ic_broken_image)
                                 Toast.makeText(requireContext(), "Failed to load image", Toast.LENGTH_LONG).show()
+                                imageHasSuccessfullyLoaded = false
                             }
                             override fun onSuccess() {
                                 shimmer.stopShimmer()
                                 shimmer.hideShimmer()
+                                imageHasSuccessfullyLoaded = true
                             }
                         })
                 }else{

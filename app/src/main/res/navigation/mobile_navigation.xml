@@ -40,6 +40,7 @@
             android:id="@+id/action_nav_devotional_to_fullScreenFragment"
             app:destination="@id/fullScreenFragment"
             app:exitAnim="@anim/fui_slide_out_left"
+            app:launchSingleTop="false"
             app:popEnterAnim="@android:anim/slide_in_left" />
     </fragment>
     <fragment

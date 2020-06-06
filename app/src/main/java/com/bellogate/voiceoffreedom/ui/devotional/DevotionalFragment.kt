@@ -13,6 +13,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.bellogate.voiceoffreedom.R
+import com.bellogate.voiceoffreedom.ui.SharedViewModel
 import com.bellogate.voiceoffreedom.ui.devotional.util.UIState
 import com.bellogate.voiceoffreedom.util.getSimpleDateFormat
 import com.bellogate.voiceoffreedom.util.showDatePickerDialog
@@ -25,11 +26,8 @@ import java.util.*
 
 class DevotionalFragment : Fragment(), OnDateSetListener {
 
-    companion object {
-        fun newInstance() = DevotionalFragment()
-    }
-
     private lateinit var viewModel: DevotionalViewModel
+    private lateinit var sharedViewModel: SharedViewModel
     private var date: String = ""
     private var imageUrl : String? = ""
     private var imageHasSuccessfullyLoaded = false
@@ -44,6 +42,7 @@ class DevotionalFragment : Fragment(), OnDateSetListener {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(DevotionalViewModel::class.java)
+        sharedViewModel = ViewModelProviders.of(requireActivity()).get(SharedViewModel::class.java)
 
         date = todayDate(System.currentTimeMillis()).toString()
 
@@ -52,6 +51,16 @@ class DevotionalFragment : Fragment(), OnDateSetListener {
         viewModel.devotional.observe(viewLifecycleOwner, Observer {
             setUpUIState(it.first, date, it.second?.bitmapUrlLink)
         })
+
+        sharedViewModel.showManageDevotionalsFragment.observe(viewLifecycleOwner, Observer {
+            if(it){
+                findNavController().navigate(R.id.action_nav_devotional_to_manageDevotionalsFragment)
+            }
+        })
+
+        //this will cause the MainActivity to call 'onCreateOptionsMenu' again.
+        //If the user is an Admin, the MainActivity will add a menu item to 'Manage Devotionals'
+        requireActivity().invalidateOptionsMenu()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

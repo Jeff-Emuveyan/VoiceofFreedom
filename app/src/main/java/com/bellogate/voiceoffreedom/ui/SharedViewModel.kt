@@ -14,14 +14,14 @@ import kotlinx.coroutines.CoroutineScope
 
 
 /**
- * Serves as a SharedViewModel and a Base class for all ViewModels
+ * Serves as a SharedViewModel for communication between the MainActivity and all fragments
  * */
 open class SharedViewModel: ViewModel() {
 
-    /** Choose authentication providers **/
-    fun getAuthProviders() = arrayListOf(
-        AuthUI.IdpConfig.EmailBuilder().build(),
-        AuthUI.IdpConfig.GoogleBuilder().build())
+
+    val showManageDevotionalsFragment = MutableLiveData<Boolean>()
+
+    val startSignInProcess = MutableLiveData<Boolean>()
 
 
     /****
@@ -32,16 +32,18 @@ open class SharedViewModel: ViewModel() {
     ).getUser(id)
 
 
-    fun saveUser(context: Context, coroutineScope: CoroutineScope, id: Int, newUser: User) =
-        UserRepository(context).saveUser(coroutineScope, id, newUser)
+
+    /** Choose authentication providers **/
+    fun getAuthProviders() = arrayListOf(
+        AuthUI.IdpConfig.EmailBuilder().build(),
+        AuthUI.IdpConfig.GoogleBuilder().build())
+
 
 
     fun logout(context: Context) = UserRepository(
         context
     ).logout()
 
-
-    val startSignInProcess = MutableLiveData<Boolean>()
 
     /**
      * Used to know whether the user has signed out
@@ -88,4 +90,7 @@ open class SharedViewModel: ViewModel() {
         }
 
     }
+
+    private fun saveUser(context: Context, coroutineScope: CoroutineScope, id: Int, newUser: User) =
+        UserRepository(context).saveUser(coroutineScope, id, newUser)
 }

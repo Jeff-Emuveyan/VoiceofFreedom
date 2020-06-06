@@ -9,10 +9,11 @@ import com.bellogate.voiceoffreedom.data.setup.SetupState
 import com.bellogate.voiceoffreedom.data.UserRepository
 import com.bellogate.voiceoffreedom.model.Admin
 import com.bellogate.voiceoffreedom.model.User
+import com.bellogate.voiceoffreedom.ui.BaseViewModel
 import com.bellogate.voiceoffreedom.ui.SharedViewModel
 import kotlinx.coroutines.launch
 
-class SetupActivityViewModel: SharedViewModel() {
+class SetupActivityViewModel: BaseViewModel() {
 
     private val _setUpState = MutableLiveData<SetupState>()
     val setUpState : LiveData<SetupState> = _setUpState

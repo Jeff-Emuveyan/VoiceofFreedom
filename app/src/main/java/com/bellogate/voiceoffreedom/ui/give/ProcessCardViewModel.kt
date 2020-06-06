@@ -11,20 +11,14 @@ import co.paystack.android.Transaction
 import co.paystack.android.model.Card
 import co.paystack.android.model.Charge
 import com.bellogate.voiceoffreedom.data.UserRepository
+import com.bellogate.voiceoffreedom.ui.BaseViewModel
 import com.bellogate.voiceoffreedom.ui.give.util.CardProcessState
 
-class ProcessCardViewModel : ViewModel() {
+class ProcessCardViewModel : BaseViewModel() {
 
 
     private val _cardProcessState = MutableLiveData<Pair<CardProcessState, String?>>()
     val cardProcessState : LiveData<Pair<CardProcessState, String?>> = _cardProcessState
-
-    /****
-     *Returns a LiveData User object that all Fragments can observe
-     */
-    fun getUser(context: Context, id: Int) = UserRepository(
-        context
-    ).getUser(id)
 
 
     fun processCard(activity: Activity, card: Card, amount: Int, email: String){

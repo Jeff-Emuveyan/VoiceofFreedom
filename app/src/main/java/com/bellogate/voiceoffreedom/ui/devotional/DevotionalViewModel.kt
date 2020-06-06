@@ -6,9 +6,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.bellogate.voiceoffreedom.data.devotional.DevotionalRepository
 import com.bellogate.voiceoffreedom.model.Devotional
+import com.bellogate.voiceoffreedom.ui.BaseViewModel
 import com.bellogate.voiceoffreedom.ui.devotional.util.UIState
 
-class DevotionalViewModel : ViewModel() {
+class DevotionalViewModel : BaseViewModel() {
 
     private val _devotional = MutableLiveData<Pair<UIState, Devotional?>>()
     val devotional: LiveData<Pair<UIState, Devotional?>> = _devotional

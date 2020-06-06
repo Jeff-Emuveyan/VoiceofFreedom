@@ -27,9 +27,8 @@ import com.bellogate.voiceoffreedom.util.showSnackMessageAtTop
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.ErrorCodes
 import com.firebase.ui.auth.IdpResponse
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
-import com.google.android.material.snackbar.Snackbar
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 
 
@@ -38,7 +37,7 @@ const val  RC_SIGN_IN = 44
 class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
-    private lateinit var viewModel: SharedViewModel
+    private lateinit var sharedViewModel: SharedViewModel
     private lateinit var drawerLayout: DrawerLayout
     private var user: User? = null
 
@@ -70,21 +69,21 @@ class MainActivity : AppCompatActivity() {
             tvFlavourType.text = resources.getText(R.string.statgin)
         }
 
-        viewModel = ViewModelProviders.of(this).get(SharedViewModel::class.java)
+        sharedViewModel = ViewModelProviders.of(this).get(SharedViewModel::class.java)
 
         //we place a constant listener to know when the user has signed out,
         // So that we can know when to delete the user from db
         //This will trigger anytime the user sign out. Successfully or not.
-        viewModel.listenForUserSignOut(this)
+        sharedViewModel.listenForUserSignOut(this)
 
 
-        viewModel.getUser(this, 1).observe(this, Observer {
+        sharedViewModel.getUser(this, 1).observe(this, Observer {
             //anytime the user has logged in or out, we regulate the menu to show the right items:
             user = it
-            invalidateOptionsMenu()
+            invalidateOptionsMenu()//this will cause 'onCreateOptionsMenu' to run again
         })
 
-        viewModel.startSignInProcess.observe(this, Observer {
+        sharedViewModel.startSignInProcess.observe(this, Observer {
             if(it){
                 launchFirebaseAuthentication()
             }
@@ -94,6 +93,8 @@ class MainActivity : AppCompatActivity() {
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.main, menu)
+
+        menu.findItem(R.id.manage_devotional).isVisible = false
 
         if(user == null){
             //when the app newly starts, the logout menu option should be hidden
@@ -116,7 +117,13 @@ class MainActivity : AppCompatActivity() {
             //Hide login menu
             val menuLogIn = menu.findItem(R.id.sign_up)
             menuLogIn.isVisible = false
+
+            //determines when to show 'Manage devotionals'
+            if(user!!.isAdmin && nav_view.checkedItem?.itemId == R.id.nav_devotional){
+                menu.findItem(R.id.manage_devotional).isVisible = true
+            }
         }
+
         return true
     }
 
@@ -136,11 +143,14 @@ class MainActivity : AppCompatActivity() {
             16908332 ->{
                 drawerLayout.openDrawer(Gravity.LEFT)
             }
+            R.id.manage_devotional ->{
+                sharedViewModel.showManageDevotionalsFragment.value = true
+            }
         }
         return true
     }
 
-    private fun logout() = viewModel.logout(this)
+    private fun logout() = sharedViewModel.logout(this)
 
 
     /**
@@ -150,11 +160,11 @@ class MainActivity : AppCompatActivity() {
         startActivityForResult(
             AuthUI.getInstance()
                 .createSignInIntentBuilder()
-                .setAvailableProviders(viewModel.getAuthProviders())
+                .setAvailableProviders(sharedViewModel.getAuthProviders())
                 .build(),
             RC_SIGN_IN
         )
-        viewModel.startSignInProcess.value = false
+        sharedViewModel.startSignInProcess.value = false
     }
 
 
@@ -176,7 +186,7 @@ class MainActivity : AppCompatActivity() {
             val progressDialog = ProgressDialog(this@MainActivity)
             progressDialog.setTitle("Please wait....")
             progressDialog.show()
-            viewModel.handleSuccessfulSignIn(this, response){
+            sharedViewModel.handleSuccessfulSignIn(this, response){
                 if(it){
                     showSnackMessageAtTop(this, view!!, "Login successful!!")
                 }else{

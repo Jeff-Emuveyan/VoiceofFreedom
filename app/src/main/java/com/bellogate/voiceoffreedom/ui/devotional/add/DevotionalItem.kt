@@ -22,6 +22,9 @@ class DevotionalItem private constructor(v: View): RecyclerView.ViewHolder(v) ,
     lateinit var buttonDate: MaterialButton
     lateinit var context: Context
 
+    var dateInSimpleForm : String? = null
+    var dateInMillis: Long? = null
+
     constructor(context: Context, v: View): this(v){
         this.context = context
         tvInstruction = v.findViewById(R.id.tvInstruction)
@@ -41,7 +44,10 @@ class DevotionalItem private constructor(v: View): RecyclerView.ViewHolder(v) ,
         val realMonth = month + 1
         val dateInSimpleFormat = "$year-$realMonth-$dayOfMonth"
 
-        buttonDate.text = getSimpleDateFormat(calendar.timeInMillis, "dd-MMM-yyyy")
+        dateInMillis = calendar.timeInMillis
+        dateInSimpleForm = getSimpleDateFormat(dateInMillis!!, "dd-MMM-yyyy")
+
+        buttonDate.text = dateInSimpleForm
 
     }
 }

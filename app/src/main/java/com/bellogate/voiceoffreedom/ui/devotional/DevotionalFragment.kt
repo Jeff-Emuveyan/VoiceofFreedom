@@ -58,6 +58,14 @@ class DevotionalFragment : Fragment(), OnDateSetListener {
             }
         })
 
+
+        sharedViewModel.showAddDevotionalFragment.observe(viewLifecycleOwner, Observer {
+            if(it){
+                findNavController().navigate(R.id.action_nav_devotional_to_addDevotionalFragment)
+            }
+        })
+
+
         //this will cause the MainActivity to call 'onCreateOptionsMenu' again.
         //If the user is an Admin, the MainActivity will add a menu item to 'Manage Devotionals'
         requireActivity().invalidateOptionsMenu()

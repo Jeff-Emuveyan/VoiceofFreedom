@@ -95,6 +95,7 @@ class MainActivity : AppCompatActivity() {
         menuInflater.inflate(R.menu.main, menu)
 
         menu.findItem(R.id.manage_devotional).isVisible = false
+        menu.findItem(R.id.add_devotional).isVisible = false
 
         if(user == null){
             //when the app newly starts, the logout menu option should be hidden
@@ -118,9 +119,10 @@ class MainActivity : AppCompatActivity() {
             val menuLogIn = menu.findItem(R.id.sign_up)
             menuLogIn.isVisible = false
 
-            //determines when to show 'Manage devotionals'
+            //determines when to give show user admin permissons for devotionals
             if(user!!.isAdmin && nav_view.checkedItem?.itemId == R.id.nav_devotional){
                 menu.findItem(R.id.manage_devotional).isVisible = true
+                menu.findItem(R.id.add_devotional).isVisible = true
             }
         }
 
@@ -140,11 +142,14 @@ class MainActivity : AppCompatActivity() {
             R.id.logout ->{
                 logout()
             }
-            16908332 ->{
-                drawerLayout.openDrawer(Gravity.LEFT)
-            }
             R.id.manage_devotional ->{
                 sharedViewModel.showManageDevotionalsFragment.value = true
+            }
+            R.id.add_devotional ->{
+                sharedViewModel.showAddDevotionalFragment.value = true
+            }
+            else ->{
+                drawerLayout.openDrawer(Gravity.LEFT)
             }
         }
         return true

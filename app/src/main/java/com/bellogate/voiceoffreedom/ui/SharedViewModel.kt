@@ -19,7 +19,13 @@ import kotlinx.coroutines.CoroutineScope
 open class SharedViewModel: ViewModel() {
 
 
-    val showManageDevotionalsFragment = MutableLiveData<Boolean>()
+    val showManageDevotionalsFragment = MutableLiveData<Boolean>().apply {
+        value = false
+    }
+
+    val showAddDevotionalFragment = MutableLiveData<Boolean>().apply {
+        value = false
+    }
 
     val startSignInProcess = MutableLiveData<Boolean>()
 

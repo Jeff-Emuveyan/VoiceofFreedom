@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.bellogate.voiceoffreedom.BuildConfig
 import com.bellogate.voiceoffreedom.R
+import com.bellogate.voiceoffreedom.ui.devotional.add.AddDevotionalAdapter
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
 import java.text.DateFormatSymbols
@@ -110,6 +111,5 @@ fun showDatePickerDialog(context: Context, listener: DatePickerDialog.OnDateSetL
     datePickerDialog.setTitle(datePickerTag)
     datePickerDialog.show()
 }
-
 
 

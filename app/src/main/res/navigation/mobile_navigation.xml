@@ -47,6 +47,11 @@
             app:destination="@id/manageDevotionalsFragment"
             app:exitAnim="@anim/fui_slide_out_left"
             app:popEnterAnim="@android:anim/slide_in_left" />
+        <action
+            android:id="@+id/action_nav_devotional_to_addDevotionalFragment"
+            app:destination="@id/addDevotionalFragment"
+            app:exitAnim="@anim/fui_slide_out_left"
+            app:popEnterAnim="@android:anim/slide_in_left" />
     </fragment>
     <fragment
         android:id="@+id/fullScreenFragment"
@@ -58,4 +63,10 @@
         android:name="com.bellogate.voiceoffreedom.ui.devotional.manage.ManageDevotionalsFragment"
         android:label="Manage Devotionals"
         tools:layout="@layout/manage_devotionals_fragment" />
+
+    <fragment
+        android:id="@+id/addDevotionalFragment"
+        android:name="com.bellogate.voiceoffreedom.ui.devotional.add.AddDevotionalFragment"
+        android:label="Add Devotional"
+        tools:layout="@layout/add_devotional_fragment" />
 </navigation>

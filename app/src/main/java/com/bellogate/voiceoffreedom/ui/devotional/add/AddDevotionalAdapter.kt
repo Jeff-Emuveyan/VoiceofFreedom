@@ -1,38 +1,46 @@
 package com.bellogate.voiceoffreedom.ui.devotional.add
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.lifecycle.LifecycleOwner
+import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.bellogate.voiceoffreedom.R
+import com.bellogate.voiceoffreedom.util.getBitmapFromUri
+import com.bellogate.voiceoffreedom.util.selectImage
 
-class AddDevotionalAdapter private constructor(): RecyclerView.Adapter<DevotionalItem>() {
+class AddDevotionalAdapter private constructor(): RecyclerView.Adapter<DevotionalCollectorItem>() {
 
-    private lateinit var context: Context
-    private var itemCount: Int = 1 //default
+    var numberOfCollectorsToShow: Int = 1 //default
+    private lateinit var activity: FragmentActivity
 
-    constructor(context: Context, itemCount: Int): this(){
-        this.context = context
-        this.itemCount = itemCount
+    constructor(activity: FragmentActivity, numberOfCollectorsToShow: Int): this(){
+        this.activity = activity
+        this.numberOfCollectorsToShow = numberOfCollectorsToShow
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DevotionalItem {
-        val inflater = LayoutInflater.from(context)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DevotionalCollectorItem {
+        val inflater = LayoutInflater.from(activity)
         val view = inflater.inflate(R.layout.add_devotional_item, parent, false)
-        return DevotionalItem(context!!, view)
+        return DevotionalCollectorItem(activity, view)
     }
 
     override fun getItemCount(): Int {
-        return itemCount
+        return numberOfCollectorsToShow
     }
 
-    override fun onBindViewHolder(holder: DevotionalItem, position: Int) {
+    override fun onBindViewHolder(holder: DevotionalCollectorItem, position: Int) {
 
         holder.imageView.setOnClickListener {
+            selectImage(activity){uri, filePath ->
+                holder.imageUri = uri
+                holder.imageView.setImageBitmap(getBitmapFromUri(activity, holder.imageUri!!))
+            }
         }
 
         holder.ivCancel.setOnClickListener {
         }
     }
+
+
+
 }

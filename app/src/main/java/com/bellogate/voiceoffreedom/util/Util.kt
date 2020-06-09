@@ -2,21 +2,29 @@ package com.bellogate.voiceoffreedom.util
 
 import android.app.DatePickerDialog
 import android.content.Context
+import android.content.pm.ActivityInfo
 import android.graphics.Bitmap
+import android.net.Uri
+import android.provider.MediaStore
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.Button
 import android.widget.FrameLayout
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
+import androidx.core.net.toFile
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.navigation.fragment.findNavController
 import com.bellogate.voiceoffreedom.BuildConfig
 import com.bellogate.voiceoffreedom.R
 import com.bellogate.voiceoffreedom.ui.devotional.add.AddDevotionalAdapter
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
+import com.greentoad.turtlebody.mediapicker.MediaPicker
+import com.greentoad.turtlebody.mediapicker.core.MediaPickerConfig
 import java.text.DateFormatSymbols
 import java.text.SimpleDateFormat
 import java.util.*
@@ -95,7 +103,7 @@ fun getSimpleDateFormat(timestampValue: Long,simpleDateFormat: String?): String 
 
 fun todayDate(dateInMilliSeconds: Long) = getSimpleDateFormat(dateInMilliSeconds, "dd-MMM-yyyy")
 
-fun showDatePickerDialog(context: Context, listener: DatePickerDialog.OnDateSetListener) {
+fun showDatePickerDialog(context: Context, shouldHaveMaxDate: Boolean, listener: DatePickerDialog.OnDateSetListener) {
     val calendar = Calendar.getInstance()
     val year = calendar[Calendar.YEAR]
     val month = calendar[Calendar.MONTH]
@@ -106,10 +114,49 @@ fun showDatePickerDialog(context: Context, listener: DatePickerDialog.OnDateSetL
     maximumDate[Calendar.MONTH] = month
     maximumDate[Calendar.DAY_OF_MONTH] = day
     val datePickerDialog = DatePickerDialog(context, listener, year, month, day)
-    datePickerDialog.datePicker.maxDate = maximumDate.timeInMillis
+    if(shouldHaveMaxDate) {
+        datePickerDialog.datePicker.maxDate = maximumDate.timeInMillis
+    }
     datePickerDialog.datePicker.tag = datePickerTag
     datePickerDialog.setTitle(datePickerTag)
     datePickerDialog.show()
 }
 
 
+val pickerConfig = MediaPickerConfig()
+    .setUriPermanentAccess(false)
+    .setAllowMultiSelection(false)
+    .setShowConfirmationDialog(true)
+    .setScreenOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
+
+
+fun getBitmapFromUri(context: Context, uri: Uri): Bitmap? =
+    MediaStore.Images.Media.getBitmap(context.contentResolver, uri)
+
+
+fun AddDevotionalAdapter.selectImage(activity: FragmentActivity, result: (uri:Uri, filePath: String) -> Unit){
+    val pickerConfig = pickerConfig
+
+    val subscribe = MediaPicker.with(activity!!, MediaPicker.MediaTypes.IMAGE)
+        .setConfig(pickerConfig)
+        .setFileMissingListener(object : MediaPicker.MediaPickerImpl.OnMediaListener {
+            override fun onMissingFileWarning() {
+                Toast.makeText(activity, "Missing file", Toast.LENGTH_LONG).show()
+            }
+        })
+        .onResult()
+        .subscribe({
+            val uri = it[0]
+            //val filePath = uri.toFile().path
+            result.invoke(uri, "filePath")
+        }, {
+            Toast.makeText(activity, "An error occurred: ${it.message}", Toast.LENGTH_LONG).show()
+        })
+}
+
+
+fun Fragment.centerToast(message: String){
+    val toast = Toast.makeText(requireContext(), message, Toast.LENGTH_LONG)
+    toast.setGravity(Gravity.CENTER, 0, 0)
+    toast.show()
+}

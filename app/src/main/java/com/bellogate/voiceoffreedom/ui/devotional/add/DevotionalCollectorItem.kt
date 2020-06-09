@@ -2,6 +2,7 @@ package com.bellogate.voiceoffreedom.ui.devotional.add
 
 import android.app.DatePickerDialog
 import android.content.Context
+import android.net.Uri
 import android.view.View
 import android.widget.DatePicker
 import android.widget.ImageView
@@ -13,7 +14,7 @@ import com.bellogate.voiceoffreedom.util.showDatePickerDialog
 import com.google.android.material.button.MaterialButton
 import java.util.*
 
-class DevotionalItem private constructor(v: View): RecyclerView.ViewHolder(v) ,
+class DevotionalCollectorItem private constructor(v: View): RecyclerView.ViewHolder(v) ,
     DatePickerDialog.OnDateSetListener{
 
     lateinit var tvInstruction: TextView
@@ -24,6 +25,7 @@ class DevotionalItem private constructor(v: View): RecyclerView.ViewHolder(v) ,
 
     var dateInSimpleForm : String? = null
     var dateInMillis: Long? = null
+    var imageUri: Uri? = null
 
     constructor(context: Context, v: View): this(v){
         this.context = context
@@ -33,7 +35,7 @@ class DevotionalItem private constructor(v: View): RecyclerView.ViewHolder(v) ,
         buttonDate = v.findViewById(R.id.buttonDate)
 
         buttonDate.setOnClickListener{
-            showDatePickerDialog(context,this)
+            showDatePickerDialog(context,false, this)
         }
     }
 

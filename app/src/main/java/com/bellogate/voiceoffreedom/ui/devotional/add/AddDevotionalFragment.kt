@@ -1,21 +1,27 @@
 package com.bellogate.voiceoffreedom.ui.devotional.add
 
 import android.content.Context
-import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bellogate.voiceoffreedom.R
 import com.bellogate.voiceoffreedom.ui.SharedViewModel
+import com.bellogate.voiceoffreedom.util.centerToast
 import kotlinx.android.synthetic.main.add_devotional_fragment.*
+
 
 class AddDevotionalFragment : Fragment() {
 
     private lateinit var viewModel: AddDevotionalViewModel
     private lateinit var sharedViewModel: SharedViewModel
+    private lateinit var addDevotionalAdapter: AddDevotionalAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,14 +42,41 @@ class AddDevotionalFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        displayDevotionalItemCollectors(requireContext(), 5)
+        displayDevotionalItemCollectors(requireContext(), 1)
+
+        postButton.setOnClickListener{
+            PostDevotionalManager.syncDevotionals(requireContext(), {
+                centerToast("Uploading....")
+                findNavController().popBackStack()
+            }, {errorMessage ->
+                centerToast(errorMessage)
+            })
+        }
+
+
+        addButton.setOnClickListener {//add a new collector to the recyclerView
+            if(viewModel.maximumNumberOfCollectorsReached(addDevotionalAdapter.numberOfCollectorsToShow)){
+                centerToast("Maximum number reached")
+                addButton.isEnabled = false
+            }else{
+                addDevotionalAdapter.numberOfCollectorsToShow += 1
+                addDevotionalAdapter.notifyDataSetChanged()
+            }
+
+
+        }
     }
+
+
+
 
 
 
     private fun displayDevotionalItemCollectors(context: Context, numberOfCollectorsToShow: Int){
         recyclerView.layoutManager = LinearLayoutManager(context)
-        val addDevotionalAdapter = AddDevotionalAdapter(requireContext(), numberOfCollectorsToShow)
+        addDevotionalAdapter = AddDevotionalAdapter(requireActivity(), numberOfCollectorsToShow)
         recyclerView.adapter = addDevotionalAdapter
+
+
     }
 }

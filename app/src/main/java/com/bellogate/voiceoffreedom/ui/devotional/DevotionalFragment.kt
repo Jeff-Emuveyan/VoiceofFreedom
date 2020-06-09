@@ -81,7 +81,7 @@ class DevotionalFragment : Fragment(), OnDateSetListener {
         }
 
         buttonDate.setOnClickListener {
-            showDatePickerDialog(requireContext(), this)
+            showDatePickerDialog(requireContext(), true, this)
         }
 
         imageView.setOnClickListener {

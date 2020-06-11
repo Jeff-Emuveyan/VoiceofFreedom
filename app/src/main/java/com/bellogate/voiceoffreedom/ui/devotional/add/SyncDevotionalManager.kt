@@ -19,13 +19,11 @@ class SyncDevotionalManager {
                 .setMessage("Upload these devotionals?")
                 .setPositiveButton("Yes") { _, _ ->
 
-                    validateCollectors()
-                    /*if(validateCollectors()){
+                    if(validateCollectors()){
                         onStart.invoke()
-
                     }else{
                         invalideInput.invoke("Missing input field(s)")
-                    }*/
+                    }
                 }
                 .setNegativeButton("No") { _, _ -> }
                 .show()
@@ -38,7 +36,10 @@ class SyncDevotionalManager {
 
             if(listOfCollectors.isNotEmpty()) {
                 for (map in listOfCollectors.entries) {
-
+                    val devotionalCollectorItem = map.value
+                    return !(devotionalCollectorItem.dateInMillis == null ||
+                            devotionalCollectorItem.dateInSimpleForm == null ||
+                            devotionalCollectorItem.imageUri == null)
                 }
             }
             return true

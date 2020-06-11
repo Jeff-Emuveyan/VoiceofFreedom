@@ -2,11 +2,9 @@ package com.bellogate.voiceoffreedom.ui.devotional.add
 
 import android.content.Context
 import android.os.Bundle
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
@@ -45,7 +43,7 @@ class AddDevotionalFragment : Fragment() {
         displayDevotionalItemCollectors(requireContext(), 1)
 
         postButton.setOnClickListener{
-            PostDevotionalManager.syncDevotionals(requireContext(), {
+            SyncDevotionalManager.syncDevotionals(requireContext(), {
                 centerToast("Uploading....")
                 findNavController().popBackStack()
             }, {errorMessage ->
@@ -66,10 +64,6 @@ class AddDevotionalFragment : Fragment() {
 
         }
     }
-
-
-
-
 
 
     private fun displayDevotionalItemCollectors(context: Context, numberOfCollectorsToShow: Int){

@@ -6,6 +6,7 @@ import android.content.pm.ActivityInfo
 import android.graphics.Bitmap
 import android.net.Uri
 import android.provider.MediaStore
+import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -14,13 +15,14 @@ import android.widget.FrameLayout
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
-import androidx.core.net.toFile
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.navigation.fragment.findNavController
 import com.bellogate.voiceoffreedom.BuildConfig
 import com.bellogate.voiceoffreedom.R
 import com.bellogate.voiceoffreedom.ui.devotional.add.AddDevotionalAdapter
+import com.bellogate.voiceoffreedom.ui.devotional.add.DevotionalCollectorItem
+import com.bellogate.voiceoffreedom.ui.devotional.add.SyncDevotionalManager
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
 import com.greentoad.turtlebody.mediapicker.MediaPicker
@@ -147,10 +149,9 @@ fun AddDevotionalAdapter.selectImage(activity: FragmentActivity, result: (uri:Ur
         .onResult()
         .subscribe({
             val uri = it[0]
-            //val filePath = uri.toFile().path
             result.invoke(uri, "filePath")
         }, {
-            Toast.makeText(activity, "An error occurred: ${it.message}", Toast.LENGTH_LONG).show()
+            it.printStackTrace()
         })
 }
 
@@ -160,3 +161,45 @@ fun Fragment.centerToast(message: String){
     toast.setGravity(Gravity.CENTER, 0, 0)
     toast.show()
 }
+
+
+fun updateCollectedItems(devotionalCollectorItem: DevotionalCollectorItem){
+
+    if(SyncDevotionalManager.listOfCollectors.containsKey(devotionalCollectorItem.id)){
+        //remove the old collector from the list:
+        SyncDevotionalManager.listOfCollectors.remove(devotionalCollectorItem.id)
+        //add the updated collector to the list again
+        SyncDevotionalManager.listOfCollectors[devotionalCollectorItem.id!!] =
+            devotionalCollectorItem
+    }else{
+        //add the updated collector to the list
+        SyncDevotionalManager.listOfCollectors[devotionalCollectorItem.id!!] =
+            devotionalCollectorItem
+    }
+}
+
+fun deleteCollectedItem(devotionalCollectorItem: DevotionalCollectorItem){
+
+    if(SyncDevotionalManager.listOfCollectors.containsKey(devotionalCollectorItem.id)){
+
+        SyncDevotionalManager.listOfCollectors.remove(devotionalCollectorItem.id)
+        logCollectors()
+    }
+}
+
+
+fun logCollectors(){
+    if(SyncDevotionalManager.listOfCollectors.isNotEmpty()) {
+        Log.e(
+            SyncDevotionalManager::class.java.simpleName,
+            "Total size is: ${SyncDevotionalManager.listOfCollectors.size}"
+        )
+        for (map in SyncDevotionalManager.listOfCollectors.entries) {
+            Log.e(
+                SyncDevotionalManager::class.java.simpleName,
+                "key: ${map.key} value: ${map.value.toString()}"
+            )
+        }
+    }
+}
+

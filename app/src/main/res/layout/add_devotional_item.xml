@@ -32,6 +32,16 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
+
+            <ImageView
+                android:id="@+id/ivCancel"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_cancel" />
+
+
             <ImageView
                 android:id="@+id/imageView"
                 android:layout_width="match_parent"
@@ -41,15 +51,7 @@
                 android:src="@drawable/ic_insert_photo"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvInstruction" />
-
-            <ImageView
-                android:id="@+id/ivCancel"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_cancel" />
+                app:layout_constraintTop_toBottomOf="@+id/ivCancel" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -62,7 +64,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="Select date"
+        android:text="@string/select_date"
         app:icon="@drawable/ic_date"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

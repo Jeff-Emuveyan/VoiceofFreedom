@@ -33,6 +33,8 @@ import java.util.*
 
 
 const val AMOUNT = "amount"
+const val STOP_NOTIFICATION = "stop_notification"
+
 
 fun showSnackMessage(view: View, message: String){
     Snackbar.make(view, message, Snackbar.LENGTH_LONG).show()

@@ -4,7 +4,7 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.ProgressDialog
 import android.content.Intent
-import android.content.pm.PackageManager
+import android.content.IntentFilter
 import android.os.Bundle
 import android.view.Gravity
 import android.view.Menu
@@ -21,8 +21,9 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.bellogate.voiceoffreedom.R
+import com.bellogate.voiceoffreedom.data.devotional.SyncDevotionalsReceiver
 import com.bellogate.voiceoffreedom.model.User
-import com.bellogate.voiceoffreedom.util.isStagingBuild
+import com.bellogate.voiceoffreedom.util.STOP_NOTIFICATION
 import com.bellogate.voiceoffreedom.util.showSnackMessage
 import com.bellogate.voiceoffreedom.util.showSnackMessageAtTop
 import com.firebase.ui.auth.AuthUI
@@ -30,7 +31,6 @@ import com.firebase.ui.auth.ErrorCodes
 import com.firebase.ui.auth.IdpResponse
 import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.app_bar_main.*
 
 
 const val  RC_SIGN_IN = 44
@@ -41,6 +41,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var sharedViewModel: SharedViewModel
     private lateinit var drawerLayout: DrawerLayout
     private var user: User? = null
+    private lateinit var broadcastReceiver: SyncDevotionalsReceiver
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,6 +67,8 @@ class MainActivity : AppCompatActivity() {
             R.style.LatoBoldTextAppearance
         )//change the font
 
+        registerBroadcastReceiver()
+
         sharedViewModel = ViewModelProviders.of(this).get(SharedViewModel::class.java)
 
         //we place a constant listener to know when the user has signed out,
@@ -85,10 +88,6 @@ class MainActivity : AppCompatActivity() {
                 launchFirebaseAuthentication()
             }
         })
-
-
-        //check or request permissions:
-        requestPermission()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -228,26 +227,19 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    private fun requestPermission(){
-        if(sharedViewModel checkPermissions this){
-            if(isStagingBuild()){
-                tvFlavourType.text = resources.getText(R.string.statgin)
-            }
-        }else sharedViewModel requestPermissions this //request user to grant permissions
+    private fun registerBroadcastReceiver(){
+
+        broadcastReceiver = SyncDevotionalsReceiver()
+        //Intent filters specify the types of intents a component can receive.
+        //They are used in filtering out the intents based on Intent values like action.
+        val filter = IntentFilter()
+        filter.addAction(STOP_NOTIFICATION)
+        registerReceiver(broadcastReceiver, filter)
     }
 
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>,
-                                            grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-
-        if (requestCode == PERMISSION_ID) {
-            if(!(grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)){
-                //prompt user to grant permission:
-                requestPermission()
-            }
-        }
+    override fun onDestroy() {
+        unregisterReceiver(broadcastReceiver)
+        super.onDestroy()
     }
-
 }

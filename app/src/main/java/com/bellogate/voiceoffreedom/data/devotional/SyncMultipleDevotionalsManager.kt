@@ -12,6 +12,8 @@ import com.bellogate.voiceoffreedom.util.DEVOTIONALS
 import com.bellogate.voiceoffreedom.util.logCollectors
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.StorageReference
+import com.google.firebase.storage.StorageTask
+import com.google.firebase.storage.UploadTask
 import com.google.firebase.storage.ktx.storage
 import java.io.ByteArrayOutputStream
 
@@ -21,8 +23,9 @@ class SyncMultipleDevotionalsManager {
     companion object{
 
         var numberOfCollectors: Int = 1 //default
-
         var listOfCollectors = LinkedHashMap<String, DevotionalCollectorItem>()
+        lateinit var  uploadTask: StorageTask<UploadTask.TaskSnapshot>
+
 
         fun syncDevotionals(context: Context, onStart:()-> Unit, invalideInput: (String)-> Unit){
             AlertDialog.Builder(context)
@@ -83,7 +86,7 @@ class SyncMultipleDevotionalsManager {
 
                 val imageRef: StorageReference = reference.child("${DEVOTIONALS}/${devotionalCollectorItem.dateInMillis}.jpg")
 
-                val uploadTask = imageRef.putBytes(data).addOnCompleteListener {
+                uploadTask = imageRef.putBytes(data).addOnCompleteListener {
                     if(it.isSuccessful){
                         //Now, sync the devotional object for this image:
                         imageRef.downloadUrl.addOnSuccessListener {uri ->
@@ -109,10 +112,17 @@ class SyncMultipleDevotionalsManager {
                             }
                         }
                     }else{
-                        Toast.makeText(context, "Failed to upload", Toast.LENGTH_LONG).show()
+                        Toast.makeText(context, "Upload has stopped", Toast.LENGTH_LONG).show()
                     }
                 }
 
+                uploadTask.addOnCanceledListener {
+                    //if the user cancels, we clear the list, hence ending the upload process
+                    listOfCollectors.clear()
+                    //this will now remove the notification for the screen:
+                    SyncNotificationManager.cancelNotification()
+                    Toast.makeText(context, "Upload cancelled", Toast.LENGTH_LONG).show()
+                }
             }
         }
     }

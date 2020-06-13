@@ -10,13 +10,14 @@ import androidx.annotation.Keep
 import androidx.core.app.NotificationCompat
 import com.bellogate.voiceoffreedom.R
 import com.bellogate.voiceoffreedom.ui.MainActivity
+import com.bellogate.voiceoffreedom.util.STOP_NOTIFICATION
 
 @Keep
 class SyncNotificationManager {
 
     companion object{
 
-        private val CHANNEL_ID = "com.seamfix.bioregistra"
+        private val CHANNEL_ID = "com.bellogate.caliphate"
         private val id = 1
         private lateinit var notificationBuilder: NotificationCompat.Builder
         private lateinit var notificationManager : NotificationManager
@@ -31,6 +32,17 @@ class SyncNotificationManager {
                     .setContentText("Uploading devotionals...")
                     .setAutoCancel(true)
 
+            //intent for user tapping the cancel button:
+            val cancelIntent = Intent(context, SyncDevotionalsReceiver::class.java).apply {
+                action = STOP_NOTIFICATION
+            }
+
+            val cancelPendingIntent: PendingIntent =
+                PendingIntent.getBroadcast(context, 0, cancelIntent, 0)
+
+            notificationBuilder.addAction(R.drawable.ic_stop, context.getString(R.string.cancel),
+                cancelPendingIntent)
+
             notificationManager =
                 context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         }
@@ -38,22 +50,10 @@ class SyncNotificationManager {
 
         fun showNotificationForAppUpdate(context: Context, numberOfDevotionalsRemaining: Int, totalDevotionalsToSync: Int){
 
-            val intent: Intent =
-                Intent(context, MainActivity::class.java).
-                    putExtra("numberOfDevotionalsRemaining", numberOfDevotionalsRemaining)
-                    .putExtra("totalDevotionalsToSync", totalDevotionalsToSync)
-
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-            val pendingIntent = PendingIntent.getActivity(
-                context, 0, intent,
-                PendingIntent.FLAG_ONE_SHOT
-            )
-
             if(numberOfDevotionalsRemaining == 0){
                 notificationBuilder.setContentText("Upload complete!")
             }
 
-            notificationBuilder.setContentIntent(pendingIntent)
             //since the value of 'numberOfDevotionalsRemaining' is actually going to be reducing at every iteration,
             //we need to: (totalDevotionalsToSync - numberOfDevotionalsRemaining) as a trick to have a high value
             //to compare with the 'totalDevotionalsToSync', if not, our notification bar will be reducing instead of
@@ -84,6 +84,10 @@ class SyncNotificationManager {
                 notificationManager.createNotificationChannel(channel)
                 //Toast.makeText(SplashActivity.this, "New Phone", Toast.LENGTH_LONG).show();
             }
+        }
+
+        fun cancelNotification(){
+            notificationManager.cancel(id)
         }
     }
 

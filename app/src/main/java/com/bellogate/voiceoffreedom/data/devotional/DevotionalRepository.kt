@@ -15,14 +15,20 @@ class DevotionalRepository(context: Context) : BaseRepository(context) {
     }
 
     fun deleteDevotional(it: Devotional, success:(Boolean, String?)-> Unit){
-        NetworkHelper.deleteDevotional(it){ succecced, message ->
-            success.invoke(succecced, message)
+        NetworkHelper.deleteDevotional(it){ succeed, message ->
+            success.invoke(succeed, message)
         }
     }
 
     fun syncDevotional(it: Devotional, success:(Boolean, String?)-> Unit){
-        NetworkHelper.syncDevotional(it){ succecced, message ->
-            success.invoke(succecced, message)
+        NetworkHelper.syncDevotional(it){ succeed, message ->
+            success.invoke(succeed, message)
+        }
+    }
+
+    fun deleteDevotionalImageFile(dateInMilliSeconds: String, success:(Boolean, String?)-> Unit){
+        NetworkHelper.deleteDevotionalImageFile(dateInMilliSeconds){ succeed, message ->
+            success.invoke(succeed, message)
         }
     }
 }

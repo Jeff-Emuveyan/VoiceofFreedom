@@ -26,9 +26,15 @@ class DevotionalViewModel : BaseViewModel() {
 
     fun deleteDevotional(context: Context, devotional: Devotional?) {
         devotional?.let {
-            DevotionalRepository(context).deleteDevotional(it){ success, message->
-                _deleteDevotional.value = success
-                Log.e(DevotionalViewModel::class.java.simpleName, message ?: "deleted successfully")
+            //delete the image file from Storage first:
+            DevotionalRepository(context).deleteDevotionalImageFile(it.dateInMilliSeconds){ fileDeleted, _ ->
+                if(fileDeleted){
+                    DevotionalRepository(context).deleteDevotional(it){ response, _->
+                        _deleteDevotional.value = response
+                    }
+                }else{
+                    _deleteDevotional.value = false
+                }
             }
         }
     }

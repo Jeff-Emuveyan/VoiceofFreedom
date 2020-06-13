@@ -10,6 +10,9 @@ import com.bellogate.voiceoffreedom.util.DEVOTIONALS
 import com.bellogate.voiceoffreedom.util.KEY
 import com.bellogate.voiceoffreedom.util.USERS
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.StorageReference
+import com.google.firebase.storage.ktx.storage
 
 class NetworkHelper {
 
@@ -116,6 +119,22 @@ class NetworkHelper {
         }
 
 
+
+        /*** Used to delete an image file in Firebase Storage **/
+        fun deleteDevotionalImageFile(timeInMilliSeconds: String, success:(Boolean, String?)-> Unit){
+            val storage = Firebase.storage
+            val reference = storage.reference
+
+            val imageRef: StorageReference = reference.child("${DEVOTIONALS}/${timeInMilliSeconds}.jpg")
+            imageRef.delete()
+                .addOnSuccessListener {
+                    success.invoke(true, null)
+                }.addOnFailureListener { e ->
+                    success.invoke(false, e.message)
+                }
+        }
+
+
         fun syncDevotional(it: Devotional, success:(Boolean, String?)-> Unit) {
             db.collection(DEVOTIONALS).document(it.dateInMilliSeconds).set(it)
                 .addOnSuccessListener {
@@ -125,5 +144,7 @@ class NetworkHelper {
                     success.invoke(false, e.message)
                 }
         }
+
     }
+
 }

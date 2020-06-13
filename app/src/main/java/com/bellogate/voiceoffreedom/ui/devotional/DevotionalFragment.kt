@@ -66,11 +66,11 @@ class DevotionalFragment : Fragment(), OnDateSetListener {
         viewModel.deleteDevotional.observe(viewLifecycleOwner, Observer {
             setUpUIState(UIState.DELETE_COMPLETE, date, null)
             if(it){
-                centerToast("Delete successful")
+                showAlert("Successful", "Delete successful")
                 //refresh
                 this getDevotionalByDate date
             }else{
-               centerToast("Operation failed, try again")
+                showAlert("Delete failed", "Delete failed, try again")
             }
         })
 

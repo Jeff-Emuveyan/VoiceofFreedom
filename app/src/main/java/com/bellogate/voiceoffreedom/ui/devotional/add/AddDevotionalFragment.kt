@@ -13,6 +13,7 @@ import com.bellogate.voiceoffreedom.R
 import com.bellogate.voiceoffreedom.data.devotional.SyncMultipleDevotionalsManager
 import com.bellogate.voiceoffreedom.ui.SharedViewModel
 import com.bellogate.voiceoffreedom.util.centerToast
+import com.bellogate.voiceoffreedom.util.showAlert
 import kotlinx.android.synthetic.main.add_devotional_fragment.*
 
 
@@ -48,7 +49,7 @@ class AddDevotionalFragment : Fragment() {
                 centerToast("Uploading....")
                 findNavController().popBackStack()
             }, {errorMessage ->
-                centerToast(errorMessage)
+                showAlert("Oops", errorMessage)
             })
         }
 

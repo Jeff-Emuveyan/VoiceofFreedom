@@ -4,6 +4,7 @@ import android.app.AlertDialog
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
+import android.util.Log
 import android.widget.Toast
 import com.bellogate.voiceoffreedom.model.Devotional
 import com.bellogate.voiceoffreedom.ui.devotional.add.DevotionalCollectorItem
@@ -32,6 +33,7 @@ class SyncMultipleDevotionalsManager {
                     if(validateCollectors()){
                         onStart.invoke()
                         doWork(context)
+                        SyncNotificationManager.create(context)
                     }else{
                         invalideInput.invoke("Missing image or date")
                     }
@@ -65,6 +67,8 @@ class SyncMultipleDevotionalsManager {
 
             if(listOfCollectors.isNotEmpty()) {
 
+                val initialListSize = listOfCollectors.size
+
                 //get the first devotionalCollectorItem on the list:
                 val devotionalCollectorItem = listOfCollectors.entries.first().value
 
@@ -91,7 +95,11 @@ class SyncMultipleDevotionalsManager {
                                 if(success){
                                     //delete the devotionalCollectorItem from the list:
                                     listOfCollectors.remove(devotionalCollectorItem.id)
-                                    Toast.makeText(context, "Uploaded: list size :${listOfCollectors.size}", Toast.LENGTH_LONG).show()
+
+                                    //show notification:
+                                    SyncNotificationManager.showNotificationForAppUpdate(context, listOfCollectors.size, initialListSize)
+                                    Log.e(SyncMultipleDevotionalsManager::class.java.simpleName
+                                        , "Uploaded: list size :${listOfCollectors.size}")
 
                                     //restart the process until the list is empty:
                                     doWork(context)

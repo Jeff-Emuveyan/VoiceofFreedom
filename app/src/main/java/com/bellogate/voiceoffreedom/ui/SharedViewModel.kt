@@ -1,6 +1,10 @@
 package com.bellogate.voiceoffreedom.ui
 
+import android.Manifest
+import android.app.Activity
 import android.content.Context
+import android.content.pm.PackageManager
+import androidx.core.app.ActivityCompat
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -12,12 +16,11 @@ import com.firebase.ui.auth.IdpResponse
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.CoroutineScope
 
-
+const val PERMISSION_ID = 200
 /**
  * Serves as a SharedViewModel for communication between the MainActivity and all fragments
  * */
 open class SharedViewModel: ViewModel() {
-
 
     val showManageDevotionalsFragment = MutableLiveData<Boolean>().apply {
         value = false
@@ -99,4 +102,21 @@ open class SharedViewModel: ViewModel() {
 
     private fun saveUser(context: Context, coroutineScope: CoroutineScope, id: Int, newUser: User) =
         UserRepository(context).saveUser(coroutineScope, id, newUser)
+
+
+    infix fun checkPermissions(context: Context): Boolean {
+        return ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE
+        ) == PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE
+                ) == PackageManager.PERMISSION_GRANTED
+    }
+
+
+    infix fun requestPermissions(activity: Activity) {
+        ActivityCompat.requestPermissions(activity,
+            arrayOf(
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+            ), PERMISSION_ID)
+    }
 }

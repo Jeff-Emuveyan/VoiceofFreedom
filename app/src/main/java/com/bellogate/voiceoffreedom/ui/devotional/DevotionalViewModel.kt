@@ -1,6 +1,7 @@
 package com.bellogate.voiceoffreedom.ui.devotional
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -14,9 +15,21 @@ class DevotionalViewModel : BaseViewModel() {
     private val _devotional = MutableLiveData<Pair<UIState, Devotional?>>()
     val devotional: LiveData<Pair<UIState, Devotional?>> = _devotional
 
+    private val _deleteDevotional = MutableLiveData<Boolean>()
+    val deleteDevotional : LiveData<Boolean> = _deleteDevotional
+
     fun getDevotionalByDate(context: Context, dateToFind: String) {
         DevotionalRepository(context).getDevotionalByDate(dateToFind) { uiState, devotional ->
             _devotional.value = uiState to devotional
+        }
+    }
+
+    fun deleteDevotional(context: Context, devotional: Devotional?) {
+        devotional?.let {
+            DevotionalRepository(context).deleteDevotional(it){ success, message->
+                _deleteDevotional.value = success
+                Log.e(DevotionalViewModel::class.java.simpleName, message ?: "deleted successfully")
+            }
         }
     }
 

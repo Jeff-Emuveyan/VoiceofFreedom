@@ -22,7 +22,7 @@ import com.bellogate.voiceoffreedom.BuildConfig
 import com.bellogate.voiceoffreedom.R
 import com.bellogate.voiceoffreedom.ui.devotional.add.AddDevotionalAdapter
 import com.bellogate.voiceoffreedom.ui.devotional.add.DevotionalCollectorItem
-import com.bellogate.voiceoffreedom.ui.devotional.add.SyncDevotionalManager
+import com.bellogate.voiceoffreedom.data.devotional.SyncMultipleDevotionalsManager
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
 import com.greentoad.turtlebody.mediapicker.MediaPicker
@@ -165,41 +165,52 @@ fun Fragment.centerToast(message: String){
 
 fun updateCollectedItems(devotionalCollectorItem: DevotionalCollectorItem){
 
-    if(SyncDevotionalManager.listOfCollectors.containsKey(devotionalCollectorItem.id)){
+    if(SyncMultipleDevotionalsManager.listOfCollectors.containsKey(devotionalCollectorItem.id)){
         //remove the old collector from the list:
-        SyncDevotionalManager.listOfCollectors.remove(devotionalCollectorItem.id)
+        SyncMultipleDevotionalsManager.listOfCollectors.remove(devotionalCollectorItem.id)
         //add the updated collector to the list again
-        SyncDevotionalManager.listOfCollectors[devotionalCollectorItem.id!!] =
+        SyncMultipleDevotionalsManager.listOfCollectors[devotionalCollectorItem.id!!] =
             devotionalCollectorItem
     }else{
         //add the updated collector to the list
-        SyncDevotionalManager.listOfCollectors[devotionalCollectorItem.id!!] =
+        SyncMultipleDevotionalsManager.listOfCollectors[devotionalCollectorItem.id!!] =
             devotionalCollectorItem
     }
 }
 
 fun deleteCollectedItem(devotionalCollectorItem: DevotionalCollectorItem){
 
-    if(SyncDevotionalManager.listOfCollectors.containsKey(devotionalCollectorItem.id)){
+    if(SyncMultipleDevotionalsManager.listOfCollectors.containsKey(devotionalCollectorItem.id)){
 
-        SyncDevotionalManager.listOfCollectors.remove(devotionalCollectorItem.id)
+        SyncMultipleDevotionalsManager.listOfCollectors.remove(devotionalCollectorItem.id)
         logCollectors()
     }
 }
 
 
 fun logCollectors(){
-    if(SyncDevotionalManager.listOfCollectors.isNotEmpty()) {
+    if(SyncMultipleDevotionalsManager.listOfCollectors.isNotEmpty()) {
         Log.e(
-            SyncDevotionalManager::class.java.simpleName,
-            "Total size is: ${SyncDevotionalManager.listOfCollectors.size}"
+            SyncMultipleDevotionalsManager::class.java.simpleName,
+            "Total size is: ${SyncMultipleDevotionalsManager.listOfCollectors.size}"
         )
-        for (map in SyncDevotionalManager.listOfCollectors.entries) {
+        for (map in SyncMultipleDevotionalsManager.listOfCollectors.entries) {
             Log.e(
-                SyncDevotionalManager::class.java.simpleName,
+                SyncMultipleDevotionalsManager::class.java.simpleName,
                 "key: ${map.key} value: ${map.value.toString()}"
             )
         }
     }
+}
+
+
+fun Fragment.alertWithAction(title: String, message: String, confirmed: (Boolean)-> Unit){
+    AlertDialog.Builder(requireContext()).setTitle(title).setMessage(message).setPositiveButton("Yes"
+    ) { _, _ ->
+        confirmed.invoke(true)
+    }.setNegativeButton("No"
+    ) { _, _ ->
+        confirmed.invoke(false)
+    }.show()
 }
 

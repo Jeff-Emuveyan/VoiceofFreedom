@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.ProgressDialog
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.Gravity
 import android.view.Menu
@@ -65,10 +66,6 @@ class MainActivity : AppCompatActivity() {
             R.style.LatoBoldTextAppearance
         )//change the font
 
-        if(isStagingBuild()){
-            tvFlavourType.text = resources.getText(R.string.statgin)
-        }
-
         sharedViewModel = ViewModelProviders.of(this).get(SharedViewModel::class.java)
 
         //we place a constant listener to know when the user has signed out,
@@ -88,6 +85,10 @@ class MainActivity : AppCompatActivity() {
                 launchFirebaseAuthentication()
             }
         })
+
+
+        //check or request permissions:
+        requestPermission()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -223,6 +224,29 @@ class MainActivity : AppCompatActivity() {
                 view!!,
                 ErrorCodes.toFriendlyMessage(response.error!!.errorCode)
             )
+        }
+    }
+
+
+    private fun requestPermission(){
+        if(sharedViewModel checkPermissions this){
+            if(isStagingBuild()){
+                tvFlavourType.text = resources.getText(R.string.statgin)
+            }
+        }else sharedViewModel requestPermissions this //request user to grant permissions
+    }
+
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>,
+                                            grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+        if (requestCode == PERMISSION_ID) {
+            if(!(grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)){
+                //prompt user to grant permission:
+                requestPermission()
+            }
         }
     }
 

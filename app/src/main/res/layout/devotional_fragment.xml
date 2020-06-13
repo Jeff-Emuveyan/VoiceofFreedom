@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/voicebig"
     tools:context="com.bellogate.voiceoffreedom.ui.devotional.DevotionalFragment">
 
     <com.facebook.shimmer.ShimmerFrameLayout
@@ -98,6 +97,27 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/buttonRetry" />
+
+    <ImageView
+        android:id="@+id/buttonDelete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_delete"
+        android:layout_marginStart="16dp"
+        app:layout_constraintBottom_toBottomOf="@+id/buttonDate"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/buttonDate" />
+
+    <ProgressBar
+        android:id="@+id/progressBarDelete"
+        style="?android:attr/progressBarStyleSmall"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/buttonDelete"
+        app:layout_constraintEnd_toEndOf="@+id/buttonDelete"
+        app:layout_constraintStart_toStartOf="@+id/buttonDelete"
+        app:layout_constraintTop_toTopOf="@+id/buttonDelete" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

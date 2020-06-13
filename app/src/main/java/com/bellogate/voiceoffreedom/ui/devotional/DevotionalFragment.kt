@@ -13,11 +13,10 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.bellogate.voiceoffreedom.R
+import com.bellogate.voiceoffreedom.model.User
 import com.bellogate.voiceoffreedom.ui.SharedViewModel
 import com.bellogate.voiceoffreedom.ui.devotional.util.UIState
-import com.bellogate.voiceoffreedom.util.getSimpleDateFormat
-import com.bellogate.voiceoffreedom.util.showDatePickerDialog
-import com.bellogate.voiceoffreedom.util.todayDate
+import com.bellogate.voiceoffreedom.util.*
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.devotional_fragment.*
@@ -31,6 +30,8 @@ class DevotionalFragment : Fragment(), OnDateSetListener {
     private var date: String = ""
     private var imageUrl : String? = ""
     private var imageHasSuccessfullyLoaded = false
+    private var user: User? = null
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -44,12 +45,33 @@ class DevotionalFragment : Fragment(), OnDateSetListener {
         viewModel = ViewModelProviders.of(this).get(DevotionalViewModel::class.java)
         sharedViewModel = ViewModelProviders.of(requireActivity()).get(SharedViewModel::class.java)
 
-        date = todayDate(System.currentTimeMillis()).toString()
-
-        this getDevotionalByDate date
+        viewModel.getUser(requireContext(), 1).observe(viewLifecycleOwner, Observer {
+            user = it
+        })
 
         viewModel.devotional.observe(viewLifecycleOwner, Observer {
             setUpUIState(it.first, date, it.second?.bitmapUrlLink)
+
+            val devotional = it.second
+            buttonDelete.setOnClickListener {
+                alertWithAction("Delete", "Delete this devotional?") { confirmed ->
+                    if (confirmed) {
+                        setUpUIState(UIState.DELETE_IN_PROGRESS, date, null)
+                        viewModel.deleteDevotional(requireContext(), devotional)
+                    }
+                }
+            }
+        })
+
+        viewModel.deleteDevotional.observe(viewLifecycleOwner, Observer {
+            setUpUIState(UIState.DELETE_COMPLETE, date, null)
+            if(it){
+                centerToast("Delete successful")
+                //refresh
+                this getDevotionalByDate date
+            }else{
+               centerToast("Operation failed, try again")
+            }
         })
 
         sharedViewModel.showManageDevotionalsFragment.observe(viewLifecycleOwner, Observer {
@@ -65,6 +87,10 @@ class DevotionalFragment : Fragment(), OnDateSetListener {
             }
         })
 
+        //fetch today's devotional
+        date = todayDate(System.currentTimeMillis()).toString()
+
+        this getDevotionalByDate date
 
         //this will cause the MainActivity to call 'onCreateOptionsMenu' again.
         //If the user is an Admin, the MainActivity will add a menu item to 'Manage Devotionals'
@@ -106,6 +132,7 @@ class DevotionalFragment : Fragment(), OnDateSetListener {
                 shimmer.startShimmer()
                 buttonRetry.visibility = View.INVISIBLE
                 tvNoDataFoundForDate.visibility = View.INVISIBLE
+                buttonDelete.visibility = View.INVISIBLE
             }
             UIState.FOUND -> {
                 if(imageUrl != null){
@@ -129,6 +156,7 @@ class DevotionalFragment : Fragment(), OnDateSetListener {
                 }
                 buttonRetry.visibility = View.INVISIBLE
                 tvNoDataFoundForDate.visibility = View.INVISIBLE
+                buttonDelete.visibility = View.VISIBLE
             }
             UIState.FAILED_TO_LOAD ->{
                 shimmer.stopShimmer()
@@ -137,6 +165,7 @@ class DevotionalFragment : Fragment(), OnDateSetListener {
                 buttonRetry.visibility = View.VISIBLE
                 Toast.makeText(requireContext(), "Failed, try again", Toast.LENGTH_LONG).show()
                 tvNoDataFoundForDate.visibility = View.INVISIBLE
+                buttonDelete.visibility = View.INVISIBLE
             }
             UIState.NO_DATA_FOR_SELECTED_DATE ->{
                 shimmer.stopShimmer()
@@ -144,9 +173,26 @@ class DevotionalFragment : Fragment(), OnDateSetListener {
                 imageView.setImageResource(R.drawable.dummy_devotional)
                 buttonRetry.visibility = View.VISIBLE
                 tvNoDataFoundForDate.visibility = View.VISIBLE
+                buttonDelete.visibility = View.INVISIBLE
             }
 
+            UIState.DELETE_IN_PROGRESS ->{
+                progressBarDelete.visibility = View.VISIBLE
+                buttonDelete.visibility = View.INVISIBLE
+                buttonDate.isEnabled = false
+                buttonRetry.isEnabled = false
+            }
+
+            UIState.DELETE_COMPLETE ->{
+                progressBarDelete.visibility = View.INVISIBLE
+                buttonDelete.visibility = View.VISIBLE
+                buttonDate.isEnabled = true
+                buttonRetry.isEnabled = true
+            }
         }
+
+        //this will always hide the delete button if the user is not an admin
+        if(user == null || !(user!!.isAdmin)) buttonDelete.visibility = View.INVISIBLE
     }
 
 

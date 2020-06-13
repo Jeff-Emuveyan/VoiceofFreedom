@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.bellogate.voiceoffreedom.R
+import com.bellogate.voiceoffreedom.data.devotional.SyncMultipleDevotionalsManager
 import com.bellogate.voiceoffreedom.util.deleteCollectedItem
 import com.bellogate.voiceoffreedom.util.getBitmapFromUri
 import com.bellogate.voiceoffreedom.util.selectImage
@@ -17,7 +18,7 @@ class AddDevotionalAdapter private constructor(): RecyclerView.Adapter<Devotiona
     var numberOfCollectorsToShow: Int = 1 //default
     set(value) {
         field = value
-        SyncDevotionalManager.numberOfCollectors = field
+        SyncMultipleDevotionalsManager.numberOfCollectors = field
     }
     private lateinit var activity: FragmentActivity
 

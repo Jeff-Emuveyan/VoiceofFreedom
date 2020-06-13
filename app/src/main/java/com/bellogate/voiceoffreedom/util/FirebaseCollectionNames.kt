@@ -4,7 +4,8 @@ package com.bellogate.voiceoffreedom.util
 /**
  *collection names
  */
-const val ADMIN = "admin"
+
 const val KEY = "key"
-const val USER = "user"
-const val DEVOTIONAL = "devotional"
+const val ADMINS = "admins"
+const val USERS = "users"
+const val DEVOTIONALS = "devotionals"

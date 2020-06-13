@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bellogate.voiceoffreedom.R
+import com.bellogate.voiceoffreedom.data.devotional.SyncMultipleDevotionalsManager
 import com.bellogate.voiceoffreedom.ui.SharedViewModel
 import com.bellogate.voiceoffreedom.util.centerToast
 import kotlinx.android.synthetic.main.add_devotional_fragment.*
@@ -43,7 +44,7 @@ class AddDevotionalFragment : Fragment() {
         displayDevotionalItemCollectors(requireContext(), 1)
 
         postButton.setOnClickListener{
-            SyncDevotionalManager.syncDevotionals(requireContext(), {
+            SyncMultipleDevotionalsManager.syncDevotionals(requireContext(), {
                 centerToast("Uploading....")
                 findNavController().popBackStack()
             }, {errorMessage ->

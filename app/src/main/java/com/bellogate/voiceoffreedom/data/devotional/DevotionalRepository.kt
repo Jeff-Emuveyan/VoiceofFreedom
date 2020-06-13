@@ -13,4 +13,16 @@ class DevotionalRepository(context: Context) : BaseRepository(context) {
             response.invoke(uiState, devotional)
         }
     }
+
+    fun deleteDevotional(it: Devotional, success:(Boolean, String?)-> Unit){
+        NetworkHelper.deleteDevotional(it){ succecced, message ->
+            success.invoke(succecced, message)
+        }
+    }
+
+    fun syncDevotional(it: Devotional, success:(Boolean, String?)-> Unit){
+        NetworkHelper.syncDevotional(it){ succecced, message ->
+            success.invoke(succecced, message)
+        }
+    }
 }

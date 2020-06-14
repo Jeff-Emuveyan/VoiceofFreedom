@@ -11,6 +11,7 @@ import androidx.lifecycle.viewModelScope
 import com.bellogate.voiceoffreedom.data.BaseRepository
 import com.bellogate.voiceoffreedom.data.UserRepository
 import com.bellogate.voiceoffreedom.model.User
+import com.bellogate.voiceoffreedom.util.Fragments
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.IdpResponse
 import com.google.firebase.auth.FirebaseAuth
@@ -22,12 +23,15 @@ const val PERMISSION_ID = 200
  * */
 open class SharedViewModel: ViewModel() {
 
-    val showManageDevotionalsFragment = MutableLiveData<Boolean>().apply {
+
+    /*** Used to notify DevotionalFragment on when to show the AddDevotionalFragment ***/
+    val showAddDevotionalFragment = MutableLiveData<Boolean>().apply {
         value = false
     }
 
-    val showAddDevotionalFragment = MutableLiveData<Boolean>().apply {
-        value = false
+    /*** Used to control the top menu items depending on thw Fragment in view ***/
+    val topMenuController = MutableLiveData<Fragments>().apply {
+        value = null
     }
 
     val startSignInProcess = MutableLiveData<Boolean>()

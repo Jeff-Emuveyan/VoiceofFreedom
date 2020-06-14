@@ -23,6 +23,7 @@ import androidx.navigation.ui.setupWithNavController
 import com.bellogate.voiceoffreedom.R
 import com.bellogate.voiceoffreedom.data.devotional.SyncDevotionalsReceiver
 import com.bellogate.voiceoffreedom.model.User
+import com.bellogate.voiceoffreedom.util.Fragments
 import com.bellogate.voiceoffreedom.util.STOP_NOTIFICATION
 import com.bellogate.voiceoffreedom.util.showSnackMessage
 import com.bellogate.voiceoffreedom.util.showSnackMessageAtTop
@@ -88,14 +89,16 @@ class MainActivity : AppCompatActivity() {
                 launchFirebaseAuthentication()
             }
         })
+
+        sharedViewModel.topMenuController.observe(this, Observer {
+            //anytime there is a call to change items in the top menu:
+            invalidateOptionsMenu()//this will cause 'onCreateOptionsMenu' to run again
+        })
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.main, menu)
-
-        menu.findItem(R.id.manage_devotional).isVisible = false
-        menu.findItem(R.id.add_devotional).isVisible = false
 
         if(user == null){
             //when the app newly starts, the logout menu option should be hidden
@@ -119,11 +122,9 @@ class MainActivity : AppCompatActivity() {
             val menuLogIn = menu.findItem(R.id.sign_up)
             menuLogIn.isVisible = false
 
-            //determines when to give show user admin permissons for devotionals
-            if(user!!.isAdmin && nav_view.checkedItem?.itemId == R.id.nav_devotional){
-                menu.findItem(R.id.manage_devotional).isVisible = true
-                menu.findItem(R.id.add_devotional).isVisible = true
-            }
+            //Determines when to show user admin permissions to Add Devotionals
+            menu.findItem(R.id.add_devotional).isVisible =
+                sharedViewModel.topMenuController.value == Fragments.DEVOTIONAL
         }
 
         return true
@@ -141,9 +142,6 @@ class MainActivity : AppCompatActivity() {
             }
             R.id.logout ->{
                 logout()
-            }
-            R.id.manage_devotional ->{
-                sharedViewModel.showManageDevotionalsFragment.value = true
             }
             R.id.add_devotional ->{
                 sharedViewModel.showAddDevotionalFragment.value = true

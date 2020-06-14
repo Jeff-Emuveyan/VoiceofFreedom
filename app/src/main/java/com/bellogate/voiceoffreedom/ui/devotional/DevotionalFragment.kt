@@ -47,6 +47,11 @@ class DevotionalFragment : Fragment(), OnDateSetListener {
 
         viewModel.getUser(requireContext(), 1).observe(viewLifecycleOwner, Observer {
             user = it
+            if(user != null && user!!.isAdmin){
+                //this will cause the MainActivity to call 'onCreateOptionsMenu' again.
+                //If the user is an Admin, the MainActivity will add a menu item to 'Add Devotional'
+                sharedViewModel.topMenuController.value = Fragments.DEVOTIONAL
+            }
         })
 
         viewModel.devotional.observe(viewLifecycleOwner, Observer {
@@ -74,12 +79,6 @@ class DevotionalFragment : Fragment(), OnDateSetListener {
             }
         })
 
-        sharedViewModel.showManageDevotionalsFragment.observe(viewLifecycleOwner, Observer {
-            if(it){
-                findNavController().navigate(R.id.action_nav_devotional_to_manageDevotionalsFragment)
-            }
-        })
-
 
         sharedViewModel.showAddDevotionalFragment.observe(viewLifecycleOwner, Observer {
             if(it){
@@ -91,10 +90,6 @@ class DevotionalFragment : Fragment(), OnDateSetListener {
         date = todayDate(System.currentTimeMillis()).toString()
 
         this getDevotionalByDate date
-
-        //this will cause the MainActivity to call 'onCreateOptionsMenu' again.
-        //If the user is an Admin, the MainActivity will add a menu item to 'Manage Devotionals'
-        requireActivity().invalidateOptionsMenu()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -213,4 +208,10 @@ class DevotionalFragment : Fragment(), OnDateSetListener {
         this getDevotionalByDate date
     }
 
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        //reset thr top menu by removinng the "Add devotional" item:
+        sharedViewModel.topMenuController.value = null
+    }
 }

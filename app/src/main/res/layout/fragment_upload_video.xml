@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".ui.media.UploadVideoFragment">
+
+
+    <Button
+        android:id="@+id/buttonSelectVideo"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        android:layout_width="95dp"
+        android:layout_height="55dp"
+        android:layout_marginTop="40dp"
+        android:shadowRadius="30"
+        android:text="Select Video"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageViewVideoThumbnail" />
+
+    <Button
+        android:id="@+id/buttonUploadAll"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        android:layout_width="104dp"
+        android:layout_height="36dp"
+        android:layout_marginTop="44dp"
+
+        android:shadowRadius="30"
+        android:text="UPLOAD"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextVideoTitle" />
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/editTextVideoTitle"
+        android:layout_width="220dp"
+        android:layout_height="45dp"
+        android:layout_marginTop="40dp"
+        android:ems="10"
+        android:fontFamily="@font/lato_bold"
+        android:hint="Preferred Video title..."
+        android:inputType="textPersonName"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewDuration" />
+
+    <TextView
+        android:id="@+id/textViewDuration"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:fontFamily="@font/lato_bold"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/textViewDirectory"
+        app:layout_constraintTop_toBottomOf="@+id/textViewDirectory" />
+
+
+    <ImageView
+        android:id="@+id/imageViewVideoThumbnail"
+        android:layout_width="194dp"
+        android:layout_height="207dp"
+        android:layout_marginTop="56dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textViewDirectory"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:fontFamily="@font/lato_bold"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.102"
+        app:layout_constraintStart_toStartOf="@+id/imageViewVideoThumbnail"
+        app:layout_constraintTop_toBottomOf="@+id/buttonSelectVideo" />
+
+    <RelativeLayout
+        android:id="@+id/relativeLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="150dp"
+        android:layout_gravity="center_horizontal|center_vertical"
+        app:layout_constraintBottom_toTopOf="@+id/buttonSelectVideo"
+        app:layout_constraintEnd_toEndOf="@+id/imageViewVideoThumbnail"
+        app:layout_constraintStart_toStartOf="@+id/imageViewVideoThumbnail"
+        app:layout_constraintTop_toTopOf="@+id/imageViewVideoThumbnail"
+        app:srcCompat="@drawable/ic_donate_money">
+
+        <ImageView
+            android:id="@+id/imageViewThumbnailForeground"
+            android:layout_width="60dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center_horizontal|bottom"
+            android:paddingBottom="10dp"
+            android:src="@drawable/kindpng_42564"
+            tools:layout_editor_absoluteX="161dp"
+            tools:layout_editor_absoluteY="113dp" />
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/textView9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:text="Video Location:"
+        android:fontFamily="@font/lato_bold"
+        app:layout_constraintBottom_toBottomOf="@+id/textViewDirectory"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/textViewDirectory"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/textView10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Video Duration:"
+        android:fontFamily="@font/lato_bold"
+        app:layout_constraintStart_toStartOf="@+id/textView9"
+        app:layout_constraintTop_toTopOf="@+id/textViewDuration" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

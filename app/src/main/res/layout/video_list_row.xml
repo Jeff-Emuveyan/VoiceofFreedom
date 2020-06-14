@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/relativeLayoutVideos"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardCornerRadius="10dp"
+    app:cardUseCompatPadding="true"
+    app:layout_constraintCircleRadius="30dp">
+
+
+    <ImageView
+        android:id="@+id/imageViewThumbnailFromFirebase"
+        android:layout_width="137dp"
+        android:layout_height="138dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="12dp"
+        android:background="@color/black"
+        app:srcCompat="@drawable/dummy_devotional" />
+
+    <TextView
+        android:id="@+id/textView11"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/imageViewThumbnailFromFirebase"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="21dp"
+        android:layout_toEndOf="@+id/imageViewThumbnailFromFirebase"
+        android:fontFamily="@font/lato_bold"
+        android:text="TITLE:"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/textView12"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView11"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="22dp"
+        android:layout_toEndOf="@+id/imageViewThumbnailFromFirebase"
+        android:fontFamily="@font/lato_bold"
+        android:text="DURATION:"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/textViewTitleFromFirebase"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/textView11"
+        android:layout_alignBottom="@+id/textView11"
+        android:layout_marginStart="5dp"
+        android:layout_toEndOf="@+id/textView11"
+        android:fontFamily="@font/lato_bold"
+        android:hint="the title..." />
+
+    <TextView
+        android:id="@+id/textViewDurationFromFirebase"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/textView12"
+        android:layout_alignBottom="@+id/textView12"
+        android:layout_marginStart="5dp"
+        android:layout_toEndOf="@+id/textView12"
+        android:fontFamily="@font/lato_bold"
+        android:hint="the duration..." />
+
+    <RelativeLayout
+        android:id="@+id/relativeLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="150dp"
+        android:layout_gravity="center_horizontal|center_vertical"
+        app:layout_constraintBottom_toTopOf="@+id/buttonSelectVideo"
+        app:layout_constraintEnd_toEndOf="@+id/imageViewVideoThumbnail"
+        app:layout_constraintStart_toStartOf="@+id/imageViewVideoThumbnail"
+        app:layout_constraintTop_toTopOf="@+id/imageViewVideoThumbnail"
+        app:srcCompat="@drawable/ic_donate_money">
+
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/imageViewClickToPlay"
+        android:layout_width="60dp"
+        android:layout_height="100dp"
+        android:layout_alignTop="@+id/imageViewThumbnailFromFirebase"
+        android:layout_alignEnd="@+id/imageViewThumbnailFromFirebase"
+        android:layout_gravity="center_horizontal|bottom"
+        android:layout_marginStart="49dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="38dp"
+        android:layout_toEndOf="@+id/relativeLayout"
+        android:clickable="true"
+        android:paddingBottom="10dp"
+        android:src="@drawable/kindpng_42564"
+        tools:layout_editor_absoluteX="161dp"
+        tools:layout_editor_absoluteY="113dp" />
+
+</RelativeLayout>

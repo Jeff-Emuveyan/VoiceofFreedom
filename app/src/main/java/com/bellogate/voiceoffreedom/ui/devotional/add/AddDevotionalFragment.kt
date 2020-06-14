@@ -42,8 +42,8 @@ class AddDevotionalFragment : Fragment() {
 
 
     private fun displayDevotionalItemCollectors(context: Context, numberOfCollectorsToShow: Int){
-        recyclerView.layoutManager = LinearLayoutManager(context)
+        recyclerViewFB.layoutManager = LinearLayoutManager(context)
         val addDevotionalAdapter = AddDevotionalAdapter(requireContext(), numberOfCollectorsToShow)
-        recyclerView.adapter = addDevotionalAdapter
+        recyclerViewFB.adapter = addDevotionalAdapter
     }
 }

@@ -19,5 +19,12 @@
             android:id="@+id/nav_devotional"
             android:icon="@drawable/ic_menu_gallery"
             android:title="@string/devotional" />
+
+
+        <item
+            android:id="@+id/nav_media"
+            android:icon="@drawable/ic_menu_gallery"
+            android:title="@string/Media" />
+
     </group>
 </menu>

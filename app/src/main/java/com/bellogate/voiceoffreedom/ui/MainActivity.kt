@@ -41,6 +41,9 @@ class MainActivity : AppCompatActivity() {
     private lateinit var drawerLayout: DrawerLayout
     private var user: User? = null
 
+
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -55,7 +58,8 @@ class MainActivity : AppCompatActivity() {
         appBarConfiguration = AppBarConfiguration(setOf(
             R.id.nav_home,
             R.id.nav_give,
-            R.id.nav_devotional
+            R.id.nav_devotional,
+            R.id.nav_media
         ), drawerLayout)
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
@@ -88,7 +92,11 @@ class MainActivity : AppCompatActivity() {
                 launchFirebaseAuthentication()
             }
         })
+
+
     }
+
+
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -202,6 +210,7 @@ class MainActivity : AppCompatActivity() {
 
 
         } else {
+
             // Sign in failed. If response is null the user canceled the
             // sign-in flow using the back button. Otherwise check
             // response.getError().getErrorCode() and handle the error.
@@ -226,4 +235,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+
+
 }
+

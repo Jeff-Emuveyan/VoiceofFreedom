@@ -6,6 +6,8 @@ import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import android.util.Log
 import android.widget.Toast
+import androidx.work.Worker
+import androidx.work.WorkerParameters
 import com.bellogate.voiceoffreedom.model.Devotional
 import com.bellogate.voiceoffreedom.ui.devotional.add.DevotionalCollectorItem
 import com.bellogate.voiceoffreedom.util.DEVOTIONALS
@@ -18,27 +20,29 @@ import com.google.firebase.storage.ktx.storage
 import java.io.ByteArrayOutputStream
 
 
-class SyncMultipleDevotionalsManager {
+class SyncMultipleDevotionalsManager(appContext: Context, workerParams: WorkerParameters):
+    Worker(appContext, workerParams) {
 
     companion object{
 
+        lateinit var context: Context
         var numberOfCollectors: Int = 1 //default
         var listOfCollectors = LinkedHashMap<String, DevotionalCollectorItem>()
         lateinit var  uploadTask: StorageTask<UploadTask.TaskSnapshot>
 
 
-        fun syncDevotionals(context: Context, onStart:()-> Unit, invalideInput: (String)-> Unit){
+        fun validateInput(context: Context, validateInput: (Boolean)-> Unit){
+            this.context = context
+
             AlertDialog.Builder(context)
                 .setTitle("Upload")
                 .setMessage("Upload these devotionals?")
                 .setPositiveButton("Yes") { _, _ ->
 
                     if(validateCollectors()){
-                        onStart.invoke()
-                        doWork(context)
-                        SyncNotificationManager.create(context)
+                        validateInput.invoke(true)
                     }else{
-                        invalideInput.invoke("Missing image or date")
+                        validateInput.invoke(false)
                     }
                 }
                 .setNegativeButton("No") { _, _ -> }
@@ -66,7 +70,7 @@ class SyncMultipleDevotionalsManager {
 
 
 
-        private fun doWork(context: Context){
+        private fun sync(context: Context){
 
             if(listOfCollectors.isNotEmpty()) {
 
@@ -105,7 +109,7 @@ class SyncMultipleDevotionalsManager {
                                         , "Uploaded: list size :${listOfCollectors.size}")
 
                                     //restart the process until the list is empty:
-                                    doWork(context)
+                                    sync(context)
                                 }else{
                                     Toast.makeText(context, "Failed to upload: $message", Toast.LENGTH_LONG).show()
                                 }
@@ -113,6 +117,7 @@ class SyncMultipleDevotionalsManager {
                         }
                     }else{
                         Toast.makeText(context, "Upload has stopped", Toast.LENGTH_LONG).show()
+
                     }
                 }
 
@@ -125,6 +130,12 @@ class SyncMultipleDevotionalsManager {
                 }
             }
         }
+    }
+
+    override fun doWork(): Result {
+        SyncNotificationManager.create(context)
+        sync(context)
+        return Result.success()
     }
 
 }

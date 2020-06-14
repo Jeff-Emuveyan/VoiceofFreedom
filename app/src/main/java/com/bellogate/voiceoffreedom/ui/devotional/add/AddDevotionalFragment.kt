@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.work.*
 import com.bellogate.voiceoffreedom.R
 import com.bellogate.voiceoffreedom.data.devotional.SyncMultipleDevotionalsManager
 import com.bellogate.voiceoffreedom.ui.SharedViewModel
@@ -45,14 +46,8 @@ class AddDevotionalFragment : Fragment() {
         displayDevotionalItemCollectors(requireContext(), 1)
 
         postButton.setOnClickListener{
-            SyncMultipleDevotionalsManager.syncDevotionals(requireContext(), {
-                centerToast("Uploading....")
-                findNavController().popBackStack()
-            }, {errorMessage ->
-                showAlert("Oops", errorMessage)
-            })
+            syncMultipleDevotionals()
         }
-
 
         addButton.setOnClickListener {//add a new collector to the recyclerView
             if(viewModel.maximumNumberOfCollectorsReached(addDevotionalAdapter.numberOfCollectorsToShow)){
@@ -72,7 +67,27 @@ class AddDevotionalFragment : Fragment() {
         recyclerView.layoutManager = LinearLayoutManager(context)
         addDevotionalAdapter = AddDevotionalAdapter(requireActivity(), numberOfCollectorsToShow)
         recyclerView.adapter = addDevotionalAdapter
+    }
 
 
+    private fun syncMultipleDevotionals(){
+        SyncMultipleDevotionalsManager.validateInput(requireContext(),validateInput = {
+            if(it){
+                centerToast("Uploading....")
+                findNavController().popBackStack()
+                //start the Workmanager:
+                val constraints = Constraints.Builder()
+                    .setRequiredNetworkType(NetworkType.CONNECTED)
+                    .build()
+                val uploadWorkRequest: OneTimeWorkRequest = OneTimeWorkRequestBuilder<SyncMultipleDevotionalsManager>()
+                    .setConstraints(constraints).build()
+                WorkManager.getInstance(requireContext())
+                    .enqueueUniqueWork("syncDevotionals", ExistingWorkPolicy.KEEP, uploadWorkRequest)
+
+            }else{
+                showAlert("Oops", "Missing image or date. " +
+                        "Please check that no devotional is missing its image or date")
+            }
+        })
     }
 }

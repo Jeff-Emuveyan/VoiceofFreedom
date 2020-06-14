@@ -166,6 +166,11 @@ dependencies {
     //Picasso
     implementation 'com.squareup.picasso:picasso:2.71828'
 
+    //Workmanager
+    implementation "androidx.work:work-runtime-ktx:2.3.4"
+    //Workmanager usually causes a duplicate class problem. The following solves it:
+    implementation 'com.google.guava:listenablefuture:9999.0-empty-to-avoid-conflict-with-guava'
+
     /* media picker */
     implementation 'com.greentoad.turtlebody:media-picker:1.0.8'
     /** The following four dependencies are used by 'com.greentoad.turtlebody:media-picker'

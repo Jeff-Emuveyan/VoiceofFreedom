@@ -57,8 +57,6 @@ class AddDevotionalFragment : Fragment() {
                 addDevotionalAdapter.numberOfCollectorsToShow += 1
                 addDevotionalAdapter.notifyDataSetChanged()
             }
-
-
         }
     }
 
@@ -71,19 +69,10 @@ class AddDevotionalFragment : Fragment() {
 
 
     private fun syncMultipleDevotionals(){
-        SyncMultipleDevotionalsManager.validateInput(requireContext(),validateInput = {
+        viewModel.validateAndSyncInput(requireContext(),validateInput = {
             if(it){
                 centerToast("Uploading....")
                 findNavController().popBackStack()
-                //start the Workmanager:
-                val constraints = Constraints.Builder()
-                    .setRequiredNetworkType(NetworkType.CONNECTED)
-                    .build()
-                val uploadWorkRequest: OneTimeWorkRequest = OneTimeWorkRequestBuilder<SyncMultipleDevotionalsManager>()
-                    .setConstraints(constraints).build()
-                WorkManager.getInstance(requireContext())
-                    .enqueueUniqueWork("syncDevotionals", ExistingWorkPolicy.KEEP, uploadWorkRequest)
-
             }else{
                 showAlert("Oops", "Missing image or date. " +
                         "Please check that no devotional is missing its image or date")

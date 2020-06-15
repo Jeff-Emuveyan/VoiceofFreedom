@@ -35,7 +35,7 @@ class HomeFragment : Fragment() {
 
         homeViewModel.getUser(requireContext(), 1).observe(viewLifecycleOwner, Observer {
             if(it != null){
-               textView.text = "There is user: ${it.email}"
+               textView.text = "There is user: ${it.email} \n Is admin: ${it.isAdmin}"
             }else{
                 textView.text = "Nooooo user"
             }

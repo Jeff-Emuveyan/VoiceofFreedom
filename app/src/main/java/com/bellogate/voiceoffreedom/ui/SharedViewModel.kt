@@ -10,8 +10,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bellogate.voiceoffreedom.data.BaseRepository
 import com.bellogate.voiceoffreedom.data.UserRepository
+import com.bellogate.voiceoffreedom.data.setup.AdminRepository
 import com.bellogate.voiceoffreedom.model.User
+import com.bellogate.voiceoffreedom.ui.setup.SetupActivityViewModel
 import com.bellogate.voiceoffreedom.util.Fragments
+import com.bellogate.voiceoffreedom.util.updateUserAdminStatus
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.IdpResponse
 import com.google.firebase.auth.FirebaseAuth
@@ -81,9 +84,16 @@ open class SharedViewModel: ViewModel() {
                 System.currentTimeMillis(), false)
 
             //finally save the new user:
-            saveUser(context, viewModelScope, 1, user)
-            saveSuccessful.invoke(true)
-
+            //But first, we need to know if this user is suppose to be an admin:
+            val adminRepository = AdminRepository(context)
+            adminRepository.fetchAllAdmin { success, result ->
+                if (success) {
+                    //search through the list of admin and update the user if his email is on the list:
+                    saveUser(context, viewModelScope, 1, user)
+                    updateUserAdminStatus(context, user!!, result, viewModelScope)
+                    saveSuccessful.invoke(true)
+                }
+            }
         }else{//this was a sign in operation because the user already existed, so:
 
             //fetch the user's details from Firestore
@@ -94,8 +104,16 @@ open class SharedViewModel: ViewModel() {
                     //You may be concerned that this will create a duplicate user in Firestore. It will not.
                     //Firestore will simply replace the old document with this new one since they both
                     //have the same ID.
-                    saveUser(context, viewModelScope, 1, it)
-                    saveSuccessful.invoke(true)
+                    //But first, we need to know if this user is suppose to be an admin:
+                    val adminRepository = AdminRepository(context)
+                    adminRepository.fetchAllAdmin { success, result ->
+                        if (success) {
+                        //search through the list of admin and update the user if his email is on the list:
+                            saveUser(context, viewModelScope, 1, it)
+                            updateUserAdminStatus(context, it, result, viewModelScope)
+                            saveSuccessful.invoke(true)
+                        }
+                    }
                 }else{
                     saveSuccessful.invoke(false)
                 }
@@ -107,20 +125,4 @@ open class SharedViewModel: ViewModel() {
     private fun saveUser(context: Context, coroutineScope: CoroutineScope, id: Int, newUser: User) =
         UserRepository(context).saveUser(coroutineScope, id, newUser)
 
-
-    infix fun checkPermissions(context: Context): Boolean {
-        return ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE
-        ) == PackageManager.PERMISSION_GRANTED &&
-                ActivityCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE
-                ) == PackageManager.PERMISSION_GRANTED
-    }
-
-
-    infix fun requestPermissions(activity: Activity) {
-        ActivityCompat.requestPermissions(activity,
-            arrayOf(
-                Manifest.permission.READ_EXTERNAL_STORAGE,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE
-            ), PERMISSION_ID)
-    }
 }

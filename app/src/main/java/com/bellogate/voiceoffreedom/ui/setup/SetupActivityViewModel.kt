@@ -11,6 +11,8 @@ import com.bellogate.voiceoffreedom.model.Admin
 import com.bellogate.voiceoffreedom.model.User
 import com.bellogate.voiceoffreedom.ui.BaseViewModel
 import com.bellogate.voiceoffreedom.ui.SharedViewModel
+import com.bellogate.voiceoffreedom.util.updateUserAdminStatus
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 class SetupActivityViewModel: BaseViewModel() {
@@ -37,7 +39,7 @@ class SetupActivityViewModel: BaseViewModel() {
             adminRepository.fetchAllAdmin { success, result ->
                 if (success) {
                     //search through the list of admin and update the user if his email is on the list
-                    updateUserAdminStatus(context, user!!, result)
+                    updateUserAdminStatus(context, user!!, result, viewModelScope)
                     _setUpState.postValue(SetupState.COMPLETE)
                 } else {
                     _setUpState.postValue(SetupState.NETWORK_ERROR)
@@ -47,28 +49,6 @@ class SetupActivityViewModel: BaseViewModel() {
             _setUpState.postValue(SetupState.COMPLETE)
         }
     }
-
-
-    /**
-     * This will update the user's admin status in Firebase and Room DB
-     */
-    private fun updateUserAdminStatus(context: Context, user: User, adminList: ArrayList<Admin>?){
-        val repository =
-            UserRepository(context)
-
-        adminList?.let {
-            for(admin in it){
-                if(admin.email == user.email){//update the user to an admin
-                    user.isAdmin = true
-                    repository.updateUser(viewModelScope, user)
-                }else{//this means that the present user should not be an admin
-                    user.isAdmin = false
-                    repository.updateUser(viewModelScope, user)
-                }
-            }
-        }
-    }
-
 
 }
 

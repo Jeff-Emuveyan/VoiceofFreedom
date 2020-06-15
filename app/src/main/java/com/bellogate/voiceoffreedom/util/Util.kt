@@ -20,13 +20,17 @@ import androidx.fragment.app.FragmentActivity
 import androidx.navigation.fragment.findNavController
 import com.bellogate.voiceoffreedom.BuildConfig
 import com.bellogate.voiceoffreedom.R
+import com.bellogate.voiceoffreedom.data.UserRepository
 import com.bellogate.voiceoffreedom.ui.devotional.add.AddDevotionalAdapter
 import com.bellogate.voiceoffreedom.ui.devotional.add.DevotionalCollectorItem
 import com.bellogate.voiceoffreedom.data.devotional.SyncMultipleDevotionalsManager
+import com.bellogate.voiceoffreedom.model.Admin
+import com.bellogate.voiceoffreedom.model.User
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
 import com.greentoad.turtlebody.mediapicker.MediaPicker
 import com.greentoad.turtlebody.mediapicker.core.MediaPickerConfig
+import kotlinx.coroutines.CoroutineScope
 import java.text.DateFormatSymbols
 import java.text.SimpleDateFormat
 import java.util.*
@@ -216,3 +220,25 @@ fun Fragment.alertWithAction(title: String, message: String, confirmed: (Boolean
     }.show()
 }
 
+
+/**
+ * This will update the user's admin status in Firebase and Room DB
+ */
+fun updateUserAdminStatus(context: Context, user: User, adminList: ArrayList<Admin>?,
+                                  viewModelScope: CoroutineScope
+){
+    val repository =
+        UserRepository(context)
+
+    adminList?.let {
+        for(admin in it){
+            if(admin.email == user.email){//update the user to an admin
+                user.isAdmin = true
+                repository.updateUser(viewModelScope, user)
+            }else{//this means that the present user should not be an admin
+                user.isAdmin = false
+                repository.updateUser(viewModelScope, user)
+            }
+        }
+    }
+}

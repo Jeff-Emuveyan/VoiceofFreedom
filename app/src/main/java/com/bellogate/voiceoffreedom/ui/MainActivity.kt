@@ -58,7 +58,8 @@ class MainActivity : AppCompatActivity() {
         appBarConfiguration = AppBarConfiguration(setOf(
             R.id.nav_home,
             R.id.nav_give,
-            R.id.nav_devotional
+            R.id.nav_devotional,
+            R.id.nav_video
         ), drawerLayout)
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
@@ -125,6 +126,10 @@ class MainActivity : AppCompatActivity() {
             //Determines when to show user admin permissions to Add Devotionals
             menu.findItem(R.id.add_devotional).isVisible =
                 sharedViewModel.topMenuController.value == Fragments.DEVOTIONAL
+
+            //Determines when to show user admin permissions to Add video
+            menu.findItem(R.id.add_video).isVisible =
+                sharedViewModel.topMenuController.value == Fragments.VIDEO
         }
 
         return true
@@ -145,6 +150,9 @@ class MainActivity : AppCompatActivity() {
             }
             R.id.add_devotional ->{
                 sharedViewModel.showAddDevotionalFragment.value = true
+            }
+            R.id.add_video ->{
+                sharedViewModel.showAddVideoFragment.value = true
             }
             else ->{
                 drawerLayout.openDrawer(Gravity.LEFT)

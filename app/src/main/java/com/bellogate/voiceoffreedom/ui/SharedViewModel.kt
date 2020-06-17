@@ -32,6 +32,12 @@ open class SharedViewModel: ViewModel() {
         value = false
     }
 
+    /*** Used to notify VideoFragment on when to show the AddVideoFragment ***/
+    val showAddVideoFragment = MutableLiveData<Boolean>().apply {
+        value = false
+    }
+
+
     /*** Used to control the top menu items depending on thw Fragment in view ***/
     val topMenuController = MutableLiveData<Fragments>().apply {
         value = null

@@ -20,6 +20,7 @@ import com.bellogate.voiceoffreedom.util.*
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.devotional_fragment.*
+import org.jetbrains.anko.support.v4.toast
 import java.lang.Exception
 import java.util.*
 
@@ -209,8 +210,9 @@ class DevotionalFragment : Fragment(), OnDateSetListener {
     }
 
 
-    override fun onDestroyView() {
-        super.onDestroyView()
+
+    override fun onPause() {
+        super.onPause()
         //reset thr top menu by removinng the "Add devotional" item:
         sharedViewModel.topMenuController.value = null
     }

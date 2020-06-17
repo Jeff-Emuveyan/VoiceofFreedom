@@ -59,4 +59,23 @@
         android:name="com.bellogate.voiceoffreedom.ui.devotional.add.AddDevotionalFragment"
         android:label="Add Devotional"
         tools:layout="@layout/add_devotional_fragment" />
+
+    <fragment
+        android:id="@+id/nav_video"
+        android:name="com.bellogate.voiceoffreedom.ui.media.video.VideoFragment"
+        android:label="Media"
+        tools:layout="@layout/video_fragment" >
+        <action
+            android:id="@+id/action_nav_media_to_addVideoFragment"
+            app:destination="@id/addVideoFragment"
+            app:exitAnim="@anim/fui_slide_out_left"
+            app:launchSingleTop="false"
+            app:popEnterAnim="@android:anim/slide_in_left"/>
+    </fragment>
+    <fragment
+        android:id="@+id/addVideoFragment"
+        android:name="com.bellogate.voiceoffreedom.ui.media.video.add.AddVideoFragment"
+        android:label="add_video_fragment"
+        tools:layout="@layout/add_video_fragment" />
+
 </navigation>

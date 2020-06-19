@@ -75,7 +75,7 @@
     <fragment
         android:id="@+id/addVideoFragment"
         android:name="com.bellogate.voiceoffreedom.ui.media.video.add.AddVideoFragment"
-        android:label="add_video_fragment"
+        android:label="Add video"
         tools:layout="@layout/add_video_fragment" />
 
 </navigation>

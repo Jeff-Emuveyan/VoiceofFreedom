@@ -38,7 +38,10 @@
     <string name="post">Post</string>
     <string name="tap_to_add_image">Tap to add image</string>
     <string name="select_date">Select date</string>
-    <string name="cancel">Cancel</string>
     <string name="media">Media</string>
     <string name="add_video">Add video</string>
+    <string name="cancel">Cancel</string>
+    <string name="video_title">Video title</string>
+    <string name="percent">0%</string>
+    <string name="title">Title</string>
 </resources>

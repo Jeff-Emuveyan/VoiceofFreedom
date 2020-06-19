@@ -31,6 +31,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.greentoad.turtlebody.mediapicker.MediaPicker
 import com.greentoad.turtlebody.mediapicker.core.MediaPickerConfig
 import kotlinx.coroutines.CoroutineScope
+import java.io.ByteArrayOutputStream
 import java.text.DateFormatSymbols
 import java.text.SimpleDateFormat
 import java.util.*
@@ -241,4 +242,11 @@ fun updateUserAdminStatus(context: Context, user: User, adminList: ArrayList<Adm
             }
         }
     }
+}
+
+
+fun Bitmap.toBytes(): ByteArray{
+    val baos = ByteArrayOutputStream()
+    this.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+    return baos.toByteArray()
 }

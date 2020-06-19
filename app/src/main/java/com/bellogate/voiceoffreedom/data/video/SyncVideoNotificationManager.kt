@@ -1,4 +1,4 @@
-package com.bellogate.voiceoffreedom.data.devotional
+package com.bellogate.voiceoffreedom.data.video
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -9,11 +9,12 @@ import android.os.Build
 import androidx.annotation.Keep
 import androidx.core.app.NotificationCompat
 import com.bellogate.voiceoffreedom.R
+import com.bellogate.voiceoffreedom.data.devotional.SyncDevotionalsReceiver
 import com.bellogate.voiceoffreedom.ui.MainActivity
 import com.bellogate.voiceoffreedom.util.STOP_NOTIFICATION
 
 @Keep
-class SyncNotificationManager {
+class SyncVideoNotificationManager {
 
     companion object{
 
@@ -29,7 +30,7 @@ class SyncNotificationManager {
                 NotificationCompat.Builder(context, CHANNEL_ID)
                     .setSmallIcon(R.mipmap.ic_launcher)//change to BR LOGO
                     .setContentTitle("Voice of Freedom")
-                    .setContentText("Uploading devotionals...")
+                    .setContentText("Uploading video...")
                     .setAutoCancel(true)
 
             //intent for user tapping the cancel button:

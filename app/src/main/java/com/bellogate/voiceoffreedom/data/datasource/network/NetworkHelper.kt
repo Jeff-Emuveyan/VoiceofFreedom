@@ -1,24 +1,23 @@
 package com.bellogate.voiceoffreedom.data.datasource.network
 
-import com.bellogate.voiceoffreedom.util.ADMINS
-import com.bellogate.voiceoffreedom.model.Admin
-import com.bellogate.voiceoffreedom.model.Devotional
-import com.bellogate.voiceoffreedom.model.Key
-import com.bellogate.voiceoffreedom.model.User
-import com.bellogate.voiceoffreedom.ui.devotional.util.UIState
-import com.bellogate.voiceoffreedom.util.DEVOTIONALS
-import com.bellogate.voiceoffreedom.util.KEY
-import com.bellogate.voiceoffreedom.util.USERS
+import android.net.Uri
+import com.bellogate.voiceoffreedom.model.*
+import com.bellogate.voiceoffreedom.ui.devotional.util.DevotionalUIState
+import com.bellogate.voiceoffreedom.util.*
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.StorageReference
+import com.google.firebase.storage.StorageTask
+import com.google.firebase.storage.UploadTask
 import com.google.firebase.storage.ktx.storage
+import java.io.File
 
 class NetworkHelper {
 
     companion object {
 
         private var db: FirebaseFirestore = FirebaseFirestore.getInstance()
+        var  videoUploadTask: StorageTask<UploadTask.TaskSnapshot>? = null
 
         /** Gets all Admin from the database***/
         fun fetchAllAdmin(fetched: (success: Boolean, result: ArrayList<Admin>?) -> Unit) =
@@ -85,24 +84,24 @@ class NetworkHelper {
         }
 
 
-        fun getDevotionalByDate(dateToFind: String, response: (UIState, Devotional?) -> Unit) {
+        fun getDevotionalByDate(dateToFind: String, response: (DevotionalUIState, Devotional?) -> Unit) {
             db.collection(DEVOTIONALS).whereEqualTo("dateInSimpleFormat", dateToFind)
                 .limit(1).get().addOnSuccessListener {
 
                     if (it.documents.isNullOrEmpty() || it.documents.size == 0) {
                         //search was successful but no devotional matched that 'timeInMilliSeconds'
-                        response.invoke(UIState.NO_DATA_FOR_SELECTED_DATE, null)
+                        response.invoke(DevotionalUIState.NO_DATA_FOR_SELECTED_DATE, null)
                     } else {
                         for (document in it.documents) {//this will only have one document because we set the limit to 1
                             val devotional = document.toObject(Devotional::class.java)
                             if (devotional != null) {
-                                response.invoke(UIState.FOUND, devotional)
+                                response.invoke(DevotionalUIState.FOUND, devotional)
                             }
                         }
                     }
 
                 }.addOnFailureListener {
-                    response.invoke(UIState.FAILED_TO_LOAD, null)
+                    response.invoke(DevotionalUIState.FAILED_TO_LOAD, null)
                 }
         }
 
@@ -137,6 +136,17 @@ class NetworkHelper {
 
         fun syncDevotional(it: Devotional, success:(Boolean, String?)-> Unit) {
             db.collection(DEVOTIONALS).document(it.dateInMilliSeconds).set(it)
+                .addOnSuccessListener {
+                    success.invoke(true, null)
+                }
+                .addOnFailureListener { e ->
+                    success.invoke(false, e.message)
+                }
+        }
+
+
+        fun syncVideo(it: Video, success:(Boolean, String?)-> Unit) {
+            db.collection(VIDEOS).document(it.dateInMilliSeconds!!).set(it)
                 .addOnSuccessListener {
                     success.invoke(true, null)
                 }

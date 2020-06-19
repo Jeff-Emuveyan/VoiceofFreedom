@@ -1,6 +1,6 @@
 package com.bellogate.voiceoffreedom.ui.devotional.util
 
-enum class UIState {
+enum class DevotionalUIState {
 
     LOADING,
     FAILED_TO_LOAD,

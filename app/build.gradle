@@ -171,6 +171,10 @@ dependencies {
     //Workmanager usually causes a duplicate class problem. The following solves it:
     implementation 'com.google.guava:listenablefuture:9999.0-empty-to-avoid-conflict-with-guava'
 
+    //Glide
+    implementation 'com.github.bumptech.glide:glide:4.11.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
+
     /* media picker */
     implementation 'com.greentoad.turtlebody:media-picker:1.0.8'
     /** The following four dependencies are used by 'com.greentoad.turtlebody:media-picker'

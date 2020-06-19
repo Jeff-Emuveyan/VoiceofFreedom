@@ -1,19 +1,17 @@
 package com.bellogate.voiceoffreedom.ui.devotional
 
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import com.bellogate.voiceoffreedom.data.devotional.DevotionalRepository
 import com.bellogate.voiceoffreedom.model.Devotional
 import com.bellogate.voiceoffreedom.ui.BaseViewModel
-import com.bellogate.voiceoffreedom.ui.devotional.util.UIState
+import com.bellogate.voiceoffreedom.ui.devotional.util.DevotionalUIState
 
 class DevotionalViewModel : BaseViewModel() {
 
-    private val _devotional = MutableLiveData<Pair<UIState, Devotional?>>()
-    val devotional: LiveData<Pair<UIState, Devotional?>> = _devotional
+    private val _devotional = MutableLiveData<Pair<DevotionalUIState, Devotional?>>()
+    val devotional: LiveData<Pair<DevotionalUIState, Devotional?>> = _devotional
 
     private val _deleteDevotional = MutableLiveData<Boolean>()
     val deleteDevotional : LiveData<Boolean> = _deleteDevotional

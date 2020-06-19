@@ -8,6 +8,11 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/../Lumiatek/app/src/main/java/com/lumiatek/lumiatek/MainActivity.kt">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/../Memo/app/build.gradle">
           <value>
             <set />
@@ -44,6 +49,11 @@
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/app/build.gradle">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/proguard-rules.pro">
           <value>
             <set />
           </value>
@@ -163,6 +173,21 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/java/com/bellogate/voiceoffreedom/data/video/SyncVideoManager.kt">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/java/com/bellogate/voiceoffreedom/data/video/SyncVideoNotificationManager.kt">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/java/com/bellogate/voiceoffreedom/data/video/VideoRepository.kt">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/app/src/main/java/com/bellogate/voiceoffreedom/model/Admin.kt">
           <value>
             <set />
@@ -184,6 +209,11 @@
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/app/src/main/java/com/bellogate/voiceoffreedom/model/User.kt">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/java/com/bellogate/voiceoffreedom/model/Video.kt">
           <value>
             <set />
           </value>
@@ -349,6 +379,21 @@
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/app/src/main/java/com/bellogate/voiceoffreedom/ui/media/video/add/AddVideoFragment.kt">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/java/com/bellogate/voiceoffreedom/ui/media/video/add/AddVideoViewModel.kt">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/java/com/bellogate/voiceoffreedom/ui/media/video/add/util/AddVideoUIState.kt">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/java/com/bellogate/voiceoffreedom/ui/media/video/add/util/UIState.kt">
           <value>
             <set />
           </value>

@@ -104,7 +104,7 @@ class SyncMultipleDevotionalsManager(appContext: Context, workerParams: WorkerPa
                                     listOfCollectors.remove(devotionalCollectorItem.id)
 
                                     //show notification:
-                                    SyncNotificationManager.showNotificationForAppUpdate(context, listOfCollectors.size, initialListSize)
+                                    SyncDevotionalNotificationManager.showNotificationForAppUpdate(context, listOfCollectors.size, initialListSize)
                                     Log.e(SyncMultipleDevotionalsManager::class.java.simpleName
                                         , "Uploaded: list size :${listOfCollectors.size}")
 
@@ -125,7 +125,7 @@ class SyncMultipleDevotionalsManager(appContext: Context, workerParams: WorkerPa
                     //if the user cancels, we clear the list, hence ending the upload process
                     listOfCollectors.clear()
                     //this will now remove the notification for the screen:
-                    SyncNotificationManager.cancelNotification()
+                    SyncDevotionalNotificationManager.cancelNotification()
                     Toast.makeText(context, "Upload cancelled", Toast.LENGTH_LONG).show()
                 }
             }
@@ -133,7 +133,7 @@ class SyncMultipleDevotionalsManager(appContext: Context, workerParams: WorkerPa
     }
 
     override fun doWork(): Result {
-        SyncNotificationManager.create(context)
+        SyncDevotionalNotificationManager.create(context)
         sync(context)
         return Result.success()
     }

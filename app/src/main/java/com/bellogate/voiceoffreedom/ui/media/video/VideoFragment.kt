@@ -60,7 +60,7 @@ class VideoFragment : Fragment() {
 
     override fun onPause() {
         super.onPause()
-        //reset thr top menu by removinng the "Add devotional" item:
+        //reset thr top menu by removing the "Add video" item:
         sharedViewModel.topMenuController.value = null
     }
 

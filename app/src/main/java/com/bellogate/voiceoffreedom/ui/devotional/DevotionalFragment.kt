@@ -1,7 +1,6 @@
 package com.bellogate.voiceoffreedom.ui.devotional
 
 import android.app.DatePickerDialog.OnDateSetListener
-import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -15,12 +14,11 @@ import androidx.navigation.fragment.findNavController
 import com.bellogate.voiceoffreedom.R
 import com.bellogate.voiceoffreedom.model.User
 import com.bellogate.voiceoffreedom.ui.SharedViewModel
-import com.bellogate.voiceoffreedom.ui.devotional.util.UIState
+import com.bellogate.voiceoffreedom.ui.devotional.util.DevotionalUIState
 import com.bellogate.voiceoffreedom.util.*
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.devotional_fragment.*
-import org.jetbrains.anko.support.v4.toast
 import java.lang.Exception
 import java.util.*
 
@@ -62,7 +60,7 @@ class DevotionalFragment : Fragment(), OnDateSetListener {
             buttonDelete.setOnClickListener {
                 alertWithAction("Delete", "Delete this devotional?") { confirmed ->
                     if (confirmed) {
-                        setUpUIState(UIState.DELETE_IN_PROGRESS, date, null)
+                        setUpUIState(DevotionalUIState.DELETE_IN_PROGRESS, date, null)
                         viewModel.deleteDevotional(requireContext(), devotional)
                     }
                 }
@@ -70,7 +68,7 @@ class DevotionalFragment : Fragment(), OnDateSetListener {
         })
 
         viewModel.deleteDevotional.observe(viewLifecycleOwner, Observer {
-            setUpUIState(UIState.DELETE_COMPLETE, date, null)
+            setUpUIState(DevotionalUIState.DELETE_COMPLETE, date, null)
             if(it){
                 showAlert("Successful", "Delete successful")
                 //refresh
@@ -117,20 +115,20 @@ class DevotionalFragment : Fragment(), OnDateSetListener {
         }
     }
 
-    private fun setUpUIState(uiState: UIState, date: String, imageUrl: String?){
+    private fun setUpUIState(devotionalUiState: DevotionalUIState, date: String, imageUrl: String?){
         this.imageUrl = imageUrl
         buttonDate.text = date
         imageHasSuccessfullyLoaded = false
 
-        when(uiState){
-            UIState.LOADING -> {
+        when(devotionalUiState){
+            DevotionalUIState.LOADING -> {
                 shimmer.showShimmer(true)
                 shimmer.startShimmer()
                 buttonRetry.visibility = View.INVISIBLE
                 tvNoDataFoundForDate.visibility = View.INVISIBLE
                 buttonDelete.visibility = View.INVISIBLE
             }
-            UIState.FOUND -> {
+            DevotionalUIState.FOUND -> {
                 if(imageUrl != null){
                     Picasso.get().load(imageUrl).placeholder(R.drawable.dummy_devotional)
                         .error(R.drawable.ic_broken_image).into(imageView, object : Callback {
@@ -154,7 +152,7 @@ class DevotionalFragment : Fragment(), OnDateSetListener {
                 tvNoDataFoundForDate.visibility = View.INVISIBLE
                 buttonDelete.visibility = View.VISIBLE
             }
-            UIState.FAILED_TO_LOAD ->{
+            DevotionalUIState.FAILED_TO_LOAD ->{
                 shimmer.stopShimmer()
                 shimmer.hideShimmer()
                 imageView.setImageResource(R.drawable.dummy_devotional)
@@ -163,7 +161,7 @@ class DevotionalFragment : Fragment(), OnDateSetListener {
                 tvNoDataFoundForDate.visibility = View.INVISIBLE
                 buttonDelete.visibility = View.INVISIBLE
             }
-            UIState.NO_DATA_FOR_SELECTED_DATE ->{
+            DevotionalUIState.NO_DATA_FOR_SELECTED_DATE ->{
                 shimmer.stopShimmer()
                 shimmer.hideShimmer()
                 imageView.setImageResource(R.drawable.dummy_devotional)
@@ -172,14 +170,14 @@ class DevotionalFragment : Fragment(), OnDateSetListener {
                 buttonDelete.visibility = View.INVISIBLE
             }
 
-            UIState.DELETE_IN_PROGRESS ->{
+            DevotionalUIState.DELETE_IN_PROGRESS ->{
                 progressBarDelete.visibility = View.VISIBLE
                 buttonDelete.visibility = View.INVISIBLE
                 buttonDate.isEnabled = false
                 buttonRetry.isEnabled = false
             }
 
-            UIState.DELETE_COMPLETE ->{
+            DevotionalUIState.DELETE_COMPLETE ->{
                 progressBarDelete.visibility = View.INVISIBLE
                 buttonDelete.visibility = View.VISIBLE
                 buttonDate.isEnabled = true
@@ -194,7 +192,7 @@ class DevotionalFragment : Fragment(), OnDateSetListener {
 
     private infix fun getDevotionalByDate(dateToFind: String){
         viewModel.getDevotionalByDate(requireContext(),dateToFind)
-        setUpUIState(UIState.LOADING, dateToFind, null)
+        setUpUIState(DevotionalUIState.LOADING, dateToFind, null)
     }
 
     override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {

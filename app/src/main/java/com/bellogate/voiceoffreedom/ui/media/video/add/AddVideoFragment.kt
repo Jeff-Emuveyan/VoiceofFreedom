@@ -13,7 +13,9 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import com.bellogate.voiceoffreedom.R
 import com.bellogate.voiceoffreedom.ui.devotional.util.AddVideoUIState
+import com.bellogate.voiceoffreedom.util.alertWithAction
 import com.bellogate.voiceoffreedom.util.centerToast
+import com.bellogate.voiceoffreedom.util.showAlert
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.add_video_fragment.*
 import org.jetbrains.anko.support.v4.toast
@@ -49,7 +51,11 @@ class AddVideoFragment : Fragment() {
         }
 
         uploadButton.setOnClickListener {
-            uploadVideo()
+            alertWithAction("Upload", "Upload this video?"){
+                if(it){
+                    uploadVideo()
+                }
+            }
         }
     }
 

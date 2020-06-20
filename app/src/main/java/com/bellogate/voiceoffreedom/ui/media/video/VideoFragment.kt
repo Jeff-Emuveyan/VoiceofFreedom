@@ -84,7 +84,7 @@ class VideoFragment : Fragment() {
 
 
         setUpUIState(VideoUIState.LOADING)//default until a response comes.
-        initializePlayer()
+        //initializePlayer()
     }
 
 

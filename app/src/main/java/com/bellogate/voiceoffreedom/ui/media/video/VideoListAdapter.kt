@@ -13,8 +13,8 @@ import java.lang.Exception
 
 class VideoListAdapter(): RecyclerView.Adapter<VideoItem>() {
 
-    var context: Context? = null
-    var videoList: ArrayList<Video?>? = null
+    private var context: Context? = null
+    private var videoList: ArrayList<Video?>? = null
 
     constructor(context: Context, lisOfVideos: ArrayList<Video?>?): this(){
         this.context = context
@@ -44,7 +44,10 @@ class VideoListAdapter(): RecyclerView.Adapter<VideoItem>() {
 
             holder.tvTitle.text = video?.title
             holder.tvDuration.text = video?.duration
-        }
 
+            holder.itemLayout.setOnClickListener {
+
+            }
+        }
     }
 }

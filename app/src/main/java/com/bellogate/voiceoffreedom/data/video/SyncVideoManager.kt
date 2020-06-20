@@ -65,7 +65,7 @@ class SyncVideoManager (private val appContext: Context, workerParams: WorkerPar
         NetworkHelper.videoUploadTask = videoRef.putFile(videoUri).addOnSuccessListener {
 
             //upload thumbnail:
-            thumbnailUploadTask = thumbnailRef.putFile(videoUri).addOnSuccessListener {
+            thumbnailUploadTask = thumbnailRef.putBytes(thumbnail).addOnSuccessListener {
 
                 videoRef.downloadUrl.addOnSuccessListener {videoRefUri ->
                     thumbnailRef.downloadUrl.addOnSuccessListener {thumbnailUri ->

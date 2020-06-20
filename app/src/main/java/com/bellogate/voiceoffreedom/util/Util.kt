@@ -41,6 +41,9 @@ const val AMOUNT = "amount"
 const val STOP_NOTIFICATION = "stop_notification"
 
 
+//WorkManager tags
+const val SYNC_VIDEO = "sync_video"
+
 fun showSnackMessage(view: View, message: String){
     Snackbar.make(view, message, Snackbar.LENGTH_LONG).show()
 }

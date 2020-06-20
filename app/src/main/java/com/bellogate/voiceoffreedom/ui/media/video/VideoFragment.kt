@@ -1,24 +1,42 @@
 package com.bellogate.voiceoffreedom.ui.media.video
 
-import androidx.lifecycle.ViewModelProviders
+import android.annotation.SuppressLint
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.bellogate.voiceoffreedom.R
 import com.bellogate.voiceoffreedom.model.User
+import com.bellogate.voiceoffreedom.model.Video
 import com.bellogate.voiceoffreedom.ui.SharedViewModel
 import com.bellogate.voiceoffreedom.util.Fragments
-import org.jetbrains.anko.support.v4.toast
+import com.google.android.exoplayer2.ExoPlaybackException
+import com.google.android.exoplayer2.ExoPlayer
+import com.google.android.exoplayer2.Player
+import com.google.android.exoplayer2.SimpleExoPlayer
+import com.google.android.exoplayer2.util.Util
+import kotlinx.android.synthetic.main.video_fragment.*
+import kotlinx.android.synthetic.main.video_view_item.*
+
 
 class VideoFragment : Fragment() {
 
-    private lateinit var viewModel: VideoViewModel
+    lateinit var viewModel: VideoViewModel
     private lateinit var sharedViewModel: SharedViewModel
+    private lateinit var videoListAdapter: VideoListAdapter
+    var player: SimpleExoPlayer? = null
     private var user: User? = null
+    var playWhenReady = true
+    var currentWindow = 0
+    var playbackPosition: Long = 0
+    lateinit var listener: PlayStateListener
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -47,14 +65,43 @@ class VideoFragment : Fragment() {
             }
         })
 
+        //fetch videos:
+        viewModel.fetchVideos(requireContext()){ uistate, videoList ->
 
+            when(uistate){
+                VideoUIState.FOUND ->{
+                    setUpUIState(VideoUIState.FOUND)
+                    displayVideos(videoList)
+                }
+                VideoUIState.NO_VIDEOS ->{
+                    setUpUIState(VideoUIState.NO_VIDEOS)
+                }
+                VideoUIState.ERROR ->{
+                    setUpUIState(VideoUIState.ERROR)
+                }
+            }
+        }
+
+
+        setUpUIState(VideoUIState.LOADING)//default until a response comes.
+        initializePlayer()
     }
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        listener = PlayStateListener()
+    }
 
+
+    private fun displayVideos(videos: ArrayList<Video?>?) {
+        recyclerView?.layoutManager = LinearLayoutManager(requireContext())
+        videoListAdapter = VideoListAdapter(requireContext(), videos)
+        recyclerView.adapter = videoListAdapter
+
+        //show the title of the first video
+        tvTitle.text = viewModel.getFirstTitle(videos)
     }
 
 
@@ -62,6 +109,53 @@ class VideoFragment : Fragment() {
         super.onPause()
         //reset thr top menu by removing the "Add video" item:
         sharedViewModel.topMenuController.value = null
+
+        if (Util.SDK_INT < 24) {
+            releasePlayer()
+        }
     }
 
+    override fun onStop() {
+        super.onStop()
+        if (Util.SDK_INT >= 24) {
+            releasePlayer()
+        }
+    }
+
+
+    override fun onStart() {
+        super.onStart()
+        if (Util.SDK_INT >= 24) {
+            initializePlayer()
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        hideSystemUi()
+        if (Util.SDK_INT < 24 || player == null) {
+            initializePlayer()
+        }
+    }
+
+
+    inner class PlayStateListener : Player.EventListener{
+
+        override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
+            if(playbackState == ExoPlayer.STATE_BUFFERING){
+                setUpUIState(VideoUIState.LOADING)
+
+            }else if(playbackState == ExoPlayer.STATE_READY){
+                setUpUIState(VideoUIState.FOUND)
+            }
+
+            if(playbackState == ExoPlayer.STATE_ENDED){
+                player?.seekTo(0); //if the video has finished playing, restart it.
+            }
+        }
+
+        override fun onPlayerError(error: ExoPlaybackException) {
+            setUpUIState(VideoUIState.ERROR)
+        }
+    }
 }

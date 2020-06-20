@@ -4,6 +4,9 @@ import android.content.Context
 import android.net.Uri
 import androidx.work.*
 import com.bellogate.voiceoffreedom.data.BaseRepository
+import com.bellogate.voiceoffreedom.data.datasource.network.NetworkHelper
+import com.bellogate.voiceoffreedom.model.Video
+import com.bellogate.voiceoffreedom.ui.media.video.VideoUIState
 
 class VideoRepository(context: Context): BaseRepository(context) {
 
@@ -26,5 +29,12 @@ class VideoRepository(context: Context): BaseRepository(context) {
         WorkManager
             .getInstance(context)
             .enqueueUniqueWork("syncVideo", ExistingWorkPolicy.APPEND, uploadWorkRequest)
+    }
+
+
+    fun fetchVideos(response:(VideoUIState, ArrayList<Video?>?)-> Unit){
+        NetworkHelper.fetchVideos{ state, list ->
+            response.invoke(state, list)
+        }
     }
 }

@@ -3,6 +3,7 @@ package com.bellogate.voiceoffreedom.data.datasource.network
 import android.net.Uri
 import com.bellogate.voiceoffreedom.model.*
 import com.bellogate.voiceoffreedom.ui.devotional.util.DevotionalUIState
+import com.bellogate.voiceoffreedom.ui.media.video.VideoUIState
 import com.bellogate.voiceoffreedom.util.*
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
@@ -154,6 +155,31 @@ class NetworkHelper {
                     success.invoke(false, e.message)
                 }
         }
+
+
+        fun fetchVideos(response:(VideoUIState, ArrayList<Video?>?)-> Unit){
+            db.collection(VIDEOS).orderBy(DATE_IN_MILLISECONDS).limit(6).get()
+                .addOnSuccessListener {
+
+                    if (it.documents.isNullOrEmpty() || it.documents.size == 0) {
+                        //search was successful but no devotional matched that 'timeInMilliSeconds'
+                        response.invoke(VideoUIState.NO_VIDEOS, null)
+                    } else {
+                        val list: ArrayList<Video?>? = ArrayList<Video?>()
+                        for (document in it.documents) {//this will only have one document because we set the limit to 1
+                            val video = document.toObject(Video::class.java)
+                            if (video != null) {
+                                list?.add(video)
+                            }
+                        }
+                        response.invoke(VideoUIState.FOUND, list)
+                    }
+
+                }.addOnFailureListener {
+                    response.invoke(VideoUIState.ERROR, null)
+                }
+        }
+
 
     }
 

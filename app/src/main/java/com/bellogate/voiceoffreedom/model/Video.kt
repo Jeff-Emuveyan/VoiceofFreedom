@@ -1,6 +1,6 @@
 package com.bellogate.voiceoffreedom.model
 
-class Video {
+class Video() {
 
     var title: String? = null
     var thumbNailUrl: String? = null
@@ -14,7 +14,7 @@ class Video {
         videoUrl: String?,
         duration: String?,
         dateInMilliSeconds: String?
-    ) {
+    ): this() {
         this.title = title
         this.thumbNailUrl = thumbNailUrl
         this.videoUrl = videoUrl

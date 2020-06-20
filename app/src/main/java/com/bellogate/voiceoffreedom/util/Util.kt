@@ -26,10 +26,13 @@ import com.bellogate.voiceoffreedom.ui.devotional.add.DevotionalCollectorItem
 import com.bellogate.voiceoffreedom.data.devotional.SyncMultipleDevotionalsManager
 import com.bellogate.voiceoffreedom.model.Admin
 import com.bellogate.voiceoffreedom.model.User
+import com.bellogate.voiceoffreedom.ui.media.video.VideoFragment
+import com.bellogate.voiceoffreedom.ui.media.video.VideoUIState
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
 import com.greentoad.turtlebody.mediapicker.MediaPicker
 import com.greentoad.turtlebody.mediapicker.core.MediaPickerConfig
+import kotlinx.android.synthetic.main.video_fragment.*
 import kotlinx.coroutines.CoroutineScope
 import java.io.ByteArrayOutputStream
 import java.text.DateFormatSymbols

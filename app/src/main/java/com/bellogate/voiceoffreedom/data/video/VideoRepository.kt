@@ -37,4 +37,28 @@ class VideoRepository(context: Context): BaseRepository(context) {
             response.invoke(state, list)
         }
     }
+
+
+    /*** Deletes the video object in firestore ***/
+    fun deleteVideo(video: Video, response:(Boolean, String?)-> Unit){
+        NetworkHelper.deleteVideo(video){ aSuccess, aErrorMessage ->
+            if(aSuccess){
+                NetworkHelper.deleteVideoFile(video) { bSuccess, bErrorMessage ->
+                    if(bSuccess){
+                        NetworkHelper.deleteVideoThumbnail(video){ cSuccess, cErrorMessage ->
+                            if(cSuccess){
+                                response.invoke(true, null)
+                            }else{
+                                response.invoke(false, cErrorMessage)
+                            }
+                        }
+                    }else{
+                        response.invoke(false, bErrorMessage)
+                    }
+                }
+            }else{
+                response.invoke(false, aErrorMessage)
+            }
+        }
+    }
 }

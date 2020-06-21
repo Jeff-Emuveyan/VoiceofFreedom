@@ -107,6 +107,17 @@ fun Fragment.showAlert(title: String, message: String){
 }
 
 
+fun showAlert(context: Context, title: String, message: String, action: (Boolean) -> Unit){
+    val alertBuilder: AlertDialog.Builder = AlertDialog.Builder(context)
+    alertBuilder.setTitle(title)
+    alertBuilder.setMessage(message)
+    alertBuilder.setPositiveButton("OK"
+    ) { _, _ -> action.invoke(true)}
+    alertBuilder.show()
+}
+
+
+
 fun getSimpleDateFormat(timestampValue: Long,simpleDateFormat: String?): String {
     val dateValue = Date(timestampValue)
     val dateFormat = SimpleDateFormat(simpleDateFormat, Locale.ENGLISH)

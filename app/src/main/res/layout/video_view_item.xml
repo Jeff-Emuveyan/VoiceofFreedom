@@ -5,30 +5,47 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginStart="8dp"
+    android:layout_marginEnd="8dp"
+    android:background="@color/white"
     android:id="@+id/layout">
 
-
-  <ImageView
-      android:id="@+id/ivThumbnail"
-      android:layout_width="50dp"
-      android:layout_height="50dp"
-      tools:src="@tools:sample/avatars"
+  <com.facebook.shimmer.ShimmerFrameLayout
+      android:id="@+id/shimmer"
+      app:shimmer_auto_start="false"
       app:layout_constraintStart_toStartOf="parent"
       android:layout_marginStart="8dp"
       app:layout_constraintTop_toTopOf="parent"
-      android:layout_marginTop="8dp" />
+      android:layout_marginTop="8dp"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content">
+
+  <ImageView
+      android:id="@+id/ivThumbnail"
+      android:layout_width="56dp"
+      android:layout_height="56dp"
+      android:layout_gravity="center_horizontal"
+      android:adjustViewBounds="true"
+      tools:src="@tools:sample/avatars"/>
+
+  </com.facebook.shimmer.ShimmerFrameLayout>
 
   <TextView
       android:id="@+id/tvTitle"
-      android:layout_width="wrap_content"
+      android:layout_width="0dp"
       android:layout_height="wrap_content"
-      tools:text="@tools:sample/full_names"
-      android:fontFamily="@font/lato_bold"
-      android:textColor="@android:color/black"
-      app:layout_constraintTop_toTopOf="@+id/ivThumbnail"
-      app:layout_constraintStart_toEndOf="@+id/ivThumbnail"
       android:layout_marginStart="8dp"
-      android:layout_marginBottom="8dp"/>
+      android:layout_marginEnd="8dp"
+      android:layout_marginTop="4dp"
+      android:fontFamily="@font/lato_bold"
+      android:maxLength="35"
+      android:maxLines="1"
+      android:textColor="@android:color/black"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintEnd_toStartOf="@+id/ivCancel"
+      app:layout_constraintStart_toEndOf="@+id/shimmer"
+      app:layout_constraintTop_toTopOf="@+id/shimmer"
+      tools:text="@tools:sample/full_names" />
 
   <TextView
       android:id="@+id/tvDuration"
@@ -37,11 +54,33 @@
       android:layout_marginStart="8dp"
       android:layout_marginEnd="8dp"
       android:fontFamily="@font/lato"
-      app:layout_constraintBottom_toBottomOf="@+id/ivThumbnail"
+      app:layout_constraintBottom_toBottomOf="@+id/shimmer"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintHorizontal_bias="0.050"
-      app:layout_constraintStart_toEndOf="@+id/ivThumbnail"
+      app:layout_constraintStart_toEndOf="@+id/shimmer"
       app:layout_constraintTop_toBottomOf="@+id/tvTitle"
       tools:text="@tools:sample/lorem[4:10]" />
+
+  <ImageView
+      android:id="@+id/ivCancel"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_margin="8dp"
+      app:layout_constraintBottom_toBottomOf="@+id/shimmer"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintTop_toTopOf="@+id/shimmer"
+      app:srcCompat="@drawable/ic_cancel" />
+
+
+  <View
+      android:layout_width="0dp"
+      android:layout_height=".5dp"
+      android:layout_marginStart="8dp"
+      android:layout_marginTop="12dp"
+      android:layout_marginEnd="8dp"
+      android:background="@color/very_light_brown"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/shimmer" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

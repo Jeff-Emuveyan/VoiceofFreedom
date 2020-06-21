@@ -3,8 +3,10 @@ package com.bellogate.voiceoffreedom.ui.media.video
 import android.annotation.SuppressLint
 import android.view.View
 import com.bellogate.voiceoffreedom.R
+import com.bellogate.voiceoffreedom.model.Video
 import com.google.android.exoplayer2.SimpleExoPlayer
 import kotlinx.android.synthetic.main.video_fragment.*
+import kotlinx.android.synthetic.main.video_view_item.*
 
 fun VideoFragment.setUpUIState(uiState: VideoUIState){
 
@@ -57,10 +59,15 @@ fun VideoFragment.initializePlayer(){
     player?.addListener(listener)
     player?.playWhenReady = true;
     player?.seekTo(currentWindow, playbackPosition);
-    player?.prepare(viewModel.getMediaSource(requireContext(),
-        requireContext().getString(R.string.text_videolink)),
-        false, false);
+}
 
+
+fun VideoFragment.playVideo(video: Video){
+    player?.prepare(viewModel.getMediaSource(requireContext(),
+        video.videoUrl!!),
+        false, false)
+
+    textViewTitle.text = video.title
 }
 
 

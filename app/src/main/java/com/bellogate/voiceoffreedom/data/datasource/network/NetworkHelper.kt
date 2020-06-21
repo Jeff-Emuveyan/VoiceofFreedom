@@ -181,6 +181,49 @@ class NetworkHelper {
         }
 
 
+        /*** Deletes the video object in firestore ***/
+        fun deleteVideo(it: Video, response:(Boolean, String?)-> Unit){
+            db.collection(VIDEOS).document(it.dateInMilliSeconds!!)
+                .delete()
+                .addOnSuccessListener {
+                    response.invoke(true, null)
+                }
+                .addOnFailureListener { e ->
+                    response.invoke(false, e.message)
+                }
+        }
+
+
+        /*** Deletes the actual video file in storage ***/
+        fun deleteVideoFile(it: Video, response:(Boolean, String?)-> Unit){
+            val storage = Firebase.storage
+            val reference = storage.reference
+
+            val imageRef: StorageReference = reference.child("${VIDEOS}/${it.dateInMilliSeconds}")
+            imageRef.delete()
+                .addOnSuccessListener {
+                    response.invoke(true, null)
+                }.addOnFailureListener { e ->
+                    response.invoke(false, e.message)
+                }
+        }
+
+
+        /*** Deletes the video thumbnail in storage ***/
+        fun deleteVideoThumbnail(it: Video, response:(Boolean, String?)-> Unit){
+            val storage = Firebase.storage
+            val reference = storage.reference
+
+            val imageRef: StorageReference = reference.child("${THUMBNAILS}/${it.dateInMilliSeconds}")
+            imageRef.delete()
+                .addOnSuccessListener {
+                    response.invoke(true, null)
+                }.addOnFailureListener { e ->
+                    response.invoke(false, e.message)
+                }
+        }
+
+
     }
 
 }

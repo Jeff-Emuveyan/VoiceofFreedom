@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -82,9 +83,7 @@ class VideoFragment : Fragment() {
             }
         }
 
-
         setUpUIState(VideoUIState.LOADING)//default until a response comes.
-        //initializePlayer()
     }
 
 
@@ -97,11 +96,14 @@ class VideoFragment : Fragment() {
 
     private fun displayVideos(videos: ArrayList<Video?>?) {
         recyclerView?.layoutManager = LinearLayoutManager(requireContext())
-        videoListAdapter = VideoListAdapter(requireContext(), videos)
+        videoListAdapter = VideoListAdapter(requireContext(), user, videos)
         recyclerView.adapter = videoListAdapter
 
-        //show the title of the first video
-        tvTitle.text = viewModel.getFirstTitle(videos)
+        //play the first video:
+        if(videos != null){
+            playVideo(videos.first()!!)
+        }
+
     }
 
 

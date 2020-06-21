@@ -33,15 +33,4 @@ class VideoViewModel : BaseViewModel() {
         return ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(uri)
     }
 
-
-    /*** Gets the title of the first video on the list **/
-    fun getFirstTitle(list: ArrayList<Video?>?): String{
-        return if(!list.isNullOrEmpty()){
-            val video = list.first()
-            video?.title!!
-        }else{
-            "Title"
-        }
-    }
-
 }

@@ -24,18 +24,19 @@ fun VideoFragment.setUpUIState(uiState: VideoUIState){
         }
 
         VideoUIState.NO_VIDEOS->{
-            exoPlayerView.visibility = View.VISIBLE
+            exoPlayerView.visibility = View.INVISIBLE
             progressBar.visibility = View.INVISIBLE
             tvError.visibility = View.VISIBLE
             tvError.text = "No videos to show"
+            textViewTitle.text = ""
         }
         VideoUIState.ERROR ->{
             exoPlayerView.visibility = View.INVISIBLE
             progressBar.visibility = View.INVISIBLE
             tvError.visibility = View.VISIBLE
             tvError.text = "Network error"
+            textViewTitle.text = ""
         }
-
     }
 
 }

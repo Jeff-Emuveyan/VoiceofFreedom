@@ -2,6 +2,7 @@ package com.bellogate.voiceoffreedom.ui.media.video
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -96,7 +97,10 @@ class VideoFragment : Fragment() {
 
     private fun displayVideos(videos: ArrayList<Video?>?) {
         recyclerView?.layoutManager = LinearLayoutManager(requireContext())
-        videoListAdapter = VideoListAdapter(requireContext(), user, videos)
+        videoListAdapter = VideoListAdapter(requireContext(), user, videos){
+            playVideo(it)
+        }
+
         recyclerView.adapter = videoListAdapter
 
         //play the first video:

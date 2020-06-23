@@ -20,11 +20,13 @@ class VideoListAdapter(): RecyclerView.Adapter<VideoItem>() {
     private var context: Context? = null
     private var videoList: ArrayList<Video?>? = null
     private var user: User? = null
+    private lateinit var videoItemClicked : (Video)-> Unit
 
-    constructor(context: Context, user: User?, lisOfVideos: ArrayList<Video?>?): this(){
+    constructor(context: Context, user: User?, lisOfVideos: ArrayList<Video?>?, videoItemClicked : (Video)-> Unit): this(){
         this.context = context
         this.videoList = lisOfVideos
         this.user = user
+        this.videoItemClicked = videoItemClicked
     }
 
     override fun getItemCount(): Int {
@@ -64,7 +66,7 @@ class VideoListAdapter(): RecyclerView.Adapter<VideoItem>() {
             holder.tvDuration.text = video?.duration
 
             holder.itemLayout.setOnClickListener {
-
+                videoItemClicked.invoke(video!!)
             }
 
             if(user != null && user!!.isAdmin) {

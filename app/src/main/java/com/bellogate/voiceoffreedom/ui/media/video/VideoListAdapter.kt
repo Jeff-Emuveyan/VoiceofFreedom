@@ -10,7 +10,9 @@ import com.bellogate.voiceoffreedom.R
 import com.bellogate.voiceoffreedom.data.video.VideoRepository
 import com.bellogate.voiceoffreedom.model.User
 import com.bellogate.voiceoffreedom.model.Video
+import com.bellogate.voiceoffreedom.util.getSimpleDateFormat
 import com.bellogate.voiceoffreedom.util.showAlert
+import com.bellogate.voiceoffreedom.util.todayDate
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 import java.lang.Exception
@@ -64,6 +66,8 @@ class VideoListAdapter(): RecyclerView.Adapter<VideoItem>() {
 
             holder.tvTitle.text = video?.title
             holder.tvDuration.text = video?.duration
+            holder.tvDate.text = getSimpleDateFormat(video!!.dateInMilliSeconds!!.toLong(),
+                "dd-MMM-yyyy")//ie 30-APR-1994
 
             holder.itemLayout.setOnClickListener {
                 videoItemClicked.invoke(video!!)

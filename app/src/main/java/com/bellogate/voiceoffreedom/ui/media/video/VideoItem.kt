@@ -18,6 +18,7 @@ class VideoItem(v: View): RecyclerView.ViewHolder(v)  {
     lateinit var ivDeleteVideo: ImageView
     lateinit var tvTitle: TextView
     lateinit var tvDuration: TextView
+    lateinit var tvDate: TextView
     lateinit var view: View
     lateinit var context: Context
 
@@ -30,6 +31,7 @@ class VideoItem(v: View): RecyclerView.ViewHolder(v)  {
         ivThumbnail = view.findViewById(R.id.ivThumbnail)
         tvTitle = view.findViewById(R.id.tvTitle)
         tvDuration = view.findViewById(R.id.tvDuration)
+        tvDate = view.findViewById(R.id.tvDate)
         ivDeleteVideo = view.findViewById(R.id.ivCancel)
     }
 }

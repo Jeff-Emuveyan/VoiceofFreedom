@@ -49,7 +49,7 @@
         android:layout_height="wrap_content"
         android:fontFamily="@font/lato_bold"
         android:maxLength="35"
-        android:maxLines="1"
+        android:maxLines="2"
         android:textColor="@android:color/black"
         tools:text="@tools:sample/full_names" />
 

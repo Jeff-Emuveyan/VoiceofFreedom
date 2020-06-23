@@ -6,6 +6,7 @@ import com.bellogate.voiceoffreedom.ui.devotional.util.DevotionalUIState
 import com.bellogate.voiceoffreedom.ui.media.video.VideoUIState
 import com.bellogate.voiceoffreedom.util.*
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.StorageTask
@@ -158,7 +159,7 @@ class NetworkHelper {
 
 
         fun fetchVideos(response:(VideoUIState, ArrayList<Video?>?)-> Unit){
-            db.collection(VIDEOS).orderBy(DATE_IN_MILLISECONDS).limit(6).get()
+            db.collection(VIDEOS).orderBy(DATE_IN_MILLISECONDS, Query.Direction.DESCENDING).limit(6).get()
                 .addOnSuccessListener {
 
                     if (it.documents.isNullOrEmpty() || it.documents.size == 0) {

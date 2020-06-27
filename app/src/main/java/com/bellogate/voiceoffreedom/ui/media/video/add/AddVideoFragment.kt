@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import com.bellogate.voiceoffreedom.R
+import com.bellogate.voiceoffreedom.ui.SharedViewModel
 import com.bellogate.voiceoffreedom.ui.devotional.util.AddVideoUIState
 import com.bellogate.voiceoffreedom.util.alertWithAction
 import com.bellogate.voiceoffreedom.util.centerToast
@@ -25,6 +26,7 @@ import java.io.File
 class AddVideoFragment : Fragment() {
 
     private lateinit var viewModel: AddVideoViewModel
+    private lateinit var sharedViewModel: SharedViewModel
     private var videoSelected = false
     private var videoUri : Uri? = null
 
@@ -38,6 +40,9 @@ class AddVideoFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(AddVideoViewModel::class.java)
+        sharedViewModel = ViewModelProviders.of(requireActivity()).get(SharedViewModel::class.java)
+
+        sharedViewModel.showAddVideoFragment.value = false
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

@@ -19,6 +19,8 @@ import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 import java.lang.Exception
 
+
+/*** Reference: https://github.com/firebase/FirebaseUI-Android/blob/master/firestore/README.md ***/
 class VideoListAdapter(options: FirestorePagingOptions<Video>): FirestorePagingAdapter<Video, VideoItem>(options) {
 
     private var context: Context? = null

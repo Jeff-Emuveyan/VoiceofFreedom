@@ -84,6 +84,8 @@ class VideoFragment : Fragment() {
 
 
     private fun fetchVideos(lifecycleOwner: LifecycleOwner) {
+        //We use FirestorePagingAdapter to fetch the videos and also handle pagination
+        //Do check the onStart() and onStop() to see how we handled lifecycle of the adapter
         recyclerView?.layoutManager = LinearLayoutManager(requireContext())
         videoListAdapter = VideoListAdapter(requireContext(), viewModel.options(lifecycleOwner), user,
             uiState = {uiState : VideoUIState ->
@@ -120,6 +122,8 @@ class VideoFragment : Fragment() {
 
     override fun onStop() {
         super.onStop()
+
+        //A line of code to handle fragment lifecycle of FirestorePagingAdapter
         videoListAdapter?.stopListening();
 
         if (Util.SDK_INT >= 24) {
@@ -130,7 +134,9 @@ class VideoFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-        videoListAdapter?.startListening();
+
+        //A line of code to handle fragment lifecycle of FirestorePagingAdapter
+        videoListAdapter?.startListening()
 
         if (Util.SDK_INT >= 24) {
             initializePlayer()

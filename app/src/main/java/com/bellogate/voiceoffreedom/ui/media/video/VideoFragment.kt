@@ -1,37 +1,39 @@
 package com.bellogate.voiceoffreedom.ui.media.video
 
-import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
+import androidx.paging.PagedList
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bellogate.voiceoffreedom.R
 import com.bellogate.voiceoffreedom.model.User
 import com.bellogate.voiceoffreedom.model.Video
 import com.bellogate.voiceoffreedom.ui.SharedViewModel
+import com.bellogate.voiceoffreedom.util.DATE_IN_MILLISECONDS
 import com.bellogate.voiceoffreedom.util.Fragments
+import com.bellogate.voiceoffreedom.util.VIDEOS
+import com.firebase.ui.firestore.paging.FirestorePagingOptions
 import com.google.android.exoplayer2.ExoPlaybackException
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.util.Util
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import kotlinx.android.synthetic.main.video_fragment.*
-import kotlinx.android.synthetic.main.video_view_item.*
 
 
 class VideoFragment : Fragment() {
 
     lateinit var viewModel: VideoViewModel
     private lateinit var sharedViewModel: SharedViewModel
-    private lateinit var videoListAdapter: VideoListAdapter
+    private var videoListAdapter: VideoListAdapter? = null
     var player: SimpleExoPlayer? = null
     private var user: User? = null
     var playWhenReady = true
@@ -59,6 +61,9 @@ class VideoFragment : Fragment() {
                 //If the user is an Admin, the MainActivity will add a menu item to 'Add video'
                 sharedViewModel.topMenuController.value = Fragments.VIDEO
             }
+
+            //fetch videos:
+            fetchVideos(viewLifecycleOwner)
         })
 
         sharedViewModel.showAddVideoFragment.observe(viewLifecycleOwner, Observer {
@@ -66,23 +71,6 @@ class VideoFragment : Fragment() {
                 findNavController().navigate(R.id.action_nav_media_to_addVideoFragment)
             }
         })
-
-        //fetch videos:
-        viewModel.fetchVideos(requireContext()){ uistate, videoList ->
-
-            when(uistate){
-                VideoUIState.FOUND ->{
-                    setUpUIState(VideoUIState.FOUND)
-                    displayVideos(videoList)
-                }
-                VideoUIState.NO_VIDEOS ->{
-                    setUpUIState(VideoUIState.NO_VIDEOS)
-                }
-                VideoUIState.ERROR ->{
-                    setUpUIState(VideoUIState.ERROR)
-                }
-            }
-        }
 
         setUpUIState(VideoUIState.LOADING)//default until a response comes.
     }
@@ -95,19 +83,28 @@ class VideoFragment : Fragment() {
     }
 
 
-    private fun displayVideos(videos: ArrayList<Video?>?) {
+    private fun fetchVideos(lifecycleOwner: LifecycleOwner) {
         recyclerView?.layoutManager = LinearLayoutManager(requireContext())
-        videoListAdapter = VideoListAdapter(requireContext(), user, videos){
-            playVideo(it)
-        }
+        videoListAdapter = VideoListAdapter(requireContext(), viewModel.options(lifecycleOwner), user,
+            uiState = {uiState : VideoUIState ->
+                when(uiState){
+                    VideoUIState.FOUND ->{
+                        setUpUIState(VideoUIState.FOUND)
+                    }
+                    VideoUIState.NO_VIDEOS ->{
+                        setUpUIState(VideoUIState.NO_VIDEOS)
+                    }
+                    VideoUIState.ERROR ->{
+                        setUpUIState(VideoUIState.ERROR)
+                    }
+                }
+            }, firstVideoReady = {
+                playVideo(it)
+            }, videoItemClicked = {
+                playVideo(it)
+            } )
 
         recyclerView.adapter = videoListAdapter
-
-        //play the first video:
-        if(videos != null){
-            playVideo(videos.first()!!)
-        }
-
     }
 
 
@@ -123,6 +120,8 @@ class VideoFragment : Fragment() {
 
     override fun onStop() {
         super.onStop()
+        videoListAdapter?.stopListening();
+
         if (Util.SDK_INT >= 24) {
             releasePlayer()
         }
@@ -131,6 +130,8 @@ class VideoFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
+        videoListAdapter?.startListening();
+
         if (Util.SDK_INT >= 24) {
             initializePlayer()
         }

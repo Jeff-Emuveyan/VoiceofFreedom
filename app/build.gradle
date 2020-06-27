@@ -190,4 +190,8 @@ dependencies {
     implementation 'com.google.android.exoplayer:exoplayer-core:2.11.1'
     implementation 'com.google.android.exoplayer:exoplayer-dash:2.11.1'
     implementation 'com.google.android.exoplayer:exoplayer-ui:2.11.1'
+
+    //FirebaseUI for Cloud Firestore
+    implementation 'com.firebaseui:firebase-ui-firestore:6.2.1'
+    implementation 'androidx.paging:paging-runtime-ktx:2.1.0'
 }

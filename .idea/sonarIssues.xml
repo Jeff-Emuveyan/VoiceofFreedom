@@ -8,7 +8,62 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/../1Kanal/app/build.gradle">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../1Kanal/app/src/main/AndroidManifest.xml">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../1Kanal/app/src/main/java/com/onekanal/fettah/kanal/MainActivity.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../1Kanal/app/src/main/java/com/onekanal/fettah/kanal/NotificationService/Util.kt">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../1Kanal/build.gradle">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../Lumiatek/app/build.gradle">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../Lumiatek/app/src/main/AndroidManifest.xml">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../Lumiatek/app/src/main/java/com/lumiatek/lumiatek/Classes/User.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../Lumiatek/app/src/main/java/com/lumiatek/lumiatek/JavaScriptInterface.java">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/../Lumiatek/app/src/main/java/com/lumiatek/lumiatek/MainActivity.kt">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../Lumiatek/app/src/main/java/com/lumiatek/lumiatek/NotificationService/MyFireBaseMessagingService.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../Lumiatek/app/src/main/java/com/lumiatek/lumiatek/User.java">
           <value>
             <set />
           </value>

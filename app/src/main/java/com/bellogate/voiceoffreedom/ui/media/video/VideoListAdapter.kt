@@ -1,39 +1,46 @@
 package com.bellogate.voiceoffreedom.ui.media.video
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.recyclerview.widget.RecyclerView
 import com.bellogate.voiceoffreedom.R
 import com.bellogate.voiceoffreedom.data.video.VideoRepository
 import com.bellogate.voiceoffreedom.model.User
 import com.bellogate.voiceoffreedom.model.Video
 import com.bellogate.voiceoffreedom.util.getSimpleDateFormat
 import com.bellogate.voiceoffreedom.util.showAlert
-import com.bellogate.voiceoffreedom.util.todayDate
+import com.firebase.ui.firestore.paging.FirestorePagingAdapter
+import com.firebase.ui.firestore.paging.FirestorePagingOptions
+import com.firebase.ui.firestore.paging.LoadingState
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 import java.lang.Exception
 
-class VideoListAdapter(): RecyclerView.Adapter<VideoItem>() {
+class VideoListAdapter(options: FirestorePagingOptions<Video>): FirestorePagingAdapter<Video, VideoItem>(options) {
 
     private var context: Context? = null
-    private var videoList: ArrayList<Video?>? = null
     private var user: User? = null
     private lateinit var videoItemClicked : (Video)-> Unit
+    private lateinit var firstVideoReady : (Video)-> Unit
+    private lateinit var uiState : (VideoUIState)-> Unit
 
-    constructor(context: Context, user: User?, lisOfVideos: ArrayList<Video?>?, videoItemClicked : (Video)-> Unit): this(){
+    constructor(context: Context,
+                options: FirestorePagingOptions<Video>,
+                user: User?,
+                uiState : (VideoUIState)-> Unit,
+                firstVideoReady : (Video)-> Unit,
+                videoItemClicked : (Video)-> Unit): this(options){
+
         this.context = context
-        this.videoList = lisOfVideos
         this.user = user
+        this.uiState = uiState
+        this.firstVideoReady = firstVideoReady
         this.videoItemClicked = videoItemClicked
     }
 
-    override fun getItemCount(): Int {
-        return videoList?.size ?: 0
-    }
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VideoItem {
@@ -43,10 +50,14 @@ class VideoListAdapter(): RecyclerView.Adapter<VideoItem>() {
     }
 
 
-    override fun onBindViewHolder(holder: VideoItem, position: Int) {
+    override fun onBindViewHolder(holder: VideoItem, position: Int, video: Video) {
 
-        if(videoList != null && videoList!!.size > 0){
-            val video = videoList!![position]
+        if(video != null){
+
+            //check to automatically play the first video:
+            if(position == 0) {
+                firstVideoReady.invoke(video)
+            }
 
             //load the thumbnail:
             holder.shimmer.showShimmer(true)
@@ -66,7 +77,8 @@ class VideoListAdapter(): RecyclerView.Adapter<VideoItem>() {
 
             holder.tvTitle.text = video?.title
             holder.tvDuration.text = video?.duration
-            holder.tvDate.text = getSimpleDateFormat(video!!.dateInMilliSeconds!!.toLong(),
+            holder.tvDate.text = getSimpleDateFormat(
+                video!!.dateInMilliSeconds!!.toLong(),
                 "dd-MMM-yyyy")//ie 30-APR-1994
 
             holder.itemLayout.setOnClickListener {
@@ -82,16 +94,17 @@ class VideoListAdapter(): RecyclerView.Adapter<VideoItem>() {
                             holder.shimmer.showShimmer(true)
                             holder.shimmer.startShimmer()
 
+                            //delete the video:
                             VideoRepository(context!!).deleteVideo(video!!){ success, errorMessage ->
                                 if(success){
-                                    videoList?.remove(video)
+                                    this.refresh()//refresh the list because an item has been removed.
                                     this.notifyDataSetChanged()
                                     Toast.makeText(context!!, "Deleted!", Toast.LENGTH_LONG).show()
                                 }else{
                                     holder.ivDeleteVideo.visibility = View.VISIBLE
                                     holder.shimmer.stopShimmer()
                                     holder.shimmer.hideShimmer()
-                                    Toast.makeText(context!!, "Try again", Toast.LENGTH_LONG).show()
+                                    Toast.makeText(context!!, "Try again $errorMessage", Toast.LENGTH_LONG).show()
                                 }
                             }
                         }else{
@@ -105,10 +118,37 @@ class VideoListAdapter(): RecyclerView.Adapter<VideoItem>() {
                 }
             }else{
                 holder.ivDeleteVideo.visibility = View.INVISIBLE
+                uiState.invoke(VideoUIState.NO_VIDEOS)
             }
         }
     }
 
 
+    override fun onLoadingStateChanged(state: LoadingState) {
+        when (state) {
 
+            LoadingState.LOADING_INITIAL ->{// this is the first method to be called.
+                Log.e(VideoListAdapter::class.java.simpleName, "LOADING_INITIAL")
+                uiState.invoke(VideoUIState.FOUND)
+            }
+
+            LoadingState.LOADED ->{
+                Log.e(VideoListAdapter::class.java.simpleName, "LOADING")
+            }
+
+            LoadingState.FINISHED ->{// this is the last method to be called after it has loaded all data from firestore
+                //(pagination included)
+                Log.e(VideoListAdapter::class.java.simpleName, "LOADING FINISHED")
+            }
+
+            LoadingState.LOADING_MORE ->{
+                Log.e(VideoListAdapter::class.java.simpleName, "LOADING MORE")
+            }
+
+            LoadingState.ERROR ->{
+                Log.e(VideoListAdapter::class.java.simpleName, "ERROR")
+                uiState.invoke(VideoUIState.ERROR)
+            }
+        }
+    }
 }

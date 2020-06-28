@@ -61,36 +61,38 @@ class SyncVideoManager (private val appContext: Context, workerParams: WorkerPar
         val videoRef: StorageReference = reference.child("$VIDEOS/${dateInMilliSeconds}")
         val thumbnailRef: StorageReference = reference.child("$THUMBNAILS/${dateInMilliSeconds}")
 
-        //upload video:
-        NetworkHelper.videoUploadTask = videoRef.putFile(videoUri).addOnSuccessListener {
+        //upload thumbnail first:
+        thumbnailUploadTask = thumbnailRef.putBytes(thumbnail).addOnSuccessListener {
 
-            //upload thumbnail:
-            thumbnailUploadTask = thumbnailRef.putBytes(thumbnail).addOnSuccessListener {
+            //upload video:
+            NetworkHelper.videoUploadTask = videoRef.putFile(videoUri).addOnSuccessListener {
 
-                videoRef.downloadUrl.addOnSuccessListener {videoRefUri ->
-                    thumbnailRef.downloadUrl.addOnSuccessListener {thumbnailUri ->
+                videoRef.downloadUrl.addOnSuccessListener { videoRefUri ->
+                    thumbnailRef.downloadUrl.addOnSuccessListener { thumbnailUri ->
 
                         val video = Video(
                             videoTitle,
                             thumbnailUri.toString(),
                             videoRefUri.toString(),
                             videoDuration,
-                            dateInMilliSeconds)
+                            dateInMilliSeconds
+                        )
 
-                        NetworkHelper.syncVideo(video){success, errorMessage ->
-                            if(success) {
+                        NetworkHelper.syncVideo(video) { success, errorMessage ->
+                            if (success) {
                                 Log.e(SyncVideoManager::class.java.simpleName, "Success!")
                             }
                         }
                     }
                 }
+            }.addOnFailureListener {
+                Log.e(SyncVideoManager::class.java.simpleName, "Failed!")
+            }.addOnProgressListener {
+                Log.e(
+                    SyncVideoManager::class.java.simpleName, "Size: ${it.totalByteCount}, " +
+                            "Uploaded: ${it.bytesTransferred}"
+                )
             }
-
-        }.addOnFailureListener {
-            Log.e(SyncVideoManager::class.java.simpleName,"Failed!")
-        }.addOnProgressListener {
-            Log.e(SyncVideoManager::class.java.simpleName,"Size: ${it.totalByteCount}, " +
-                    "Uploaded: ${it.bytesTransferred}")
         }
     }
 

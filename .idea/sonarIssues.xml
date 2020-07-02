@@ -88,6 +88,91 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/../RatingTestApp/app/build.gradle">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../RatingTestApp/app/src/main/AndroidManifest.xml">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../RatingTestApp/app/src/main/java/com/seamfix/ratingtestapp/MainActivity.kt">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../RatingTestApp/apprating/build.gradle">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../RatingTestApp/apprating/src/main/AndroidManifest.xml">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../RatingTestApp/apprating/src/main/java/com/seamfix/apprating/AppRatingDialogFragment.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../RatingTestApp/apprating/src/main/java/com/seamfix/apprating/CustomRatingBuilder.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../RatingTestApp/apprating/src/main/java/com/seamfix/apprating/FeedBackManager.kt">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../RatingTestApp/apprating/src/main/java/com/seamfix/apprating/Feedback.kt">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../RatingTestApp/apprating/src/main/java/com/seamfix/apprating/FeedbackWorker.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../RatingTestApp/apprating/src/main/java/com/seamfix/apprating/FeedbackWorker.kt">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../RatingTestApp/apprating/src/main/java/com/seamfix/apprating/MyWorker.kt">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../RatingTestApp/apprating/src/main/java/com/seamfix/apprating/Util.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../RatingTestApp/apprating/src/main/java/com/seamfix/apprating/Util.kt">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../RatingTestApp/apprating/src/main/java/com/seamfix/apprating/Worker.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../RatingTestApp/apprating/src/main/java/entities/Feedback.kt">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../RatingTestApp/apprating/src/main/res/layout/dialog_fragment_app_rating.xml">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/../Safe/app/build.gradle">
           <value>
             <set />
@@ -653,6 +738,11 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/../br-android-client/app/src/main/java/com/seamfix/bioregistra/dialogfragment/AppRatingDialogFragment.java">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/../br-android-client/app/src/main/java/com/seamfix/bioregistra/dialogfragment/PreviewDialogFragment.java">
           <value>
             <set />
@@ -678,12 +768,22 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/../br-android-client/app/src/main/java/com/seamfix/bioregistra/fragment/MainProjectFragment.java">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/../br-android-client/app/src/main/java/com/seamfix/bioregistra/fragment/PortraitListFragment.java">
           <value>
             <set />
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/../br-android-client/app/src/main/java/com/seamfix/bioregistra/fragment/SplashScreenFragment.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../br-android-client/app/src/main/res/layout/dialog_fragment_app_rating.xml">
           <value>
             <set />
           </value>
@@ -749,6 +849,16 @@
           </value>
         </entry>
         <entry key="$USER_HOME$/Documents/in_app_update/app/src/main/res/layout/activity_main.xml">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="/a.dummy">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="/fragment.java">
           <value>
             <set />
           </value>

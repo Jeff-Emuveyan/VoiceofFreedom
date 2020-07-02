@@ -19,7 +19,7 @@ class SetupActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_setup)
 
-        tvNetworkFailure.visibility = View.GONE
+        tvNetworkFailure.visibility = View.INVISIBLE
         tvNetworkFailure.setOnClickListener{
             checkAndUpdateUserAdminStatus()
         }
@@ -45,7 +45,7 @@ class SetupActivity : AppCompatActivity() {
     }
 
     private fun checkAndUpdateUserAdminStatus() {
-        tvNetworkFailure.visibility = View.GONE
+        tvNetworkFailure.visibility = View.INVISIBLE
         progressBar.visibility = View.VISIBLE
         setupActivityViewModel.checkAndUpdateUserAdminStatus(this)
     }

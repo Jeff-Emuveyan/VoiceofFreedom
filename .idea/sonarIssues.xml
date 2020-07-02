@@ -793,6 +793,11 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/../br-android-client/app/src/uba/java/com/seamfix/bioregistra/adapter/SearchResultAdapter.java">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/../mtn/app/build.gradle">
           <value>
             <set />

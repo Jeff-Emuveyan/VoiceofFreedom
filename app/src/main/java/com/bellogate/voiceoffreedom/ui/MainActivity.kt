@@ -23,15 +23,11 @@ import androidx.navigation.ui.setupWithNavController
 import com.bellogate.voiceoffreedom.R
 import com.bellogate.voiceoffreedom.data.devotional.SyncDevotionalsReceiver
 import com.bellogate.voiceoffreedom.model.User
-import com.bellogate.voiceoffreedom.util.Fragments
-import com.bellogate.voiceoffreedom.util.STOP_NOTIFICATION
-import com.bellogate.voiceoffreedom.util.showSnackMessage
-import com.bellogate.voiceoffreedom.util.showSnackMessageAtTop
+import com.bellogate.voiceoffreedom.util.*
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.ErrorCodes
 import com.firebase.ui.auth.IdpResponse
 import com.google.android.material.navigation.NavigationView
-import kotlinx.android.synthetic.main.activity_main.*
 
 
 const val  RC_SIGN_IN = 44
@@ -95,6 +91,11 @@ class MainActivity : AppCompatActivity() {
             //anytime there is a call to change items in the top menu:
             invalidateOptionsMenu()//this will cause 'onCreateOptionsMenu' to run again
         })
+
+
+        //check for updates:
+        ClientUpdateManager.init(this)
+        ClientUpdateManager.requireUpdate()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -185,6 +186,15 @@ class MainActivity : AppCompatActivity() {
         if (requestCode == RC_SIGN_IN) {
             handleSignIn(resultCode, data)
         }
+
+        if (requestCode == ClientUpdateManager.UPDATE_REQUEST_CODE) {
+            if (resultCode != Activity.RESULT_OK) { // If the update is cancelled or fails,
+                // you can request to start the update again.
+                Toast.makeText(this, R.string.update_stopped, Toast.LENGTH_LONG).show()
+            } else {
+                Toast.makeText(this, R.string.complete, Toast.LENGTH_LONG).show()
+            }
+        }
     }
 
 
@@ -247,5 +257,12 @@ class MainActivity : AppCompatActivity() {
     override fun onDestroy() {
         unregisterReceiver(broadcastReceiver)
         super.onDestroy()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        ClientUpdateManager.listenForUpdateStateWhenResume(
+            this,
+            ClientUpdateManager.appUpdateManager)
     }
 }

@@ -47,4 +47,7 @@
     <string name="text_videolink">https://firebasestorage.googleapis.com/v0/b/voiceoffreedom-9cdf9.appspot.com/o/videos%2F194b928e-cce5-498b-b161-728f8582e8b6?alt=media&amp;token=a8401930-bdc5-4803-b56a-0d4b9894e984</string>
     <string name="voice_of_freedom_ministries_int_l_inc">Voice of Freedom Ministries Int\'l. Inc</string>
     <string name="http_www_voiceoffreedomministries_org">http://www.voiceoffreedomministries.org/</string>
+
+    <string name="complete">Update completed</string>
+    <string name="update_stopped">Update stopped</string>
 </resources>

@@ -9,6 +9,9 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.bellogate.voiceoffreedom.R
+import com.smarteist.autoimageslider.IndicatorView.animation.type.IndicatorAnimationType
+import com.smarteist.autoimageslider.SliderAnimations
+import kotlinx.android.synthetic.main.fragment_home.*
 
 class HomeFragment : Fragment() {
 
@@ -27,6 +30,16 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val listOfImages = arrayListOf(SliderItem("Worship with us", R.drawable.a),
+            SliderItem("Worship with us", R.drawable.b),
+            SliderItem("Worship with us", R.drawable.c),
+            SliderItem("Worship with us", R.drawable.d))
+
+        imageSlider.setSliderAdapter(SliderAdapter(context, listOfImages));
+        imageSlider.startAutoCycle();
+        imageSlider.setIndicatorAnimation(IndicatorAnimationType.WORM);
+        imageSlider.setSliderTransformAnimation(SliderAnimations.SIMPLETRANSFORMATION);
 
     }
 }

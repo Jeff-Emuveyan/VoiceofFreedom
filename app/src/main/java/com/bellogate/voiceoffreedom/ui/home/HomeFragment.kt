@@ -28,17 +28,5 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val textView: TextView = view.findViewById(R.id.text_home)
-        homeViewModel.text.observe(viewLifecycleOwner, Observer {
-            textView.text = it
-        })
-
-        homeViewModel.getUser(requireContext(), 1).observe(viewLifecycleOwner, Observer {
-            if(it != null){
-               textView.text = "There is user: ${it.email} \n Is admin: ${it.isAdmin}"
-            }else{
-                textView.text = "Nooooo user"
-            }
-        })
     }
 }

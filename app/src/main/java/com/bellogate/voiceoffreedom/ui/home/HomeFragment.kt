@@ -139,6 +139,10 @@ class HomeFragment : Fragment() {
         //We would't need to do this if it was a fragment we were launching. onActivityCreated will
         //be called when we return back to this fragment and the value of 'topMenuController' will
         //be set for us.
+
+        //When we return back from the gallery activity, we have to disable the live data that
+        //launches the gallery:
+        sharedViewModel.launchGallery.value = false
     }
 
     override fun onPause() {

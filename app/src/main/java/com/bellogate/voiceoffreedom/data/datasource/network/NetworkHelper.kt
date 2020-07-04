@@ -1,8 +1,10 @@
 package com.bellogate.voiceoffreedom.data.datasource.network
 
 import android.net.Uri
+import android.util.Log
 import com.bellogate.voiceoffreedom.model.*
 import com.bellogate.voiceoffreedom.ui.devotional.util.DevotionalUIState
+import com.bellogate.voiceoffreedom.ui.home.NetworkState
 import com.bellogate.voiceoffreedom.ui.media.video.VideoUIState
 import com.bellogate.voiceoffreedom.util.*
 import com.google.firebase.firestore.FirebaseFirestore
@@ -221,6 +223,29 @@ class NetworkHelper {
                     response.invoke(true, null)
                 }.addOnFailureListener { e ->
                     response.invoke(false, e.message)
+                }
+        }
+
+
+        /*** Get's the recent event from firebase ***/
+        fun getLatestEvent(response: (NetworkState, Event?) -> Unit) {
+            db.collection(EVENTS).limit(1)
+                .get().addOnSuccessListener {
+                    for (document in it.documents) {//this will only have one document because we set the limit to 1
+                        val event = document.toObject(Event::class.java)
+                        if(event != null){
+                            response.invoke(NetworkState.FOUND, event)
+                        }else{
+                            response.invoke(NetworkState.ERROR, null)
+                        }
+                    }
+                }.addOnFailureListener {//when there is a network failure
+                    response.invoke(NetworkState.ERROR, null)
+                }
+                .addOnCompleteListener {
+                    if(it.result != null && it.result!!.isEmpty){//when u actually have no record on firebase:
+                        response.invoke(NetworkState.ERROR, null)
+                    }
                 }
         }
 

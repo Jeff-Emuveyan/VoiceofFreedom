@@ -1,5 +1,6 @@
 package com.bellogate.voiceoffreedom.ui.home
 
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,10 +13,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.bellogate.voiceoffreedom.R
 import com.bellogate.voiceoffreedom.model.User
 import com.bellogate.voiceoffreedom.ui.SharedViewModel
-import com.bellogate.voiceoffreedom.util.Fragments
-import com.bellogate.voiceoffreedom.util.getBitmapFromUri
-import com.bellogate.voiceoffreedom.util.selectImage
-import com.bellogate.voiceoffreedom.util.updateCollectedItems
+import com.bellogate.voiceoffreedom.util.*
 import com.smarteist.autoimageslider.IndicatorView.animation.type.IndicatorAnimationType
 import com.smarteist.autoimageslider.SliderAnimations
 import com.squareup.picasso.Callback
@@ -71,7 +69,8 @@ class HomeFragment : Fragment() {
             //launch gallery so that user can change the event image:
             if(it){
                 selectImage(requireActivity()){uri, filePath ->
-
+                    //sync image:
+                    syncImage(uri)
                 }
             }
         })
@@ -114,6 +113,23 @@ class HomeFragment : Fragment() {
 
         fetchLatestEvent()
     }
+
+
+    private fun syncImage(uri: Uri) {
+        tvNetworkError.visibility = View.GONE
+        imageView.setImageURI(uri)
+        shimmer.showShimmer(true)
+        shimmer.startShimmer()
+        homeViewModel.syncImage(uri){ success, _ ->
+            shimmer.stopShimmer()
+            shimmer.hideShimmer()
+            if(!success){
+                centerToast("Failed to upload image")
+                imageView.setImageResource(R.drawable.ic_broken_image)
+            }
+        }
+    }
+
 
     private fun fetchLatestEvent() {
         tvNetworkError.visibility = View.GONE

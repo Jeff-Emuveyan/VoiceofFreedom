@@ -250,6 +250,17 @@ class NetworkHelper {
         }
 
 
+        fun syncEvent(it: Event, response:(Boolean, String?)-> Unit) {
+            db.collection(EVENTS).document("1").set(it)
+                .addOnSuccessListener {
+                    response.invoke(true, null)
+                }
+                .addOnFailureListener { e ->
+                    response.invoke(false, e.message)
+                }
+        }
+
+
     }
 
 }

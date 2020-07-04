@@ -160,7 +160,7 @@ fun getBitmapFromUri(context: Context, uri: Uri): Bitmap? =
     MediaStore.Images.Media.getBitmap(context.contentResolver, uri)
 
 
-fun AddDevotionalAdapter.selectImage(activity: FragmentActivity, result: (uri:Uri, filePath: String) -> Unit){
+fun selectImage(activity: FragmentActivity, result: (uri:Uri, filePath: String) -> Unit){
     val pickerConfig = pickerConfig
 
     val subscribe = MediaPicker.with(activity!!, MediaPicker.MediaTypes.IMAGE)

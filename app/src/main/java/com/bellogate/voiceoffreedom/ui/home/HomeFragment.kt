@@ -13,6 +13,9 @@ import com.bellogate.voiceoffreedom.R
 import com.bellogate.voiceoffreedom.model.User
 import com.bellogate.voiceoffreedom.ui.SharedViewModel
 import com.bellogate.voiceoffreedom.util.Fragments
+import com.bellogate.voiceoffreedom.util.getBitmapFromUri
+import com.bellogate.voiceoffreedom.util.selectImage
+import com.bellogate.voiceoffreedom.util.updateCollectedItems
 import com.smarteist.autoimageslider.IndicatorView.animation.type.IndicatorAnimationType
 import com.smarteist.autoimageslider.SliderAnimations
 import com.squareup.picasso.Callback
@@ -64,6 +67,14 @@ class HomeFragment : Fragment() {
         homeViewModel = ViewModelProviders.of(this).get(HomeViewModel::class.java)
         sharedViewModel = ViewModelProviders.of(requireActivity()).get(SharedViewModel::class.java)
 
+        sharedViewModel.launchGallery.observe(viewLifecycleOwner, Observer {
+            //launch gallery so that user can change the event image:
+            if(it){
+                selectImage(requireActivity()){uri, filePath ->
+
+                }
+            }
+        })
 
         homeViewModel.getUser(requireContext(), 1).observe(viewLifecycleOwner, Observer {
             user = it
@@ -73,7 +84,6 @@ class HomeFragment : Fragment() {
                 sharedViewModel.topMenuController.value = Fragments.HOME
             }
         })
-
 
         homeViewModel.event.observe(viewLifecycleOwner, Observer {
 
@@ -121,6 +131,15 @@ class HomeFragment : Fragment() {
         imageView.setImageResource(R.drawable.ic_broken_image)
     }
 
+    override fun onResume() {
+        super.onResume()
+        //since we are going to be launching an Activity to capture image, we need to:
+        //retain the "Change Image" item when the user returns back to this fragment:
+        sharedViewModel.topMenuController.value = Fragments.HOME
+        //We would't need to do this if it was a fragment we were launching. onActivityCreated will
+        //be called when we return back to this fragment and the value of 'topMenuController' will
+        //be set for us.
+    }
 
     override fun onPause() {
         super.onPause()

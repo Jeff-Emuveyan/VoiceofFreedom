@@ -37,6 +37,11 @@ open class SharedViewModel: ViewModel() {
         value = false
     }
 
+    /*** Used to notify HomeFragment on when to launch gallery to allow user change event image ***/
+    val launchGallery = MutableLiveData<Boolean>().apply {
+        value = false
+    }
+
 
     /*** Used to control the top menu items depending on thw Fragment in view ***/
     val topMenuController = MutableLiveData<Fragments>().apply {

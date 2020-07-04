@@ -1,5 +1,8 @@
 package com.bellogate.voiceoffreedom.model
 
+import androidx.annotation.Keep
+
+@Keep
 class Video() {
 
     var title: String? = null

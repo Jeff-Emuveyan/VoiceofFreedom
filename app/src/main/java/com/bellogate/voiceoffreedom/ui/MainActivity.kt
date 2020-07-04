@@ -159,6 +159,9 @@ class MainActivity : AppCompatActivity() {
             R.id.add_video ->{
                 sharedViewModel.showAddVideoFragment.value = true
             }
+            R.id.change_event ->{
+                sharedViewModel.launchGallery.value = true
+            }
             else ->{
                 drawerLayout.openDrawer(Gravity.LEFT)
             }

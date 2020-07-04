@@ -242,11 +242,6 @@ class NetworkHelper {
                 }.addOnFailureListener {//when there is a network failure
                     response.invoke(NetworkState.ERROR, null)
                 }
-                .addOnCompleteListener {
-                    if(it.result != null && it.result!!.isEmpty){//when u actually have no record on firebase:
-                        response.invoke(NetworkState.ERROR, null)
-                    }
-                }
         }
 
 

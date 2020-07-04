@@ -10,6 +10,9 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.bellogate.voiceoffreedom.R
+import com.bellogate.voiceoffreedom.model.User
+import com.bellogate.voiceoffreedom.ui.SharedViewModel
+import com.bellogate.voiceoffreedom.util.Fragments
 import com.smarteist.autoimageslider.IndicatorView.animation.type.IndicatorAnimationType
 import com.smarteist.autoimageslider.SliderAnimations
 import com.squareup.picasso.Callback
@@ -23,6 +26,8 @@ import java.lang.Exception
 class HomeFragment : Fragment() {
 
     private lateinit var homeViewModel: HomeViewModel
+    private lateinit var sharedViewModel: SharedViewModel
+    private var user: User? = null
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -56,8 +61,18 @@ class HomeFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        homeViewModel =
-            ViewModelProviders.of(this).get(HomeViewModel::class.java)
+        homeViewModel = ViewModelProviders.of(this).get(HomeViewModel::class.java)
+        sharedViewModel = ViewModelProviders.of(requireActivity()).get(SharedViewModel::class.java)
+
+
+        homeViewModel.getUser(requireContext(), 1).observe(viewLifecycleOwner, Observer {
+            user = it
+            if(user != null && user!!.isAdmin){
+                //this will cause the MainActivity to call 'onCreateOptionsMenu' again.
+                //If the user is an Admin, the MainActivity will add a menu item to 'Add Devotional'
+                sharedViewModel.topMenuController.value = Fragments.HOME
+            }
+        })
 
 
         homeViewModel.event.observe(viewLifecycleOwner, Observer {
@@ -104,5 +119,12 @@ class HomeFragment : Fragment() {
         shimmer.hideShimmer()
         tvNetworkError.visibility = View.VISIBLE
         imageView.setImageResource(R.drawable.ic_broken_image)
+    }
+
+
+    override fun onPause() {
+        super.onPause()
+        //reset the top menu by removing the "Change Image" item:
+        sharedViewModel.topMenuController.value = null
     }
 }

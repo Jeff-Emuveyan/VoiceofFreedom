@@ -131,6 +131,10 @@ class MainActivity : AppCompatActivity() {
             //Determines when to show user admin permissions to Add video
             menu.findItem(R.id.add_video).isVisible =
                 sharedViewModel.topMenuController.value == Fragments.VIDEO
+
+            //Determines when to show user admin permissions to Change event image
+            menu.findItem(R.id.change_event).isVisible =
+                sharedViewModel.topMenuController.value == Fragments.HOME
         }
 
         return true

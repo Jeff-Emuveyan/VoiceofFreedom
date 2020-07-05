@@ -25,5 +25,11 @@
             android:icon="@drawable/media"
             android:title="@string/media" />
 
+
+        <item
+            android:id="@+id/nav_about"
+            android:icon="@drawable/ic_about"
+            android:title="@string/about" />
+
     </group>
 </menu>

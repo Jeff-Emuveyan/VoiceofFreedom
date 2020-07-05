@@ -7,18 +7,6 @@
     android:background="@color/white"
     tools:context=".ui.home.HomeFragment">
 
-    <TextView
-        android:id="@+id/tvNetworkError"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/lato_bold"
-        android:padding="8dp"
-        android:text="Network error, tap here to try again"
-        android:textColor="@color/red"
-        android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
     <com.facebook.shimmer.ShimmerFrameLayout
         android:id="@+id/shimmer"
@@ -27,7 +15,7 @@
         app:layout_constraintBottom_toTopOf="@+id/textViewTitle"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvNetworkError"
+        app:layout_constraintTop_toTopOf="parent"
         app:shimmer_auto_start="true">
 
         <androidx.cardview.widget.CardView
@@ -40,6 +28,16 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/tvNetworkError"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/lato_bold"
+                android:padding="8dp"
+                android:text="Network error, tap here to try again"
+                android:textColor="@color/red"
+                android:visibility="gone"/>
 
             <ImageView
                 android:id="@+id/imageView"

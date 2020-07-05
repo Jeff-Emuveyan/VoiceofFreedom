@@ -47,6 +47,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:adjustViewBounds="true"
+                android:scaleType="fitXY"
                 android:src="@drawable/ic_insert_photo" />
 
         </androidx.cardview.widget.CardView>

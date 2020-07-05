@@ -50,7 +50,8 @@
 
     <string name="complete">Update completed</string>
     <string name="update_stopped">Update stopped</string>
-    <string name="voice_of_freedom_ministries">Voice Of Freedom Ministries</string>
+    <string name="voice_of_freedom_ministries">Voice Of Freedom Ministries Intl.</string>
     <string name="change_image">Change Image</string>
     <string name="about">About</string>
+    <string name="about_message">Discovering and empowering the people with the secrets of Victorious Living.</string>
 </resources>

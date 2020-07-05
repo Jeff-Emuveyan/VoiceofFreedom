@@ -12,4 +12,5 @@
     <color name="very_light_brown">#C7C7C7</color>
     <color name="transparent_black">#7F000000</color>
     <color name="transparent_light_black">#41000000</color>
+    <color name="blue">#0043EE</color>
 </resources>

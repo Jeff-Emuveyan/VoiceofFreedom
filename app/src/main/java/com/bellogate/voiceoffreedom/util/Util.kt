@@ -253,6 +253,7 @@ fun updateUserAdminStatus(context: Context, user: User, adminList: ArrayList<Adm
             if(admin.email == user.email){//update the user to an admin
                 user.isAdmin = true
                 repository.updateUser(viewModelScope, user)
+                return
             }else{//this means that the present user should not be an admin
                 user.isAdmin = false
                 repository.updateUser(viewModelScope, user)

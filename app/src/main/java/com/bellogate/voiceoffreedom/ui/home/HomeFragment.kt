@@ -149,16 +149,19 @@ class HomeFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        //since we are going to be launching an Activity to capture image, we need to:
-        //retain the "Change Image" item when the user returns back to this fragment:
-        sharedViewModel.topMenuController.value = Fragments.HOME
-        //We would't need to do this if it was a fragment we were launching. onActivityCreated will
-        //be called when we return back to this fragment and the value of 'topMenuController' will
-        //be set for us.
 
-        //When we return back from the gallery activity, we have to disable the live data that
-        //launches the gallery:
-        sharedViewModel.launchGallery.value = false
+        if(user != null && user!!.isAdmin) {
+            //since we are going to be launching an Activity to capture image, we need to:
+            //retain the "Change Image" item when the user (an Admin) returns back to this fragment:
+            sharedViewModel.topMenuController.value = Fragments.HOME
+            //We would't need to do this if it was a fragment we were launching. onActivityCreated will
+            //be called when we return back to this fragment and the value of 'topMenuController' will
+            //be set for us.
+
+            //When we return back from the gallery activity, we have to disable the live data that
+            //launches the gallery:
+            sharedViewModel.launchGallery.value = false
+        }
     }
 
     override fun onPause() {

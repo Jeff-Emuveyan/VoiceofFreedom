@@ -42,6 +42,7 @@ import java.util.*
 
 const val AMOUNT = "amount"
 const val STOP_NOTIFICATION = "stop_notification"
+const val Progress = "progress"
 
 
 //WorkManager tags

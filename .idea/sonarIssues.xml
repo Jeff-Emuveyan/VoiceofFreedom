@@ -833,6 +833,11 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/../br-android-client/app/src/main/java/com/seamfix/bioregistra/fragment/VerifyTokenFragment.kt">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/../br-android-client/app/src/main/res/layout/dialog_fragment_app_rating.xml">
           <value>
             <set />

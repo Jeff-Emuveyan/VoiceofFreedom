@@ -11,12 +11,11 @@ import android.net.Uri
 import android.os.Build
 import android.util.Log
 import androidx.core.app.NotificationCompat
-import androidx.work.ForegroundInfo
-import androidx.work.WorkManager
-import androidx.work.Worker
-import androidx.work.WorkerParameters
+import androidx.lifecycle.LifecycleOwner
+import androidx.work.*
 import com.bellogate.voiceoffreedom.data.datasource.network.NetworkHelper
 import com.bellogate.voiceoffreedom.model.Video
+import com.bellogate.voiceoffreedom.util.Progress
 import com.bellogate.voiceoffreedom.util.THUMBNAILS
 import com.bellogate.voiceoffreedom.util.VIDEOS
 import com.bellogate.voiceoffreedom.util.toBytes
@@ -25,17 +24,22 @@ import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.StorageTask
 import com.google.firebase.storage.UploadTask
 import com.google.firebase.storage.ktx.storage
+import kotlinx.coroutines.*
+import kotlinx.coroutines.tasks.await
 import java.util.concurrent.TimeUnit
 
 
-class SyncVideoManager (private val appContext: Context, workerParams: WorkerParameters): Worker(appContext, workerParams) {
+class SyncVideoManager (private val appContext: Context, workerParams: WorkerParameters): CoroutineWorker(appContext, workerParams) {
 
-    var  thumbnailUploadTask: StorageTask<UploadTask.TaskSnapshot>? = null
+    var  thumbnailUploadTask: UploadTask.TaskSnapshot? = null
+    var  videoUploadTask: UploadTask.TaskSnapshot? = null
+
 
     companion object{
         lateinit var videoUri: Uri
     }
-    override fun doWork(): Result {
+
+    override suspend fun doWork(): Result {
 
         val videoTitle = inputData.getString("videoTitle")
         val dateInMilliSeconds = inputData.getString("dateInMilliSeconds")
@@ -48,6 +52,8 @@ class SyncVideoManager (private val appContext: Context, workerParams: WorkerPar
         //get the duration:
         val videoDuration = getDuration(appContext, videoUri)
 
+        Log.e(SyncVideoManager::class.java.simpleName, "Worker starts....")
+
         uploadVideoFile(videoTitle!!, videoDuration, videoUri, thumbnail.toBytes(), dateInMilliSeconds!!)
 
         return Result.success()
@@ -55,7 +61,7 @@ class SyncVideoManager (private val appContext: Context, workerParams: WorkerPar
 
 
     /** Used to upload a video  file **/
-    private fun uploadVideoFile(videoTitle: String,
+    private suspend fun uploadVideoFile(videoTitle: String,
                                 videoDuration: String,
                                 videoUri: Uri,
                                 thumbnail: ByteArray,
@@ -66,40 +72,53 @@ class SyncVideoManager (private val appContext: Context, workerParams: WorkerPar
         val videoRef: StorageReference = reference.child("$VIDEOS/${dateInMilliSeconds}")
         val thumbnailRef: StorageReference = reference.child("$THUMBNAILS/${dateInMilliSeconds}")
 
+
         //upload thumbnail first:
-        thumbnailUploadTask = thumbnailRef.putBytes(thumbnail).addOnSuccessListener {
+        thumbnailUploadTask = thumbnailRef.putBytes(thumbnail).await()
+
+        if(thumbnailUploadTask!!.task.isSuccessful){
+
+            var thumbnailUri = thumbnailRef.downloadUrl.await()
 
             //upload video:
-            NetworkHelper.videoUploadTask = videoRef.putFile(videoUri).addOnSuccessListener {
-
-                videoRef.downloadUrl.addOnSuccessListener { videoRefUri ->
-                    thumbnailRef.downloadUrl.addOnSuccessListener { thumbnailUri ->
-
-                        val video = Video(
-                            videoTitle,
-                            thumbnailUri.toString(),
-                            videoRefUri.toString(),
-                            videoDuration,
-                            dateInMilliSeconds
-                        )
-
-                        NetworkHelper.syncVideo(video) { success, errorMessage ->
-                            if (success) {
-                                Log.e(SyncVideoManager::class.java.simpleName, "Success!")
-                            }
-                        }
-                    }
-                }
-            }.addOnFailureListener {
-                Log.e(SyncVideoManager::class.java.simpleName, "Failed!")
-            }.addOnProgressListener {
-
+            videoUploadTask = videoRef.putFile(videoUri).addOnProgressListener {
                 Log.e(SyncVideoManager::class.java.simpleName, "Size: ${it.totalByteCount}, " +
-                            "Uploaded: ${it.bytesTransferred}")
+                        "Uploaded: ${it.bytesTransferred}")
 
-                setForegroundAsync(createForegroundInfo(it.totalByteCount.toInt(), it.bytesTransferred.toInt())!!)
+                //update the progress:
+                val progress = workDataOf(Progress to it.bytesTransferred)
+
+                val coroutineScope = CoroutineScope(coroutineContext + Job())
+                coroutineScope.launch(Dispatchers.Default) {
+                    setProgress(progress)
+                    Log.e(SyncVideoManager::class.java.simpleName, "setProgress called")
+                }
+            }.await()
+
+
+            Log.e(SyncVideoManager::class.java.simpleName, "Video upload should have ended")
+            if(videoUploadTask!!.task.isSuccessful){
+                Log.e(SyncVideoManager::class.java.simpleName, "Video uploaded successfully")
+
+                var videolUri = videoRef.downloadUrl.await()
+
+                val video = Video(
+                    videoTitle,
+                    thumbnailUri.toString(),
+                    videolUri.toString(),
+                    videoDuration,
+                    dateInMilliSeconds
+                )
+
+                //Write the video object:
+                NetworkHelper.db.collection(VIDEOS).document(video.dateInMilliSeconds!!).set(video).await()
+
+            }else{
+                Log.e(SyncVideoManager::class.java.simpleName, "Video uploaded has failed")
             }
         }
+
+
     }
 
 

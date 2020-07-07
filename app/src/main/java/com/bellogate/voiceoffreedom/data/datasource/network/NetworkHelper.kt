@@ -20,8 +20,7 @@ class NetworkHelper {
 
     companion object {
 
-        private var db: FirebaseFirestore = FirebaseFirestore.getInstance()
-        var  videoUploadTask: StorageTask<UploadTask.TaskSnapshot>? = null
+        var db: FirebaseFirestore = FirebaseFirestore.getInstance()
 
         /** Gets all Admin from the database***/
         fun fetchAllAdmin(fetched: (success: Boolean, result: ArrayList<Admin>?) -> Unit) =

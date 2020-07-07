@@ -6,14 +6,20 @@ import android.graphics.BitmapFactory
 import android.media.MediaMetadataRetriever
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.work.WorkInfo
+import androidx.work.WorkManager
 import com.bellogate.voiceoffreedom.R
+import com.bellogate.voiceoffreedom.data.video.SyncVideoManager
 import com.bellogate.voiceoffreedom.ui.SharedViewModel
 import com.bellogate.voiceoffreedom.ui.devotional.util.AddVideoUIState
+import com.bellogate.voiceoffreedom.util.Progress
 import com.bellogate.voiceoffreedom.util.alertWithAction
 import com.bellogate.voiceoffreedom.util.centerToast
 import com.bellogate.voiceoffreedom.util.showAlert
@@ -43,6 +49,23 @@ class AddVideoFragment : Fragment() {
         sharedViewModel = ViewModelProviders.of(requireActivity()).get(SharedViewModel::class.java)
 
         sharedViewModel.showAddVideoFragment.value = false
+
+        viewModel.id.observe(viewLifecycleOwner, Observer {
+
+            if(it != null){
+                WorkManager.getInstance(requireContext())
+                    // requestId is the WorkRequest id
+                    .getWorkInfoByIdLiveData(it)
+                    .observe(viewLifecycleOwner, Observer { workInfo: WorkInfo? ->
+                        if (workInfo != null) {
+                            val progress = workInfo.progress
+                            val value = progress.getLong(Progress, 0)
+                            // Do something with progress information
+                            Log.e(SyncVideoManager::class.java.simpleName, "Recieving request: id: $it value: $value" )
+                        }
+                    })
+            }
+        })
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

@@ -2,15 +2,18 @@ package com.bellogate.voiceoffreedom.data.video
 
 import android.content.Context
 import android.net.Uri
+import android.util.Log
 import androidx.work.*
 import com.bellogate.voiceoffreedom.data.BaseRepository
 import com.bellogate.voiceoffreedom.data.datasource.network.NetworkHelper
 import com.bellogate.voiceoffreedom.model.Video
 import com.bellogate.voiceoffreedom.ui.media.video.VideoUIState
+import java.util.*
+import kotlin.collections.ArrayList
 
 class VideoRepository(context: Context): BaseRepository(context) {
 
-    fun uploadVideo(videoUri: Uri, videoTitle: String, dateInMilliSeconds: String) {
+    fun uploadVideo(videoUri: Uri, videoTitle: String, dateInMilliSeconds: String, id: (UUID) -> Unit) {
         //start the Worker to upload the video:
         val constraints = Constraints.Builder()
             .setRequiredNetworkType(NetworkType.CONNECTED)
@@ -29,6 +32,9 @@ class VideoRepository(context: Context): BaseRepository(context) {
         WorkManager
             .getInstance(context)
             .enqueueUniqueWork("syncVideo", ExistingWorkPolicy.APPEND, uploadWorkRequest)
+
+        id.invoke(uploadWorkRequest.id)
+        Log.e(SyncVideoManager::class.java.simpleName, "id: ${uploadWorkRequest.id}")
     }
 
 

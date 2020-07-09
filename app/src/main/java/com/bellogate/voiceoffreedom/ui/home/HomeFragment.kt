@@ -97,8 +97,8 @@ class HomeFragment : Fragment() {
                                     showRetry()
                                 }
                                 override fun onSuccess() {
-                                    shimmer.stopShimmer()
-                                    shimmer.hideShimmer()
+                                    shimmer?.stopShimmer()
+                                    shimmer?.hideShimmer()
                                 }
                             })
                     }else{

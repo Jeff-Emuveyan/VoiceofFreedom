@@ -9,7 +9,7 @@ import java.util.*
 
 class AddVideoViewModel : ViewModel() {
 
-    val id: MutableLiveData<UUID> = MutableLiveData<UUID>().apply {
+    val values: MutableLiveData<Pair<UUID, Long>> = MutableLiveData<Pair<UUID, Long>>().apply {
         value = null
     }
 
@@ -17,7 +17,9 @@ class AddVideoViewModel : ViewModel() {
     fun uploadVideo(context: Context, videoTitle: String, videoUri: Uri) {
         val dateInMilliSeconds = System.currentTimeMillis().toString()
         VideoRepository(context).uploadVideo(videoUri, videoTitle, dateInMilliSeconds){
-            id.value = it
+            val uuid = it.first
+            val fileSize = it.second
+            values.value = uuid to fileSize
         }
     }
 

@@ -19,10 +19,7 @@ import com.bellogate.voiceoffreedom.R
 import com.bellogate.voiceoffreedom.data.video.SyncVideoManager
 import com.bellogate.voiceoffreedom.ui.SharedViewModel
 import com.bellogate.voiceoffreedom.ui.devotional.util.AddVideoUIState
-import com.bellogate.voiceoffreedom.util.Progress
-import com.bellogate.voiceoffreedom.util.alertWithAction
-import com.bellogate.voiceoffreedom.util.centerToast
-import com.bellogate.voiceoffreedom.util.showAlert
+import com.bellogate.voiceoffreedom.util.*
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.add_video_fragment.*
 import org.jetbrains.anko.support.v4.toast
@@ -50,20 +47,51 @@ class AddVideoFragment : Fragment() {
 
         sharedViewModel.showAddVideoFragment.value = false
 
-        viewModel.id.observe(viewLifecycleOwner, Observer {
+        //A LiveData to notify this fragment with video upload progress:
+        viewModel.values.observe(viewLifecycleOwner, Observer { values ->
+            if(values != null){
 
-            if(it != null){
+                val uuid = values.first
+                val totalByteCount = values.second
+
                 WorkManager.getInstance(requireContext())
                     // requestId is the WorkRequest id
-                    .getWorkInfoByIdLiveData(it)
+                    .getWorkInfoByIdLiveData(uuid)
                     .observe(viewLifecycleOwner, Observer { workInfo: WorkInfo? ->
                         if (workInfo != null) {
                             val progress = workInfo.progress
-                            val value = progress.getLong(Progress, 0)
+                            val bytesTransferred = progress.getLong(Progress, 0)
                             // Do something with progress information
-                            Log.e(SyncVideoManager::class.java.simpleName, "Recieving request: id: $it value: $value" )
+                            Log.e(SyncVideoManager::class.java.simpleName,
+                                "Recieving request: uuid: $uuid   " +
+                                        "totalByteCount: $totalByteCount   " +
+                                        "bytesTransferred: $bytesTransferred" )
+
+                            if(bytesTransferred < totalByteCount){//an upload is still in progress
+                                setUpUIState(AddVideoUIState.VIDEO_UPLOADING)
+
+                                //show to progress %
+                                val progressPercent = getPercentFromValues(totalByteCount, bytesTransferred)
+                                tvPercent.text = "${progressPercent.toString()}%"
+
+                            }else{
+                                setUpUIState(AddVideoUIState.DEFAULT)
+                                videoSelected = false
+                            }
                         }
                     })
+
+
+                buttonCancel.setOnClickListener {
+                   showAlert(requireContext(), "Stop upload?", "Do you want to stop uploading this video?") {
+                       //stop the upload task
+                       WorkManager.getInstance(requireContext()).cancelWorkById(uuid)
+                       //reset the UI
+                       setUpUIState(AddVideoUIState.DEFAULT)
+                       videoSelected = false
+                       toast("Cancelled")
+                   }
+                }
             }
         })
     }
@@ -107,6 +135,7 @@ class AddVideoFragment : Fragment() {
                 progressBar.visibility = View.INVISIBLE
                 tvTitle.visibility = View.INVISIBLE
                 tvPercent.visibility = View.INVISIBLE
+                imageViewThumbnail.setImageResource(R.drawable.ic_video)
             }
 
             AddVideoUIState.VIDEO_SELECTED -> {

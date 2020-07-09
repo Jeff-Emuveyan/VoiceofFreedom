@@ -15,10 +15,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.work.*
 import com.bellogate.voiceoffreedom.data.datasource.network.NetworkHelper
 import com.bellogate.voiceoffreedom.model.Video
-import com.bellogate.voiceoffreedom.util.Progress
-import com.bellogate.voiceoffreedom.util.THUMBNAILS
-import com.bellogate.voiceoffreedom.util.VIDEOS
-import com.bellogate.voiceoffreedom.util.toBytes
+import com.bellogate.voiceoffreedom.util.*
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.StorageTask
@@ -85,12 +82,14 @@ class SyncVideoManager (private val appContext: Context, workerParams: WorkerPar
                 Log.e(SyncVideoManager::class.java.simpleName, "Size: ${it.totalByteCount}, " +
                         "Uploaded: ${it.bytesTransferred}")
 
-                //update the progress:
+                //emit the progress:
                 val progress = workDataOf(Progress to it.bytesTransferred)
+
 
                 val coroutineScope = CoroutineScope(coroutineContext + Job())
                 coroutineScope.launch(Dispatchers.Default) {
-                    setProgress(progress)
+                    setProgress(progress)//setProgress can only publish one data throughout. So we
+                    //can't do setProgress(total) too.
                     Log.e(SyncVideoManager::class.java.simpleName, "setProgress called")
                 }
             }.await()

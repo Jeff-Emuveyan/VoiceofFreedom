@@ -21,18 +21,14 @@ import androidx.navigation.fragment.findNavController
 import com.bellogate.voiceoffreedom.BuildConfig
 import com.bellogate.voiceoffreedom.R
 import com.bellogate.voiceoffreedom.data.UserRepository
-import com.bellogate.voiceoffreedom.ui.devotional.add.AddDevotionalAdapter
 import com.bellogate.voiceoffreedom.ui.devotional.add.DevotionalCollectorItem
 import com.bellogate.voiceoffreedom.data.devotional.SyncMultipleDevotionalsManager
 import com.bellogate.voiceoffreedom.model.Admin
 import com.bellogate.voiceoffreedom.model.User
-import com.bellogate.voiceoffreedom.ui.media.video.VideoFragment
-import com.bellogate.voiceoffreedom.ui.media.video.VideoUIState
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
 import com.greentoad.turtlebody.mediapicker.MediaPicker
 import com.greentoad.turtlebody.mediapicker.core.MediaPickerConfig
-import kotlinx.android.synthetic.main.video_fragment.*
 import kotlinx.coroutines.CoroutineScope
 import java.io.ByteArrayOutputStream
 import java.text.DateFormatSymbols
@@ -43,6 +39,7 @@ import java.util.*
 const val AMOUNT = "amount"
 const val STOP_NOTIFICATION = "stop_notification"
 const val Progress = "progress"
+const val TotalFileSize = "total"
 
 
 //WorkManager tags
@@ -268,4 +265,12 @@ fun Bitmap.toBytes(): ByteArray{
     val baos = ByteArrayOutputStream()
     this.compress(Bitmap.CompressFormat.JPEG, 100, baos)
     return baos.toByteArray()
+}
+
+
+
+/*** Get the percentage of a value when compared to another value **/
+fun getPercentFromValues(valueToBeComparedWith: Long, valueProvided: Long): Long{
+
+    return (valueProvided * 100) / valueToBeComparedWith
 }

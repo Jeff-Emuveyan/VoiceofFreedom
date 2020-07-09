@@ -128,6 +128,11 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/../RatingTestApp/apprating/src/main/java/com/seamfix/apprating/CustomAppRatingDialogFragment.java">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/../RatingTestApp/apprating/src/main/java/com/seamfix/apprating/CustomRatingBuilder.java">
           <value>
             <set />
@@ -849,6 +854,11 @@
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/../br-android-client/app/src/uba/java/com/seamfix/bioregistra/adapter/SearchResultAdapter.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../br-android-client/settings.gradle">
           <value>
             <set />
           </value>

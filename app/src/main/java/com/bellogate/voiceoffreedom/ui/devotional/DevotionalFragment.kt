@@ -133,15 +133,15 @@ class DevotionalFragment : Fragment(), OnDateSetListener {
                     Picasso.get().load(imageUrl).placeholder(R.drawable.dummy_devotional)
                         .error(R.drawable.ic_broken_image).into(imageView, object : Callback {
                             override fun onError(e: Exception?) {
-                                shimmer.stopShimmer()
-                                shimmer.hideShimmer()
+                                shimmer?.stopShimmer()
+                                shimmer?.hideShimmer()
                                 imageView.setImageResource(R.drawable.ic_broken_image)
                                 Toast.makeText(requireContext(), "Failed to load image", Toast.LENGTH_LONG).show()
                                 imageHasSuccessfullyLoaded = false
                             }
                             override fun onSuccess() {
-                                shimmer.stopShimmer()
-                                shimmer.hideShimmer()
+                                shimmer?.stopShimmer()
+                                shimmer?.hideShimmer()
                                 imageHasSuccessfullyLoaded = true
                             }
                         })

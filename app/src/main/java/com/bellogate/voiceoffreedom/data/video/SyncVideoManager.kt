@@ -166,7 +166,7 @@ class SyncVideoManager (private val appContext: Context, workerParams: WorkerPar
         // Create the NotificationChannel, but only on API 26+ because
         // the NotificationChannel class is new and not in the support library
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val importance = NotificationManager.IMPORTANCE_DEFAULT// IMPORTANCE_LOW means this
+            val importance = NotificationManager.IMPORTANCE_LOW// IMPORTANCE_LOW means this
             //notification will not play sound. Change it to IMPORTANCE_DEFAULT if you want sound.
             val channel = NotificationChannel(CHANNEL_ID, CHANNEL_NAME, importance)
             channel.description = "voice_of_freedom"

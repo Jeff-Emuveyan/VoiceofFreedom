@@ -62,9 +62,7 @@ open class SharedViewModel: ViewModel() {
 
     /** Choose authentication providers **/
     fun getAuthProviders() = arrayListOf(
-        AuthUI.IdpConfig.EmailBuilder().build(),
-        AuthUI.IdpConfig.GoogleBuilder().build())
-
+        AuthUI.IdpConfig.EmailBuilder().build())
 
 
     fun logout(context: Context) = UserRepository(

@@ -90,6 +90,7 @@ class SyncVideoManager (private val appContext: Context, workerParams: WorkerPar
                 coroutineScope.launch(Dispatchers.Default) {
                     setProgress(progress)//setProgress can only publish one data throughout. So we
                     //can't do setProgress(total) too.
+                    setForeground(createForegroundInfo(it.totalByteCount, it.bytesTransferred))
                     Log.e(SyncVideoManager::class.java.simpleName, "setProgress called")
                 }
             }.await()
@@ -134,7 +135,7 @@ class SyncVideoManager (private val appContext: Context, workerParams: WorkerPar
     }
 
 
-    private fun createForegroundInfo(max: Int, progress: Int): ForegroundInfo? { // Build a notification using bytesRead and contentLength
+    private fun createForegroundInfo(max: Long, progress: Long): ForegroundInfo { // Build a notification using bytesRead and contentLength
         val context = applicationContext
         val id = "com.bellogate.caliphate"
         val title = "Uploading..."
@@ -149,7 +150,7 @@ class SyncVideoManager (private val appContext: Context, workerParams: WorkerPar
             .setContentTitle(title)
             .setTicker(title)
             .setSmallIcon(R.drawable.alert_light_frame)
-            .setProgress(max, progress, false)
+            .setProgress(max.toInt(), progress.toInt(), false)
             .setOngoing(true) // Add the cancel action to the notification which can
             // be used to cancel the worker
             .addAction(R.drawable.ic_delete, cancel, intent)

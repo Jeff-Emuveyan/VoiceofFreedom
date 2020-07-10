@@ -67,8 +67,11 @@ class AddVideoFragment : Fragment() {
                                         "totalByteCount: $totalByteCount   " +
                                         "bytesTransferred: $bytesTransferred" )
 
-                            if(bytesTransferred < totalByteCount){//an upload is still in progress
+                            if(bytesTransferred.toInt() != 0
+                                &&
+                                bytesTransferred < totalByteCount){//an upload is still in progress
                                 setUpUIState(AddVideoUIState.VIDEO_UPLOADING)
+                                videoSelected = true
 
                                 //show to progress %
                                 val progressPercent = getPercentFromValues(totalByteCount, bytesTransferred)

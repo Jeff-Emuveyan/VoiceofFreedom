@@ -90,6 +90,7 @@ class SyncVideoManager (private val appContext: Context, workerParams: WorkerPar
                 coroutineScope.launch(Dispatchers.Default) {
                     setProgress(progress)//setProgress can only publish one data throughout. So we
                     //can't do setProgress(total) too.
+
                     setForeground(createForegroundInfo(it.totalByteCount, it.bytesTransferred))
                     Log.e(SyncVideoManager::class.java.simpleName, "setProgress called")
                 }

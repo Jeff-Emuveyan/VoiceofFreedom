@@ -41,7 +41,6 @@ const val STOP_NOTIFICATION = "stop_notification"
 const val Progress = "progress"
 const val TotalFileSize = "total"
 
-
 //WorkManager tags
 const val SYNC_VIDEO = "sync_video"
 

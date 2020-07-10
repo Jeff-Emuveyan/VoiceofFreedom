@@ -1,9 +1,13 @@
 package com.bellogate.voiceoffreedom.util
 
 import android.app.DatePickerDialog
+import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.graphics.Bitmap
+import android.media.RingtoneManager
 import android.net.Uri
 import android.provider.MediaStore
 import android.util.Log
@@ -14,6 +18,7 @@ import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
@@ -21,10 +26,11 @@ import androidx.navigation.fragment.findNavController
 import com.bellogate.voiceoffreedom.BuildConfig
 import com.bellogate.voiceoffreedom.R
 import com.bellogate.voiceoffreedom.data.UserRepository
-import com.bellogate.voiceoffreedom.ui.devotional.add.DevotionalCollectorItem
 import com.bellogate.voiceoffreedom.data.devotional.SyncMultipleDevotionalsManager
 import com.bellogate.voiceoffreedom.model.Admin
 import com.bellogate.voiceoffreedom.model.User
+import com.bellogate.voiceoffreedom.ui.MainActivity
+import com.bellogate.voiceoffreedom.ui.devotional.add.DevotionalCollectorItem
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
 import com.greentoad.turtlebody.mediapicker.MediaPicker
@@ -272,4 +278,33 @@ fun Bitmap.toBytes(): ByteArray{
 fun getPercentFromValues(valueToBeComparedWith: Long, valueProvided: Long): Long{
 
     return (valueProvided * 100) / valueToBeComparedWith
+}
+
+
+fun showNotification(context: Context, title: String, body: String) {
+    val intent: Intent = Intent(context, MainActivity::class.java)
+
+    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+    val pendingIntent = PendingIntent.getActivity(
+        context, 0 /* Request code */, intent,
+        PendingIntent.FLAG_ONE_SHOT
+    )
+    val CHANNEL_ID = "com.bellogate.caliphate"
+    val defaultSoundUri = RingtoneManager.getDefaultUri(
+        RingtoneManager.TYPE_NOTIFICATION
+    )
+    val notificationBuilder =
+        NotificationCompat.Builder(context, CHANNEL_ID)
+            .setSmallIcon(R.mipmap.app_icon)
+            .setContentTitle(title)
+            .setContentText(body)
+            .setAutoCancel(true)
+            .setSound(defaultSoundUri)
+            .setContentIntent(pendingIntent)
+            .setStyle(
+                NotificationCompat.BigTextStyle()
+                    .bigText(body)
+            )
+    val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+    notificationManager.notify(Random().nextInt(), notificationBuilder.build())
 }

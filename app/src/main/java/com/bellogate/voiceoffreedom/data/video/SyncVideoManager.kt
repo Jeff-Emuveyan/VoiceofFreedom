@@ -99,6 +99,7 @@ class SyncVideoManager (private val appContext: Context, workerParams: WorkerPar
 
             Log.e(SyncVideoManager::class.java.simpleName, "Video upload should have ended")
             if(videoUploadTask!!.task.isSuccessful){
+                showNotification(appContext, "Upload successful", "")
                 Log.e(SyncVideoManager::class.java.simpleName, "Video uploaded successfully")
 
                 var videolUri = videoRef.downloadUrl.await()

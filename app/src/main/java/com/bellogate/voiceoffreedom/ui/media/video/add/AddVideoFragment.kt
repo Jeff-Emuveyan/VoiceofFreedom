@@ -118,6 +118,7 @@ class AddVideoFragment : Fragment() {
         uploadButton.setOnClickListener {
             alertWithAction("Upload", "Upload this video?"){
                 if(it){
+                    toast("Uploading...")
                     uploadVideo()
                 }
             }
@@ -145,6 +146,7 @@ class AddVideoFragment : Fragment() {
                 tvTitle.visibility = View.INVISIBLE
                 tvPercent.visibility = View.INVISIBLE
                 imageViewThumbnail.setImageResource(R.drawable.ic_video)
+                tvUploading.visibility = View.INVISIBLE
             }
 
             AddVideoUIState.VIDEO_SELECTED -> {
@@ -154,10 +156,10 @@ class AddVideoFragment : Fragment() {
                 progressBar.visibility = View.INVISIBLE
                 tvTitle.visibility = View.VISIBLE
                 tvPercent.visibility = View.INVISIBLE
+                tvUploading.visibility = View.INVISIBLE
             }
 
             AddVideoUIState.VIDEO_UPLOADING -> {
-                toast("Uploading...")
                 selectButton.isEnabled = false
                 uploadButton.isEnabled = false
                 buttonCancel.visibility = View.VISIBLE
@@ -166,6 +168,7 @@ class AddVideoFragment : Fragment() {
                 tvTitle.visibility = View.VISIBLE
                 tvPercent.visibility = View.VISIBLE
                 tvPercent.text = resources.getText(R.string.percent)
+                tvUploading.visibility = View.VISIBLE
             }
         }
     }

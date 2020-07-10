@@ -15,6 +15,7 @@
         android:fontFamily="@font/lato_bold"
         android:textSize="30sp"
         android:text="@string/percent"
+        android:textColor="@color/green"
         app:layout_constraintBottom_toTopOf="@+id/cardView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -118,6 +119,16 @@
         app:layout_constraintEnd_toEndOf="@+id/uploadButton"
         app:layout_constraintStart_toStartOf="@+id/uploadButton"
         app:layout_constraintTop_toBottomOf="@+id/uploadButton" />
+
+    <TextView
+        android:id="@+id/tvUploading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/lato_bold"
+        android:textColor="@color/green"
+        android:text="Uploading..."
+        app:layout_constraintBottom_toTopOf="@+id/progressBar"
+        app:layout_constraintStart_toStartOf="@+id/progressBar" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

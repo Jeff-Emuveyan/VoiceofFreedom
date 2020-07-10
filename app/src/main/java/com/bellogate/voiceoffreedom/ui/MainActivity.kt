@@ -180,6 +180,7 @@ class MainActivity : AppCompatActivity() {
         startActivityForResult(
             AuthUI.getInstance()
                 .createSignInIntentBuilder()
+                .setLogo(R.mipmap.app_icon)
                 .setAvailableProviders(sharedViewModel.getAuthProviders())
                 .build(),
             RC_SIGN_IN

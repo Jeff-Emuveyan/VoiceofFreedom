@@ -5,6 +5,7 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.content.pm.ActivityInfo
 import android.graphics.Bitmap
 import android.media.RingtoneManager
@@ -46,6 +47,8 @@ const val AMOUNT = "amount"
 const val STOP_NOTIFICATION = "stop_notification"
 const val Progress = "progress"
 const val TotalFileSize = "total"
+const val UUID = "uuid"
+const val NO_VALUE_SET = -1L
 
 //WorkManager tags
 const val SYNC_VIDEO = "sync_video"

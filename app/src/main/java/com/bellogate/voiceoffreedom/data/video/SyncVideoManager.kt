@@ -5,6 +5,7 @@ import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
+import android.content.SharedPreferences
 import android.media.MediaMetadataRetriever
 import android.media.MediaPlayer
 import android.net.Uri
@@ -116,10 +117,10 @@ class SyncVideoManager (private val appContext: Context, workerParams: WorkerPar
                 NetworkHelper.db.collection(VIDEOS).document(video.dateInMilliSeconds!!).set(video).await()
 
             }else{
+                showNotification(appContext, "Upload failed, try again", "")
                 Log.e(SyncVideoManager::class.java.simpleName, "Video uploaded has failed")
             }
         }
-
 
     }
 
@@ -182,4 +183,5 @@ class SyncVideoManager (private val appContext: Context, workerParams: WorkerPar
             //Toast.makeText(SplashActivity.this, "New Phone", Toast.LENGTH_LONG).show();
         }
     }
+
 }

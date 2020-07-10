@@ -2,8 +2,6 @@ package com.bellogate.voiceoffreedom.ui.media.video.add
 
 import android.app.Activity
 import android.content.Intent
-import android.graphics.BitmapFactory
-import android.media.MediaMetadataRetriever
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -23,7 +21,6 @@ import com.bellogate.voiceoffreedom.util.*
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.add_video_fragment.*
 import org.jetbrains.anko.support.v4.toast
-import java.io.File
 
 
 class AddVideoFragment : Fragment() {
@@ -47,12 +44,17 @@ class AddVideoFragment : Fragment() {
 
         sharedViewModel.showAddVideoFragment.value = false
 
-        //A LiveData to notify this fragment with video upload progress:
-        viewModel.values.observe(viewLifecycleOwner, Observer { values ->
-            if(values != null){
+        //By default when the fragment starts, we try to see
+        //if there is any ongoing upload work so that we can display the status. If there isn't, we return
+        //null and then wait till the user decides to do an upload.
+        viewModel.values = viewModel.getCurrentUploadWorkInformation(requireContext())
 
-                val uuid = values.first
-                val totalByteCount = values.second
+        //A LiveData to notify this fragment with video upload progress:
+        viewModel.values.observe(viewLifecycleOwner, Observer { aPair ->
+            if(aPair != null){
+
+                val uuid = aPair.first
+                val totalByteCount = aPair.second
 
                 WorkManager.getInstance(requireContext())
                     // requestId is the WorkRequest id
@@ -66,6 +68,9 @@ class AddVideoFragment : Fragment() {
                                 "Recieving request: uuid: $uuid   " +
                                         "totalByteCount: $totalByteCount   " +
                                         "bytesTransferred: $bytesTransferred" )
+
+                            //save this info for later use in case the fragment restarts
+                            viewModel.saveCurrentUploadWorkInformation(requireContext(),uuid, totalByteCount)
 
                             if(bytesTransferred.toInt() != 0
                                 &&
@@ -89,6 +94,7 @@ class AddVideoFragment : Fragment() {
                    showAlert(requireContext(), "Stop upload?", "Do you want to stop uploading this video?") {
                        //stop the upload task
                        WorkManager.getInstance(requireContext()).cancelWorkById(uuid)
+
                        //reset the UI
                        setUpUIState(AddVideoUIState.DEFAULT)
                        videoSelected = false

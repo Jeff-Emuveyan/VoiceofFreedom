@@ -87,6 +87,7 @@ class VideoListAdapter(options: FirestorePagingOptions<Video>): FirestorePagingA
                 videoItemClicked.invoke(video!!)
             }
 
+            //Admin privileges
             if(user != null && user!!.isAdmin) {
                 holder.ivDeleteVideo.visibility = View.VISIBLE
                 holder.ivDeleteVideo.setOnClickListener {
@@ -118,6 +119,8 @@ class VideoListAdapter(options: FirestorePagingOptions<Video>): FirestorePagingA
                     }
 
                 }
+            }else{
+                holder.ivDeleteVideo.visibility = View.INVISIBLE
             }
         }else{
             holder.ivDeleteVideo.visibility = View.INVISIBLE

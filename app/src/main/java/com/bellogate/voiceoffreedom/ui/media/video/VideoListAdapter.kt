@@ -118,10 +118,10 @@ class VideoListAdapter(options: FirestorePagingOptions<Video>): FirestorePagingA
                     }
 
                 }
-            }else{
-                holder.ivDeleteVideo.visibility = View.INVISIBLE
-                uiState.invoke(VideoUIState.NO_VIDEOS)
             }
+        }else{
+            holder.ivDeleteVideo.visibility = View.INVISIBLE
+            uiState.invoke(VideoUIState.NO_VIDEOS)
         }
     }
 

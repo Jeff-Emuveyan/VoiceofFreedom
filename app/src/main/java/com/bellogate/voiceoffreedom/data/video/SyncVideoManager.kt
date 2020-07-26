@@ -125,19 +125,6 @@ class SyncVideoManager (private val appContext: Context, workerParams: WorkerPar
     }
 
 
-    private fun getDuration(context: Context, videoUri: Uri): String {
-
-        val mp: MediaPlayer = MediaPlayer.create(context, videoUri)
-        val duration = mp.duration
-        mp.release()
-
-        return  String.format("%d min, %d sec",
-            TimeUnit.MILLISECONDS.toMinutes(duration.toLong()),
-            TimeUnit.MILLISECONDS.toSeconds(duration.toLong()) -
-                    TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(duration.toLong())))
-    }
-
-
     private fun createForegroundInfo(max: Long, progress: Long): ForegroundInfo { // Build a notification using bytesRead and contentLength
         val context = applicationContext
         val id = "com.bellogate.caliphate"

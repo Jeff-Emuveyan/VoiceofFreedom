@@ -42,6 +42,10 @@ open class SharedViewModel: ViewModel() {
         value = false
     }
 
+    /*** Used to notify AudioFragment on when to launch gallery to allow user pick an audio ***/
+    val launchAudioPicker = MutableLiveData<Boolean>().apply {
+        value = false
+    }
 
     /*** Used to control the top menu items depending on thw Fragment in view ***/
     val topMenuController = MutableLiveData<Fragments>().apply {

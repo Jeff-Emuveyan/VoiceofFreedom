@@ -68,7 +68,7 @@ class HomeFragment : Fragment() {
         sharedViewModel.launchGallery.observe(viewLifecycleOwner, Observer {
             //launch gallery so that user can change the event image:
             if(it){
-                selectImage(requireActivity()){uri, filePath ->
+                selectImage(requireActivity()){uri, file ->
                     //sync image:
                     syncImage(uri)
                 }

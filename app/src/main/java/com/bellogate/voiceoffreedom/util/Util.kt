@@ -1,15 +1,15 @@
 package com.bellogate.voiceoffreedom.util
 
-import android.app.DatePickerDialog
-import android.app.NotificationManager
-import android.app.PendingIntent
+import android.app.*
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.ActivityInfo
 import android.graphics.Bitmap
+import android.media.MediaPlayer
 import android.media.RingtoneManager
 import android.net.Uri
+import android.os.Build
 import android.provider.MediaStore
 import android.util.Log
 import android.view.Gravity
@@ -24,6 +24,8 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.navigation.fragment.findNavController
+import androidx.work.ForegroundInfo
+import androidx.work.WorkManager
 import com.bellogate.voiceoffreedom.BuildConfig
 import com.bellogate.voiceoffreedom.R
 import com.bellogate.voiceoffreedom.data.UserRepository
@@ -38,9 +40,11 @@ import com.greentoad.turtlebody.mediapicker.MediaPicker
 import com.greentoad.turtlebody.mediapicker.core.MediaPickerConfig
 import kotlinx.coroutines.CoroutineScope
 import java.io.ByteArrayOutputStream
+import java.io.File
 import java.text.DateFormatSymbols
 import java.text.SimpleDateFormat
 import java.util.*
+import java.util.concurrent.TimeUnit
 
 
 const val AMOUNT = "amount"
@@ -156,7 +160,7 @@ fun showDatePickerDialog(context: Context, shouldHaveMaxDate: Boolean, listener:
 
 
 val pickerConfig = MediaPickerConfig()
-    .setUriPermanentAccess(false)
+    .setUriPermanentAccess(true)
     .setAllowMultiSelection(false)
     .setShowConfirmationDialog(true)
     .setScreenOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
@@ -166,7 +170,7 @@ fun getBitmapFromUri(context: Context, uri: Uri): Bitmap? =
     MediaStore.Images.Media.getBitmap(context.contentResolver, uri)
 
 
-fun selectImage(activity: FragmentActivity, result: (uri:Uri, filePath: String) -> Unit){
+fun selectImage(activity: FragmentActivity, result: (uri:Uri, file: File) -> Unit){
     val pickerConfig = pickerConfig
 
     val subscribe = MediaPicker.with(activity!!, MediaPicker.MediaTypes.IMAGE)
@@ -179,7 +183,28 @@ fun selectImage(activity: FragmentActivity, result: (uri:Uri, filePath: String) 
         .onResult()
         .subscribe({
             val uri = it[0]
-            result.invoke(uri, "filePath")
+            val file = FileUtil.from(activity, uri)
+            result.invoke(uri, file)
+        }, {
+            it.printStackTrace()
+        })
+}
+
+fun selectAudio(activity: FragmentActivity, result: (uri:Uri, file: File) -> Unit){
+    val pickerConfig = pickerConfig
+
+    val subscribe = MediaPicker.with(activity!!, MediaPicker.MediaTypes.AUDIO)
+        .setConfig(pickerConfig)
+        .setFileMissingListener(object : MediaPicker.MediaPickerImpl.OnMediaListener {
+            override fun onMissingFileWarning() {
+                Toast.makeText(activity, "Missing file", Toast.LENGTH_LONG).show()
+            }
+        })
+        .onResult()
+        .subscribe({
+            val uri = it[0]
+            val file = FileUtil.from(activity, uri)
+            result.invoke(uri, file)
         }, {
             it.printStackTrace()
         })
@@ -310,4 +335,63 @@ fun showNotification(context: Context, title: String, body: String) {
             )
     val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
     notificationManager.notify(Random().nextInt(), notificationBuilder.build())
+}
+
+
+fun getDuration(context: Context, mediaUri: Uri): String {
+
+    val mp: MediaPlayer = MediaPlayer.create(context, mediaUri)
+    val duration = mp.duration
+    mp.release()
+
+    return  String.format("%d min, %d sec",
+        TimeUnit.MILLISECONDS.toMinutes(duration.toLong()),
+        TimeUnit.MILLISECONDS.toSeconds(duration.toLong()) -
+                TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(duration.toLong())))
+}
+
+
+fun createForegroundInfo(context: Context, uuid: UUID, max: Long, progress: Long): ForegroundInfo { // Build a notification using bytesRead and contentLength
+    val id = "com.bellogate.caliphate"
+    val title = "Uploading..."
+    val cancel = "Stop"
+    // This PendingIntent can be used to cancel the worker
+    val intent = WorkManager.getInstance(context)
+        .createCancelPendingIntent(uuid)
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        createNotificationChannel(context)
+    }
+    val notification: Notification = NotificationCompat.Builder(context, id)
+        .setContentTitle(title)
+        .setTicker(title)
+        .setSmallIcon(android.R.drawable.alert_light_frame)
+        .setProgress(max.toInt(), progress.toInt(), false)
+        .setOngoing(true) // Add the cancel action to the notification which can
+        // be used to cancel the worker
+        .addAction(android.R.drawable.ic_delete, cancel, intent)
+        .build()
+    return ForegroundInfo(33, notification)
+}
+
+
+private fun createNotificationChannel(context: Context) { //If you don't call this method, you notifications will only show on older versions of android phones.
+    val CHANNEL_NAME = "voice_of_freedom"
+    val CHANNEL_ID = "com.bellogate.caliphate"
+    // Create the NotificationChannel, but only on API 26+ because
+    // the NotificationChannel class is new and not in the support library
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        val importance = NotificationManager.IMPORTANCE_LOW// IMPORTANCE_LOW means this
+        //notification will not play sound. Change it to IMPORTANCE_DEFAULT if you want sound.
+        val channel = NotificationChannel(CHANNEL_ID, CHANNEL_NAME, importance)
+        channel.description = "voice_of_freedom"
+        channel.enableVibration(true)
+        channel.enableLights(true)
+        // Register the channel with the system; you can't change the importance
+        // or other notification behaviors after this
+        val notificationManager = context.getSystemService(
+            NotificationManager::class.java
+        )
+        notificationManager.createNotificationChannel(channel)
+        //Toast.makeText(SplashActivity.this, "New Phone", Toast.LENGTH_LONG).show();
+    }
 }

@@ -92,7 +92,7 @@ class SyncVideoManager (private val appContext: Context, workerParams: WorkerPar
                     setProgress(progress)//setProgress can only publish one data throughout. So we
                     //can't do setProgress(total) too.
 
-                    setForeground(createForegroundInfo(it.totalByteCount, it.bytesTransferred))
+                    setForeground(createForegroundInfo(appContext, id, it.totalByteCount, it.bytesTransferred))
                     Log.e(SyncVideoManager::class.java.simpleName, "setProgress called")
                 }
             }.await()
@@ -122,53 +122,6 @@ class SyncVideoManager (private val appContext: Context, workerParams: WorkerPar
             }
         }
 
-    }
-
-
-    private fun createForegroundInfo(max: Long, progress: Long): ForegroundInfo { // Build a notification using bytesRead and contentLength
-        val context = applicationContext
-        val id = "com.bellogate.caliphate"
-        val title = "Uploading..."
-        val cancel = "Stop"
-        // This PendingIntent can be used to cancel the worker
-        val intent = WorkManager.getInstance(context)
-            .createCancelPendingIntent(getId())
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            createNotificationChannel(appContext)
-        }
-        val notification: Notification = NotificationCompat.Builder(context, id)
-            .setContentTitle(title)
-            .setTicker(title)
-            .setSmallIcon(R.drawable.alert_light_frame)
-            .setProgress(max.toInt(), progress.toInt(), false)
-            .setOngoing(true) // Add the cancel action to the notification which can
-            // be used to cancel the worker
-            .addAction(R.drawable.ic_delete, cancel, intent)
-            .build()
-        return ForegroundInfo(33, notification)
-    }
-
-
-    private fun createNotificationChannel(context: Context) { //If you don't call this method, you notifications will only show on older versions of android phones.
-        val CHANNEL_NAME = "voice_of_freedom"
-        val CHANNEL_ID = "com.bellogate.caliphate"
-        // Create the NotificationChannel, but only on API 26+ because
-        // the NotificationChannel class is new and not in the support library
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val importance = NotificationManager.IMPORTANCE_LOW// IMPORTANCE_LOW means this
-            //notification will not play sound. Change it to IMPORTANCE_DEFAULT if you want sound.
-            val channel = NotificationChannel(CHANNEL_ID, CHANNEL_NAME, importance)
-            channel.description = "voice_of_freedom"
-            channel.enableVibration(true)
-            channel.enableLights(true)
-            // Register the channel with the system; you can't change the importance
-            // or other notification behaviors after this
-            val notificationManager = context.getSystemService(
-                NotificationManager::class.java
-            )
-            notificationManager.createNotificationChannel(channel)
-            //Toast.makeText(SplashActivity.this, "New Phone", Toast.LENGTH_LONG).show();
-        }
     }
 
 }

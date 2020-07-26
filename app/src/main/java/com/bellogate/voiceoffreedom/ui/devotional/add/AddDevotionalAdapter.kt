@@ -41,7 +41,7 @@ class AddDevotionalAdapter private constructor(): RecyclerView.Adapter<Devotiona
     override fun onBindViewHolder(holder: DevotionalCollectorItem, position: Int) {
 
         holder.imageView.setOnClickListener {
-            selectImage(activity){uri, filePath ->
+            selectImage(activity){uri, file ->
                 holder.imageUri = uri
                 holder.imageView.setImageBitmap(getBitmapFromUri(activity, holder.imageUri!!))
                 updateCollectedItems(holder)

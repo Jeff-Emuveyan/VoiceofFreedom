@@ -20,10 +20,16 @@
             android:icon="@drawable/devotional"
             android:title="@string/devotional" />
 
+
         <item
             android:id="@+id/nav_video"
             android:icon="@drawable/media"
-            android:title="@string/media" />
+            android:title="@string/video" />
+
+        <item
+            android:id="@+id/nav_audio"
+            android:icon="@drawable/ic_audio"
+            android:title="@string/audio_media_messages" />
 
 
         <item

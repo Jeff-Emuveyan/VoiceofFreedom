@@ -56,6 +56,7 @@ class MainActivity : AppCompatActivity() {
             R.id.nav_give,
             R.id.nav_devotional,
             R.id.nav_video,
+            R.id.nav_audio,
             R.id.nav_about
         ), drawerLayout)
         setupActionBarWithNavController(navController, appBarConfiguration)
@@ -133,9 +134,14 @@ class MainActivity : AppCompatActivity() {
             menu.findItem(R.id.add_video).isVisible =
                 sharedViewModel.topMenuController.value == Fragments.VIDEO
 
+            //Determines when to show user admin permissions to Add audio
+            menu.findItem(R.id.add_audio).isVisible =
+                sharedViewModel.topMenuController.value == Fragments.AUDIO
+
             //Determines when to show user admin permissions to Change event image
             menu.findItem(R.id.change_event).isVisible =
                 sharedViewModel.topMenuController.value == Fragments.HOME
+
         }
 
         return true
@@ -163,11 +169,15 @@ class MainActivity : AppCompatActivity() {
             R.id.change_event ->{
                 sharedViewModel.launchGallery.value = true
             }
+            R.id.add_audio ->{
+                sharedViewModel.launchAudioPicker.value = true
+            }
             else ->{
                 drawerLayout.openDrawer(Gravity.LEFT)
             }
         }
         return true
+
     }
 
     private fun logout() = sharedViewModel.logout(this)

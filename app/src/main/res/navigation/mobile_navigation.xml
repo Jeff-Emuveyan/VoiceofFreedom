@@ -84,4 +84,10 @@
         android:label="About"
         tools:layout="@layout/fragment_about" />
 
+    <fragment
+        android:id="@+id/nav_audio"
+        android:name="com.bellogate.voiceoffreedom.ui.media.audio.AudioFragment"
+        android:label="Audio media"
+        tools:layout="@layout/audio_fragment" />
+
 </navigation>

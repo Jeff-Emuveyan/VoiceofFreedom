@@ -4,5 +4,6 @@ enum class Fragments {
 
     DEVOTIONAL,
     VIDEO,
+    AUDIO,
     HOME
 }

@@ -7,7 +7,7 @@ import androidx.work.*
 import com.bellogate.voiceoffreedom.data.BaseRepository
 import com.bellogate.voiceoffreedom.data.datasource.network.NetworkHelper
 import com.bellogate.voiceoffreedom.model.Video
-import com.bellogate.voiceoffreedom.ui.media.video.VideoUIState
+import com.bellogate.voiceoffreedom.model.ListUIState
 import com.bellogate.voiceoffreedom.util.FileUtil
 import java.util.*
 
@@ -45,7 +45,7 @@ class VideoRepository(context: Context): BaseRepository(context) {
     }
 
 
-    fun fetchVideos(response:(VideoUIState, ArrayList<Video?>?)-> Unit){
+    fun fetchVideos(response:(ListUIState, ArrayList<Video?>?)-> Unit){
         NetworkHelper.fetchVideos{ state, list ->
             response.invoke(state, list)
         }

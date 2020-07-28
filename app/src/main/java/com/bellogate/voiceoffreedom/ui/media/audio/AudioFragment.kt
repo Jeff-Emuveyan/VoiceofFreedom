@@ -8,7 +8,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.bellogate.voiceoffreedom.R
 import com.bellogate.voiceoffreedom.model.User
 import com.bellogate.voiceoffreedom.ui.SharedViewModel
@@ -16,6 +18,7 @@ import com.bellogate.voiceoffreedom.util.FileUtil
 import com.bellogate.voiceoffreedom.util.Fragments
 import com.bellogate.voiceoffreedom.util.selectAudio
 import com.bellogate.voiceoffreedom.util.showAlert
+import kotlinx.android.synthetic.main.video_fragment.*
 import java.io.File
 
 class AudioFragment : Fragment() {
@@ -26,6 +29,7 @@ class AudioFragment : Fragment() {
 
     private lateinit var viewModel: AudioViewModel
     private lateinit var sharedViewModel: SharedViewModel
+    private var audioListAdapter: AudioListAdapter? = null
     private var user: User? = null
 
     override fun onCreateView(
@@ -61,6 +65,23 @@ class AudioFragment : Fragment() {
                 }
             }
         })
+
+        //fetch audio:
+        fetchAudios(viewLifecycleOwner)
+    }
+
+    private fun fetchAudios(lifecycleOwner: LifecycleOwner) {
+        //We use FirestorePagingAdapter to fetch the videos and also handle pagination
+        //Do check the onStart() and onStop() to see how we handled lifecycle of the adapter
+        recyclerView?.layoutManager = LinearLayoutManager(requireContext())
+        audioListAdapter = AudioListAdapter(requireContext(), viewModel.options(lifecycleOwner), user,
+            uiState =  {
+
+        }, audioItemClicked = {
+
+        })
+
+        recyclerView.adapter = audioListAdapter
     }
 
 

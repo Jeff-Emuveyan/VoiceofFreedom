@@ -2,35 +2,34 @@ package com.bellogate.voiceoffreedom.ui.media.video
 
 import android.annotation.SuppressLint
 import android.view.View
-import com.bellogate.voiceoffreedom.R
 import com.bellogate.voiceoffreedom.model.Video
+import com.bellogate.voiceoffreedom.model.ListUIState
 import com.google.android.exoplayer2.SimpleExoPlayer
 import kotlinx.android.synthetic.main.video_fragment.*
-import kotlinx.android.synthetic.main.video_view_item.*
 
-fun VideoFragment.setUpUIState(uiState: VideoUIState){
+fun VideoFragment.setUpUIState(uiState: ListUIState){
 
     when(uiState){
-        VideoUIState.LOADING ->{
+        ListUIState.LOADING ->{
             exoPlayerView.visibility = View.VISIBLE
             progressBar.visibility = View.VISIBLE
             tvError.visibility = View.INVISIBLE
         }
 
-        VideoUIState.FOUND->{
+        ListUIState.FOUND->{
             exoPlayerView.visibility = View.VISIBLE
             progressBar.visibility = View.INVISIBLE
             tvError.visibility = View.INVISIBLE
         }
 
-        VideoUIState.NO_VIDEOS->{
+        ListUIState.NO_VIDEOS->{
             exoPlayerView.visibility = View.INVISIBLE
             progressBar.visibility = View.INVISIBLE
             tvError.visibility = View.VISIBLE
             tvError.text = "No videos to show"
             textViewTitle.text = ""
         }
-        VideoUIState.ERROR ->{
+        ListUIState.ERROR ->{
             exoPlayerView.visibility = View.INVISIBLE
             progressBar.visibility = View.INVISIBLE
             tvError.visibility = View.VISIBLE

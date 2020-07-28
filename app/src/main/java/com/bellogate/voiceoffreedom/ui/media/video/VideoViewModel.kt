@@ -3,10 +3,10 @@ package com.bellogate.voiceoffreedom.ui.media.video
 import android.content.Context
 import android.net.Uri
 import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.MutableLiveData
 import androidx.paging.PagedList
 import com.bellogate.voiceoffreedom.data.video.VideoRepository
 import com.bellogate.voiceoffreedom.model.Video
+import com.bellogate.voiceoffreedom.model.ListUIState
 import com.bellogate.voiceoffreedom.ui.BaseViewModel
 import com.bellogate.voiceoffreedom.util.DATE_IN_MILLISECONDS
 import com.bellogate.voiceoffreedom.util.VIDEOS
@@ -38,7 +38,7 @@ class VideoViewModel : BaseViewModel() {
                 .build()
 }
 
-    fun fetchVideos(context: Context, response:(VideoUIState, ArrayList<Video?>?)-> Unit){
+    fun fetchVideos(context: Context, response:(ListUIState, ArrayList<Video?>?)-> Unit){
         VideoRepository(context).fetchVideos{ state, list ->
             response.invoke(state, list)
         }

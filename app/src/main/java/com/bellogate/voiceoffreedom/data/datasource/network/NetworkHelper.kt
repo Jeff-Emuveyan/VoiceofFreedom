@@ -1,20 +1,15 @@
 package com.bellogate.voiceoffreedom.data.datasource.network
 
-import android.net.Uri
-import android.util.Log
 import com.bellogate.voiceoffreedom.model.*
 import com.bellogate.voiceoffreedom.ui.devotional.util.DevotionalUIState
 import com.bellogate.voiceoffreedom.ui.home.NetworkState
-import com.bellogate.voiceoffreedom.ui.media.video.VideoUIState
+import com.bellogate.voiceoffreedom.model.ListUIState
 import com.bellogate.voiceoffreedom.util.*
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.StorageReference
-import com.google.firebase.storage.StorageTask
-import com.google.firebase.storage.UploadTask
 import com.google.firebase.storage.ktx.storage
-import java.io.File
 
 class NetworkHelper {
 
@@ -159,13 +154,13 @@ class NetworkHelper {
         }
 
 
-        fun fetchVideos(response:(VideoUIState, ArrayList<Video?>?)-> Unit){
+        fun fetchVideos(response:(ListUIState, ArrayList<Video?>?)-> Unit){
             db.collection(VIDEOS).orderBy(DATE_IN_MILLISECONDS, Query.Direction.DESCENDING).limit(6).get()
                 .addOnSuccessListener {
 
                     if (it.documents.isNullOrEmpty() || it.documents.size == 0) {
                         //search was successful but no devotional matched that 'timeInMilliSeconds'
-                        response.invoke(VideoUIState.NO_VIDEOS, null)
+                        response.invoke(ListUIState.NO_VIDEOS, null)
                     } else {
                         val list: ArrayList<Video?>? = ArrayList<Video?>()
                         for (document in it.documents) {//this will only have one document because we set the limit to 1
@@ -174,11 +169,11 @@ class NetworkHelper {
                                 list?.add(video)
                             }
                         }
-                        response.invoke(VideoUIState.FOUND, list)
+                        response.invoke(ListUIState.FOUND, list)
                     }
 
                 }.addOnFailureListener {
-                    response.invoke(VideoUIState.ERROR, null)
+                    response.invoke(ListUIState.ERROR, null)
                 }
         }
 

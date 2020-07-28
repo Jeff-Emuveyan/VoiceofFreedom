@@ -9,23 +9,17 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
-import androidx.paging.PagedList
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bellogate.voiceoffreedom.R
 import com.bellogate.voiceoffreedom.model.User
-import com.bellogate.voiceoffreedom.model.Video
+import com.bellogate.voiceoffreedom.model.ListUIState
 import com.bellogate.voiceoffreedom.ui.SharedViewModel
-import com.bellogate.voiceoffreedom.util.DATE_IN_MILLISECONDS
 import com.bellogate.voiceoffreedom.util.Fragments
-import com.bellogate.voiceoffreedom.util.VIDEOS
-import com.firebase.ui.firestore.paging.FirestorePagingOptions
 import com.google.android.exoplayer2.ExoPlaybackException
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.util.Util
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.Query
 import kotlinx.android.synthetic.main.video_fragment.*
 
 
@@ -72,7 +66,7 @@ class VideoFragment : Fragment() {
             }
         })
 
-        setUpUIState(VideoUIState.LOADING)//default until a response comes.
+        setUpUIState(ListUIState.LOADING)//default until a response comes.
     }
 
 
@@ -88,16 +82,16 @@ class VideoFragment : Fragment() {
         //Do check the onStart() and onStop() to see how we handled lifecycle of the adapter
         recyclerView?.layoutManager = LinearLayoutManager(requireContext())
         videoListAdapter = VideoListAdapter(requireContext(), viewModel.options(lifecycleOwner), user,
-            uiState = {uiState : VideoUIState ->
+            uiState = {uiState : ListUIState ->
                 when(uiState){
-                    VideoUIState.FOUND ->{
-                        setUpUIState(VideoUIState.FOUND)
+                    ListUIState.FOUND ->{
+                        setUpUIState(ListUIState.FOUND)
                     }
-                    VideoUIState.NO_VIDEOS ->{
-                        setUpUIState(VideoUIState.NO_VIDEOS)
+                    ListUIState.NO_VIDEOS ->{
+                        setUpUIState(ListUIState.NO_VIDEOS)
                     }
-                    VideoUIState.ERROR ->{
-                        setUpUIState(VideoUIState.ERROR)
+                    ListUIState.ERROR ->{
+                        setUpUIState(ListUIState.ERROR)
                     }
                 }
             }, firstVideoReady = {
@@ -156,10 +150,10 @@ class VideoFragment : Fragment() {
 
         override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
             if(playbackState == ExoPlayer.STATE_BUFFERING){
-                setUpUIState(VideoUIState.LOADING)
+                setUpUIState(ListUIState.LOADING)
 
             }else if(playbackState == ExoPlayer.STATE_READY){
-                setUpUIState(VideoUIState.FOUND)
+                setUpUIState(ListUIState.FOUND)
             }
 
             if(playbackState == ExoPlayer.STATE_ENDED){
@@ -168,7 +162,7 @@ class VideoFragment : Fragment() {
         }
 
         override fun onPlayerError(error: ExoPlaybackException) {
-            setUpUIState(VideoUIState.ERROR)
+            setUpUIState(ListUIState.ERROR)
         }
     }
 }

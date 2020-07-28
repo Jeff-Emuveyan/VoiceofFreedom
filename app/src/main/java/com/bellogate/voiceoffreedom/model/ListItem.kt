@@ -1,4 +1,4 @@
-package com.bellogate.voiceoffreedom.ui.media.video
+package com.bellogate.voiceoffreedom.model
 
 import android.content.Context
 import android.view.View
@@ -10,7 +10,7 @@ import com.bellogate.voiceoffreedom.R
 import com.facebook.shimmer.Shimmer
 import com.facebook.shimmer.ShimmerFrameLayout
 
-class VideoItem(v: View): RecyclerView.ViewHolder(v)  {
+class ListItem(v: View): RecyclerView.ViewHolder(v)  {
 
     lateinit var itemLayout: ConstraintLayout
     lateinit var shimmer: ShimmerFrameLayout

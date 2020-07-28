@@ -383,6 +383,11 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/java/com/bellogate/voiceoffreedom/model/ListItem.kt">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/app/src/main/java/com/bellogate/voiceoffreedom/model/SecretKey.kt">
           <value>
             <set />
@@ -394,6 +399,11 @@
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/app/src/main/java/com/bellogate/voiceoffreedom/model/Video.kt">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/java/com/bellogate/voiceoffreedom/model/VideoItem.kt">
           <value>
             <set />
           </value>
@@ -569,6 +579,11 @@
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/app/src/main/java/com/bellogate/voiceoffreedom/ui/media/audio/AudioFragment.kt">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/java/com/bellogate/voiceoffreedom/ui/media/audio/AudioListAdapter.kt">
           <value>
             <set />
           </value>

@@ -12,8 +12,10 @@ import com.bellogate.voiceoffreedom.model.User
 import com.bellogate.voiceoffreedom.model.Video
 import com.bellogate.voiceoffreedom.model.ListItem
 import com.bellogate.voiceoffreedom.model.ListUIState
+import com.bellogate.voiceoffreedom.util.downloadFile
 import com.bellogate.voiceoffreedom.util.getSimpleDateFormat
 import com.bellogate.voiceoffreedom.util.showAlert
+import com.bellogate.voiceoffreedom.util.showMediaPopUpMenu
 import com.firebase.ui.firestore.paging.FirestorePagingAdapter
 import com.firebase.ui.firestore.paging.FirestorePagingOptions
 import com.firebase.ui.firestore.paging.LoadingState
@@ -49,7 +51,7 @@ class VideoListAdapter(options: FirestorePagingOptions<Video>): FirestorePagingA
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListItem {
         val inflater = LayoutInflater.from(context)
-        val view = inflater.inflate(R.layout.video_view_item, parent, false)
+        val view = inflater.inflate(R.layout.list_item, parent, false)
         return ListItem(context!!, view)
     }
 
@@ -61,6 +63,36 @@ class VideoListAdapter(options: FirestorePagingOptions<Video>): FirestorePagingA
             //check to automatically play the first video:
             if(position == 0) {
                 firstVideoReady.invoke(video)
+            }
+
+            //delete video
+            fun deleteVideo(){
+                showAlert(context!!, "Delete", "Delete this video?"){
+                    if(it){
+                        holder.ivMenu.visibility = View.GONE
+                        holder.shimmer.showShimmer(true)
+                        holder.shimmer.startShimmer()
+
+                        //delete the video:
+                        VideoRepository(context!!).deleteVideo(video!!){ success, errorMessage ->
+                            if(success){
+                                this.refresh()//refresh the list because an item has been removed.
+                                this.notifyDataSetChanged()
+                                Toast.makeText(context!!, "Deleted!", Toast.LENGTH_LONG).show()
+                            }else{
+                                holder.ivMenu.visibility = View.VISIBLE
+                                holder.shimmer.stopShimmer()
+                                holder.shimmer.hideShimmer()
+                                Toast.makeText(context!!, "Try again $errorMessage", Toast.LENGTH_LONG).show()
+                            }
+                        }
+                    }else{
+                        holder.ivMenu.visibility = View.VISIBLE
+                        holder.shimmer.stopShimmer()
+                        holder.shimmer.hideShimmer()
+                        Toast.makeText(context!!, "Try again", Toast.LENGTH_LONG).show()
+                    }
+                }
             }
 
             //load the thumbnail:
@@ -79,56 +111,42 @@ class VideoListAdapter(options: FirestorePagingOptions<Video>): FirestorePagingA
                     }
                 })
 
+
+            //set the texts:
             holder.tvTitle.text = video?.title
             holder.tvDuration.text = video?.duration
             holder.tvDate.text = getSimpleDateFormat(
                 video!!.dateInMilliSeconds!!.toLong(),
                 "dd-MMM-yyyy")//ie 30-APR-1994
 
+
+            //handle click events:
             holder.itemLayout.setOnClickListener {
                 videoItemClicked.invoke(video!!)
             }
 
-            //Admin privileges
-            if(user != null && user!!.isAdmin) {
-                holder.ivDeleteVideo.visibility = View.VISIBLE
-                holder.ivDeleteVideo.setOnClickListener {
-                    showAlert(context!!, "Delete", "Delete this video?"){
-                        if(it){
-                            holder.ivDeleteVideo.visibility = View.GONE
-                            holder.shimmer.showShimmer(true)
-                            holder.shimmer.startShimmer()
 
-                            //delete the video:
-                            VideoRepository(context!!).deleteVideo(video!!){ success, errorMessage ->
-                                if(success){
-                                    this.refresh()//refresh the list because an item has been removed.
-                                    this.notifyDataSetChanged()
-                                    Toast.makeText(context!!, "Deleted!", Toast.LENGTH_LONG).show()
-                                }else{
-                                    holder.ivDeleteVideo.visibility = View.VISIBLE
-                                    holder.shimmer.stopShimmer()
-                                    holder.shimmer.hideShimmer()
-                                    Toast.makeText(context!!, "Try again $errorMessage", Toast.LENGTH_LONG).show()
-                                }
-                            }
-                        }else{
-                            holder.ivDeleteVideo.visibility = View.VISIBLE
-                            holder.shimmer.stopShimmer()
-                            holder.shimmer.hideShimmer()
-                            Toast.makeText(context!!, "Try again", Toast.LENGTH_LONG).show()
+            holder.ivMenu.setOnClickListener {
+                showMediaPopUpMenu(context!!, user, holder.ivMenu){
+                    when (it.itemId) {
+                        R.id.delete_item -> {
+                            deleteVideo()
+                        }
+                        R.id.download_item -> {
+                            downloadVideo(video.videoUrl)
                         }
                     }
-
                 }
-            }else{
-                holder.ivDeleteVideo.visibility = View.INVISIBLE
             }
         }else{
-            holder.ivDeleteVideo.visibility = View.INVISIBLE
+            holder.ivMenu.visibility = View.INVISIBLE
             uiState.invoke(ListUIState.NO_VIDEOS)
         }
     }
+
+
+
+    private fun downloadVideo(videoUrl: String?) = downloadFile(context!!, videoUrl!!)
 
 
     override fun onLoadingStateChanged(state: LoadingState) {

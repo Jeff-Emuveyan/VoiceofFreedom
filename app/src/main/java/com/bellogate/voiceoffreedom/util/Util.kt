@@ -10,17 +10,21 @@ import android.media.MediaPlayer
 import android.media.RingtoneManager
 import android.net.Uri
 import android.os.Build
+import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.widget.Button
 import android.widget.FrameLayout
+import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.navigation.fragment.findNavController
@@ -393,5 +397,38 @@ private fun createNotificationChannel(context: Context) { //If you don't call th
         )
         notificationManager.createNotificationChannel(channel)
         //Toast.makeText(SplashActivity.this, "New Phone", Toast.LENGTH_LONG).show();
+    }
+}
+
+
+fun showMediaPopUpMenu(context: Context, user: User?, view: View, onMenuClicked: (MenuItem)-> Unit){
+
+    val popupMenu = PopupMenu(context, view)
+    popupMenu.menuInflater.inflate(R.menu.popup_menu, popupMenu.menu)
+
+    //control menu items based on the user's privilege:
+    if(user == null || !user.isAdmin){//user should not see the delete menu:
+        popupMenu.menu.getItem(1).isVisible = false
+    }
+    popupMenu.setOnMenuItemClickListener {
+        onMenuClicked.invoke(it)
+        true
+    }
+
+    popupMenu.show()
+
+}
+
+/**** Used to download a file (audio or video) ***/
+fun downloadFile(context: Context, url: String){
+    showAlert(context, "Download file?", "Do you want to download this file?"){
+        val downloadManager =  context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
+        val uri = Uri.parse(url)
+        val request = DownloadManager.Request(uri);
+        request.setTitle("Voice of Freedom");
+        request.setDescription("Downloading file...");
+        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, uri.lastPathSegment);
+        downloadManager.enqueue(request)
     }
 }

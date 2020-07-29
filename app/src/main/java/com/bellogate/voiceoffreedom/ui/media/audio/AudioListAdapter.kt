@@ -7,16 +7,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.bellogate.voiceoffreedom.R
-import com.bellogate.voiceoffreedom.data.video.VideoRepository
+import com.bellogate.voiceoffreedom.data.audio.AudioRepository
 import com.bellogate.voiceoffreedom.model.*
+import com.bellogate.voiceoffreedom.util.downloadFile
 import com.bellogate.voiceoffreedom.util.getSimpleDateFormat
 import com.bellogate.voiceoffreedom.util.showAlert
+import com.bellogate.voiceoffreedom.util.showMediaPopUpMenu
 import com.firebase.ui.firestore.paging.FirestorePagingAdapter
 import com.firebase.ui.firestore.paging.FirestorePagingOptions
 import com.firebase.ui.firestore.paging.LoadingState
-import com.squareup.picasso.Callback
-import com.squareup.picasso.Picasso
-import java.lang.Exception
 
 
 /*** Reference: https://github.com/firebase/FirebaseUI-Android/blob/master/firestore/README.md ***/
@@ -42,7 +41,7 @@ class AudioListAdapter(options: FirestorePagingOptions<Audio>): FirestorePagingA
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListItem {
         val inflater = LayoutInflater.from(context)
-        val view = inflater.inflate(R.layout.video_view_item, parent, false)
+        val view = inflater.inflate(R.layout.list_item, parent, false)
         return ListItem(context!!, view)
     }
 
@@ -51,6 +50,39 @@ class AudioListAdapter(options: FirestorePagingOptions<Audio>): FirestorePagingA
 
         if(audio != null){
 
+
+            //delete video
+            fun deleteAudio(){
+                showAlert(context!!, "Delete", "Delete this audio?"){
+                    if(it){
+                        holder.ivMenu.visibility = View.GONE
+                        holder.shimmer.showShimmer(true)
+                        holder.shimmer.startShimmer()
+
+                        //delete the audio:
+                        AudioRepository(context!!).deleteAudio(audio!!){ success, errorMessage ->
+                            if(success){
+                                this.refresh()//refresh the list because an item has been removed.
+                                this.notifyDataSetChanged()
+                                Toast.makeText(context!!, "Deleted!", Toast.LENGTH_LONG).show()
+                            }else{
+                                holder.ivMenu.visibility = View.VISIBLE
+                                holder.shimmer.stopShimmer()
+                                holder.shimmer.hideShimmer()
+                                Toast.makeText(context!!, "Try again $errorMessage", Toast.LENGTH_LONG).show()
+                            }
+                        }
+                    }else{
+                        holder.ivMenu.visibility = View.VISIBLE
+                        holder.shimmer.stopShimmer()
+                        holder.shimmer.hideShimmer()
+                        Toast.makeText(context!!, "Try again", Toast.LENGTH_LONG).show()
+                    }
+                }
+            }
+
+
+            //setup views
             holder.ivThumbnail.setImageResource(R.drawable.ic_audiotrack)
             holder.shimmer.showShimmer(false)
             holder.shimmer.stopShimmer()
@@ -60,50 +92,36 @@ class AudioListAdapter(options: FirestorePagingOptions<Audio>): FirestorePagingA
                 audio!!.dateInMilliSeconds!!.toLong(),
                 "dd-MMM-yyyy")//ie 30-APR-1994
 
+
+            //handle click events:
             holder.itemLayout.setOnClickListener {
                 audioItemClicked.invoke(audio!!)
             }
 
-            //Admin privileges
-            if(user != null && user!!.isAdmin) {
-                holder.ivDeleteVideo.visibility = View.VISIBLE
-                holder.ivDeleteVideo.setOnClickListener {
-                    showAlert(context!!, "Delete", "Delete this video?"){
-                        if(it){
-                            holder.ivDeleteVideo.visibility = View.GONE
-                            holder.shimmer.showShimmer(true)
-                            holder.shimmer.startShimmer()
 
-                            /*//delete the video:
-                            VideoRepository(context!!).deleteVideo(video!!){ success, errorMessage ->
-                                if(success){
-                                    this.refresh()//refresh the list because an item has been removed.
-                                    this.notifyDataSetChanged()
-                                    Toast.makeText(context!!, "Deleted!", Toast.LENGTH_LONG).show()
-                                }else{
-                                    holder.ivDeleteVideo.visibility = View.VISIBLE
-                                    holder.shimmer.stopShimmer()
-                                    holder.shimmer.hideShimmer()
-                                    Toast.makeText(context!!, "Try again $errorMessage", Toast.LENGTH_LONG).show()
-                                }
-                            }*/
-                        }else{
-                            holder.ivDeleteVideo.visibility = View.VISIBLE
-                            holder.shimmer.stopShimmer()
-                            holder.shimmer.hideShimmer()
-                            Toast.makeText(context!!, "Try again", Toast.LENGTH_LONG).show()
+            holder.ivMenu.setOnClickListener {
+                val s = 10
+                showMediaPopUpMenu(context!!, user, holder.ivMenu){
+                    when (it.itemId) {
+                        R.id.delete_item -> {
+                            deleteAudio()
+                        }
+                        R.id.download_item -> {
+                            downloadAudio(audio.audioUrl)
                         }
                     }
-
                 }
-            }else{
-                holder.ivDeleteVideo.visibility = View.INVISIBLE
             }
+
         }else{
-            holder.ivDeleteVideo.visibility = View.INVISIBLE
+            holder.ivMenu.visibility = View.INVISIBLE
             uiState.invoke(ListUIState.NO_VIDEOS)
         }
     }
+
+
+
+    private fun downloadAudio(audioUrl: String?) = downloadFile(context!!, audioUrl!!)
 
 
     override fun onLoadingStateChanged(state: LoadingState) {

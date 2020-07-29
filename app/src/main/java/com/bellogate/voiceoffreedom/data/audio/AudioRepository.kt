@@ -5,7 +5,9 @@ import android.media.MediaPlayer
 import android.net.Uri
 import androidx.work.*
 import com.bellogate.voiceoffreedom.data.BaseRepository
+import com.bellogate.voiceoffreedom.data.datasource.network.NetworkHelper
 import com.bellogate.voiceoffreedom.data.video.SyncVideoManager
+import com.bellogate.voiceoffreedom.model.Audio
 import com.bellogate.voiceoffreedom.util.getDuration
 import java.io.File
 import java.util.concurrent.TimeUnit
@@ -34,5 +36,23 @@ class AudioRepository(context: Context): BaseRepository(context) {
         WorkManager
             .getInstance(context)
             .enqueueUniqueWork("syncAudio", ExistingWorkPolicy.REPLACE, uploadWorkRequest)
+    }
+
+
+    /*** Deletes the audio object in FireStore and then audio file in storage ***/
+    fun deleteAudio(audio: Audio, response:(Boolean, String?)-> Unit){
+        NetworkHelper.deleteAudio(audio) { aSuccess, aErrorMessage ->
+            if(aSuccess){
+                NetworkHelper.deleteAudioFile(audio) { bSuccess, bErrorMessage ->
+                    if(bSuccess){
+                        response.invoke(true, null)
+                    }else{
+                        response.invoke(false, bErrorMessage)
+                    }
+                }
+            }else{
+                response.invoke(false, aErrorMessage)
+            }
+        }
     }
 }

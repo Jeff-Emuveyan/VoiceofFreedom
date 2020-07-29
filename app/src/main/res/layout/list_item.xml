@@ -37,7 +37,7 @@
       android:layout_marginStart="8dp"
       android:layout_marginEnd="8dp"
       android:layout_marginTop="6dp"
-      app:layout_constraintEnd_toStartOf="@+id/ivCancel"
+      app:layout_constraintEnd_toStartOf="@+id/ivMenu"
       app:layout_constraintStart_toEndOf="@+id/shimmer"
       app:layout_constraintTop_toTopOf="@+id/shimmer"
       app:layout_constraintBottom_toBottomOf="@id/shimmer">
@@ -74,14 +74,14 @@
 
 
   <ImageView
-      android:id="@+id/ivCancel"
+      android:id="@+id/ivMenu"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_margin="8dp"
       app:layout_constraintBottom_toBottomOf="@+id/shimmer"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintTop_toTopOf="@+id/shimmer"
-      app:srcCompat="@drawable/ic_cancel" />
+      app:srcCompat="@drawable/ic_vert" />
 
 
   <View

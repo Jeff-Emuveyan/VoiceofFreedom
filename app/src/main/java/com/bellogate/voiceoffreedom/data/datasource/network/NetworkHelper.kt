@@ -255,6 +255,35 @@ class NetworkHelper {
         }
 
 
+
+        /*** Deletes the audio object in firestore ***/
+        fun deleteAudio(it: Audio, response:(Boolean, String?)-> Unit){
+            db.collection(AUDIOS).document(it.dateInMilliSeconds!!)
+                .delete()
+                .addOnSuccessListener {
+                    response.invoke(true, null)
+                }
+                .addOnFailureListener { e ->
+                    response.invoke(false, e.message)
+                }
+        }
+
+
+        /*** Deletes the actual video file in storage ***/
+        fun deleteAudioFile(it: Audio, response:(Boolean, String?)-> Unit){
+            val storage = Firebase.storage
+            val reference = storage.reference
+
+            val imageRef: StorageReference = reference.child("${AUDIOS}/${it.dateInMilliSeconds}")
+            imageRef.delete()
+                .addOnSuccessListener {
+                    response.invoke(true, null)
+                }.addOnFailureListener { e ->
+                    response.invoke(false, e.message)
+                }
+        }
+
+
     }
 
 }

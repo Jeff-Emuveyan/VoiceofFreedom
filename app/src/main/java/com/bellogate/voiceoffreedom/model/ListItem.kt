@@ -15,7 +15,7 @@ class ListItem(v: View): RecyclerView.ViewHolder(v)  {
     lateinit var itemLayout: ConstraintLayout
     lateinit var shimmer: ShimmerFrameLayout
     lateinit var ivThumbnail: ImageView
-    lateinit var ivDeleteVideo: ImageView
+    lateinit var ivMenu: ImageView
     lateinit var tvTitle: TextView
     lateinit var tvDuration: TextView
     lateinit var tvDate: TextView
@@ -32,6 +32,6 @@ class ListItem(v: View): RecyclerView.ViewHolder(v)  {
         tvTitle = view.findViewById(R.id.tvTitle)
         tvDuration = view.findViewById(R.id.tvDuration)
         tvDate = view.findViewById(R.id.tvDate)
-        ivDeleteVideo = view.findViewById(R.id.ivCancel)
+        ivMenu = view.findViewById(R.id.ivMenu)
     }
 }

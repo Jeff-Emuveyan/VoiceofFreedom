@@ -51,6 +51,9 @@ class AudioFragment : Fragment() {
                 //If the user is an Admin, the MainActivity will add a menu item to 'Add audio'
                 sharedViewModel.topMenuController.value = Fragments.AUDIO
             }
+
+            //fetch audio:
+            fetchAudios(viewLifecycleOwner)
         })
 
 
@@ -66,8 +69,6 @@ class AudioFragment : Fragment() {
             }
         })
 
-        //fetch audio:
-        fetchAudios(viewLifecycleOwner)
     }
 
     private fun fetchAudios(lifecycleOwner: LifecycleOwner) {

@@ -30,7 +30,7 @@ import org.jetbrains.anko.support.v4.toast
 
 class VideoFragment : Fragment() {
 
-    private var videoLink: String? = null
+    private var video: Video? = null
     lateinit var viewModel: VideoViewModel
     private lateinit var sharedViewModel: SharedViewModel
     private var videoListAdapter: VideoListAdapter? = null
@@ -105,9 +105,9 @@ class VideoFragment : Fragment() {
                 playVideo(it)
             }, videoItemClicked = {
                 playVideo(it)
-            }){videoUrl ->
-            videoLink = videoUrl
-            downloadFile(requireActivity(), videoUrl)
+            }){video ->
+            this.video = video
+            downloadFile(requireActivity(), video.title!!, video.videoUrl!!)
         }
 
 
@@ -188,7 +188,7 @@ class VideoFragment : Fragment() {
                         return
                     }
                 }
-                downloadFile(requireActivity(), videoLink!!)
+                downloadFile(requireActivity(), video!!.title!!, video!!.videoUrl!!)
             }
         }
     }

@@ -12,6 +12,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bellogate.voiceoffreedom.R
+import com.bellogate.voiceoffreedom.model.Audio
 import com.bellogate.voiceoffreedom.model.User
 import com.bellogate.voiceoffreedom.ui.SharedViewModel
 import com.bellogate.voiceoffreedom.util.*
@@ -24,7 +25,7 @@ class AudioFragment : Fragment() {
         fun newInstance() = AudioFragment()
     }
 
-    private var audioLink: String? = null
+    private var audio: Audio? = null
     private lateinit var viewModel: AudioViewModel
     private lateinit var sharedViewModel: SharedViewModel
     private var audioListAdapter: AudioListAdapter? = null
@@ -78,9 +79,9 @@ class AudioFragment : Fragment() {
 
         }, audioItemClicked = {
                 viewModel.playAudio(parentFragmentManager, it)
-        }){audioUrl ->
-            audioLink = audioUrl
-            downloadFile(requireActivity(), audioLink!!)
+        }){audio ->
+            this.audio = audio
+            downloadFile(requireActivity(), this.audio!!.title!!, this.audio!!.audioUrl!!)
         }
 
         recyclerView.adapter = audioListAdapter
@@ -131,7 +132,7 @@ class AudioFragment : Fragment() {
                         return
                     }
                 }
-                downloadFile(requireActivity(), audioLink!!)
+                downloadFile(requireActivity(), audio!!.title!!, audio!!.audioUrl!!)
             }
         }
     }

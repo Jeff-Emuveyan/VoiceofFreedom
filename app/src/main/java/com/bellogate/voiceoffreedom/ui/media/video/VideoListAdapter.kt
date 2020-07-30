@@ -34,7 +34,7 @@ class VideoListAdapter(options: FirestorePagingOptions<Video>): FirestorePagingA
     private lateinit var videoItemClicked : (Video)-> Unit
     private lateinit var firstVideoReady : (Video)-> Unit
     private lateinit var uiState : (ListUIState)-> Unit
-    private lateinit var downloadVideo:(url: String)->Unit
+    private lateinit var downloadVideo:(video: Video)->Unit
 
 
     constructor(context: Context,
@@ -43,7 +43,7 @@ class VideoListAdapter(options: FirestorePagingOptions<Video>): FirestorePagingA
                 uiState : (ListUIState)-> Unit,
                 firstVideoReady : (Video)-> Unit,
                 videoItemClicked : (Video)-> Unit,
-                downloadVideo: (String)->Unit ): this(options){
+                downloadVideo: (Video)-> Unit ): this(options){
 
         this.context = context
         this.user = user
@@ -137,7 +137,7 @@ class VideoListAdapter(options: FirestorePagingOptions<Video>): FirestorePagingA
                             deleteVideo()
                         }
                         R.id.download_item -> {
-                            downloadVideo.invoke(video.videoUrl!!)
+                            downloadVideo.invoke(video)
                         }
                     }
                 }

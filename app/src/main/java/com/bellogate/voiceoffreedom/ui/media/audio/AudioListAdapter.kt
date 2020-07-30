@@ -25,14 +25,14 @@ class AudioListAdapter(options: FirestorePagingOptions<Audio>): FirestorePagingA
     private var user: User? = null
     private lateinit var audioItemClicked : (Audio)-> Unit
     private lateinit var uiState : (ListUIState)-> Unit
-    private lateinit var downloadVideo:(url: String)->Unit
+    private lateinit var downloadVideo:(audio: Audio)->Unit
 
     constructor(context: Context,
                 options: FirestorePagingOptions<Audio>,
                 user: User?,
                 uiState : (ListUIState)-> Unit,
                 audioItemClicked : (Audio)-> Unit,
-                downloadVideo: (String)->Unit): this(options){
+                downloadVideo: (Audio)->Unit): this(options){
 
         this.context = context
         this.user = user
@@ -110,7 +110,7 @@ class AudioListAdapter(options: FirestorePagingOptions<Audio>): FirestorePagingA
                             deleteAudio()
                         }
                         R.id.download_item -> {
-                           downloadVideo.invoke(audio.audioUrl!!)
+                           downloadVideo.invoke(audio)
                         }
                     }
                 }
@@ -121,10 +121,6 @@ class AudioListAdapter(options: FirestorePagingOptions<Audio>): FirestorePagingA
             uiState.invoke(ListUIState.NO_VIDEOS)
         }
     }
-
-
-
-  //  private fun downloadAudio(audioUrl: String?) = downloadFile(context!!, audioUrl!!)
 
 
     override fun onLoadingStateChanged(state: LoadingState) {

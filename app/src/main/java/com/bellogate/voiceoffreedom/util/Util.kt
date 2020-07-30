@@ -426,7 +426,7 @@ fun showMediaPopUpMenu(context: Context, user: User?, view: View, onMenuClicked:
 
 
 /**** Used to download a file (audio or video) ***/
-fun Fragment.downloadFile(context: Context, url: String){
+fun Fragment.downloadFile(context: Context, title: String, url: String){
 
     if(verifyStoragePermissions(context)){
         showAlert(context, "Download file?", "Do you want to download this file?") {
@@ -434,7 +434,7 @@ fun Fragment.downloadFile(context: Context, url: String){
             val downloadManager = context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
             val uri = Uri.parse(url)
             val request = DownloadManager.Request(uri);
-            request.setTitle("Voice of Freedom");
+            request.setTitle(getProperTitle(title))
             request.setDescription("Downloading file...");
             request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
             request.setDestinationInExternalPublicDir(
@@ -447,6 +447,15 @@ fun Fragment.downloadFile(context: Context, url: String){
 
 }
 
+
+private fun getProperTitle(title: String): String{
+    return if(title.contains(".")){
+        //eg helloWorld.mp3 proper title should be helloworld
+        title.substring(0, title.length -4)
+    }else{
+        title
+    }
+}
 
 
 private fun Fragment.verifyStoragePermissions(context: Context?): Boolean { // Check if we have read or write permission

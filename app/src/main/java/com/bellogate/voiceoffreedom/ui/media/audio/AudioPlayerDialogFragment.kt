@@ -132,7 +132,7 @@ class AudioPlayerDialogFragment(var audio: Audio): DialogFragment() {
 
             }else if(playbackState == ExoPlayer.STATE_READY){
                 progressBar.visibility = View.INVISIBLE
-                tvMessage.visibility = View.INVISIBLE
+                tvMessage.visibility = View.VISIBLE
                 tvMessage.text = getString(R.string.audio_playing)
             }
 

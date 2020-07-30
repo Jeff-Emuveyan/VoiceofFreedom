@@ -1,10 +1,11 @@
 package com.bellogate.voiceoffreedom.util
 
+import android.Manifest
 import android.app.*
 import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.content.pm.ActivityInfo
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.media.MediaPlayer
 import android.media.RingtoneManager
@@ -22,9 +23,10 @@ import android.widget.FrameLayout
 import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.navigation.fragment.findNavController
@@ -43,6 +45,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.greentoad.turtlebody.mediapicker.MediaPicker
 import com.greentoad.turtlebody.mediapicker.core.MediaPickerConfig
 import kotlinx.coroutines.CoroutineScope
+import org.jetbrains.anko.support.v4.toast
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.text.DateFormatSymbols
@@ -57,6 +60,7 @@ const val Progress = "progress"
 const val TotalFileSize = "total"
 const val UUID = "uuid"
 const val NO_VALUE_SET = -1L
+const val REQUEST_DOWNLOAD_PERMISSIONS = 888
 
 //WorkManager tags
 const val SYNC_VIDEO = "sync_video"
@@ -419,16 +423,49 @@ fun showMediaPopUpMenu(context: Context, user: User?, view: View, onMenuClicked:
 
 }
 
+
+
 /**** Used to download a file (audio or video) ***/
-fun downloadFile(context: Context, url: String){
-    showAlert(context, "Download file?", "Do you want to download this file?"){
-        val downloadManager =  context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
-        val uri = Uri.parse(url)
-        val request = DownloadManager.Request(uri);
-        request.setTitle("Voice of Freedom");
-        request.setDescription("Downloading file...");
-        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
-        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, uri.lastPathSegment);
-        downloadManager.enqueue(request)
+fun Fragment.downloadFile(context: Context, url: String){
+
+    if(verifyStoragePermissions(context)){
+        showAlert(context, "Download file?", "Do you want to download this file?") {
+            toast("Downloading...")
+            val downloadManager = context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
+            val uri = Uri.parse(url)
+            val request = DownloadManager.Request(uri);
+            request.setTitle("Voice of Freedom");
+            request.setDescription("Downloading file...");
+            request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+            request.setDestinationInExternalPublicDir(
+                Environment.DIRECTORY_DOWNLOADS,
+                uri.lastPathSegment
+            );
+            downloadManager.enqueue(request)
+        }
+    }
+
+}
+
+
+
+private fun Fragment.verifyStoragePermissions(context: Context?): Boolean { // Check if we have read or write permission
+    // Storage Permissions variables
+    val permissions = arrayOf(
+        Manifest.permission.READ_EXTERNAL_STORAGE,
+        Manifest.permission.WRITE_EXTERNAL_STORAGE)
+
+    val writePermission = ActivityCompat.checkSelfPermission(context!!, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+    val readPermission = ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE)
+
+    return if (writePermission != PackageManager.PERMISSION_GRANTED
+        || readPermission != PackageManager.PERMISSION_GRANTED) { // We don't have permission so prompt the user
+
+        requestPermissions(
+            permissions,
+            REQUEST_DOWNLOAD_PERMISSIONS)
+        false
+    }else{
+        true
     }
 }

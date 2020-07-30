@@ -13,18 +13,24 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bellogate.voiceoffreedom.R
 import com.bellogate.voiceoffreedom.model.User
 import com.bellogate.voiceoffreedom.model.ListUIState
+import com.bellogate.voiceoffreedom.model.Video
 import com.bellogate.voiceoffreedom.ui.SharedViewModel
 import com.bellogate.voiceoffreedom.util.Fragments
+import com.bellogate.voiceoffreedom.util.REQUEST_DOWNLOAD_PERMISSIONS
+import com.bellogate.voiceoffreedom.util.downloadFile
+import com.bellogate.voiceoffreedom.util.showAlert
 import com.google.android.exoplayer2.ExoPlaybackException
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.util.Util
 import kotlinx.android.synthetic.main.video_fragment.*
+import org.jetbrains.anko.support.v4.toast
 
 
 class VideoFragment : Fragment() {
 
+    private var videoLink: String? = null
     lateinit var viewModel: VideoViewModel
     private lateinit var sharedViewModel: SharedViewModel
     private var videoListAdapter: VideoListAdapter? = null
@@ -67,6 +73,7 @@ class VideoFragment : Fragment() {
         })
 
         setUpUIState(ListUIState.LOADING)//default until a response comes.
+
     }
 
 
@@ -98,7 +105,11 @@ class VideoFragment : Fragment() {
                 playVideo(it)
             }, videoItemClicked = {
                 playVideo(it)
-            } )
+            }){videoUrl ->
+            videoLink = videoUrl
+            downloadFile(requireActivity(), videoUrl)
+        }
+
 
         recyclerView.adapter = videoListAdapter
     }
@@ -163,6 +174,22 @@ class VideoFragment : Fragment() {
 
         override fun onPlayerError(error: ExoPlaybackException) {
             setUpUIState(ListUIState.ERROR)
+        }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+        if(requestCode == REQUEST_DOWNLOAD_PERMISSIONS){
+            if (grantResults.isNotEmpty()) {
+                for (value in grantResults) {
+                    if (value == -1) {
+                        showAlert( "Permissions", "Please grant all permissions")
+                        return
+                    }
+                }
+                downloadFile(requireActivity(), videoLink!!)
+            }
         }
     }
 }

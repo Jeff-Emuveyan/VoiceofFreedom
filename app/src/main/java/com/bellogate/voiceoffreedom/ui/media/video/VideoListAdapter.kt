@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.FragmentActivity
 import com.bellogate.voiceoffreedom.R
 import com.bellogate.voiceoffreedom.data.video.VideoRepository
 import com.bellogate.voiceoffreedom.model.User
@@ -27,27 +28,30 @@ import java.lang.Exception
 /*** Reference: https://github.com/firebase/FirebaseUI-Android/blob/master/firestore/README.md ***/
 class VideoListAdapter(options: FirestorePagingOptions<Video>): FirestorePagingAdapter<Video, ListItem>(options) {
 
+
     private var context: Context? = null
     private var user: User? = null
     private lateinit var videoItemClicked : (Video)-> Unit
     private lateinit var firstVideoReady : (Video)-> Unit
     private lateinit var uiState : (ListUIState)-> Unit
+    private lateinit var downloadVideo:(url: String)->Unit
+
 
     constructor(context: Context,
                 options: FirestorePagingOptions<Video>,
                 user: User?,
                 uiState : (ListUIState)-> Unit,
                 firstVideoReady : (Video)-> Unit,
-                videoItemClicked : (Video)-> Unit): this(options){
+                videoItemClicked : (Video)-> Unit,
+                downloadVideo: (String)->Unit ): this(options){
 
         this.context = context
         this.user = user
         this.uiState = uiState
         this.firstVideoReady = firstVideoReady
         this.videoItemClicked = videoItemClicked
+        this.downloadVideo = downloadVideo
     }
-
-
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListItem {
         val inflater = LayoutInflater.from(context)
@@ -133,7 +137,7 @@ class VideoListAdapter(options: FirestorePagingOptions<Video>): FirestorePagingA
                             deleteVideo()
                         }
                         R.id.download_item -> {
-                            downloadVideo(video.videoUrl)
+                            downloadVideo.invoke(video.videoUrl!!)
                         }
                     }
                 }
@@ -143,10 +147,6 @@ class VideoListAdapter(options: FirestorePagingOptions<Video>): FirestorePagingA
             uiState.invoke(ListUIState.NO_VIDEOS)
         }
     }
-
-
-
-    private fun downloadVideo(videoUrl: String?) = downloadFile(context!!, videoUrl!!)
 
 
     override fun onLoadingStateChanged(state: LoadingState) {

@@ -14,10 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bellogate.voiceoffreedom.R
 import com.bellogate.voiceoffreedom.model.User
 import com.bellogate.voiceoffreedom.ui.SharedViewModel
-import com.bellogate.voiceoffreedom.util.FileUtil
-import com.bellogate.voiceoffreedom.util.Fragments
-import com.bellogate.voiceoffreedom.util.selectAudio
-import com.bellogate.voiceoffreedom.util.showAlert
+import com.bellogate.voiceoffreedom.util.*
 import kotlinx.android.synthetic.main.video_fragment.*
 import java.io.File
 
@@ -27,6 +24,7 @@ class AudioFragment : Fragment() {
         fun newInstance() = AudioFragment()
     }
 
+    private var audioLink: String? = null
     private lateinit var viewModel: AudioViewModel
     private lateinit var sharedViewModel: SharedViewModel
     private var audioListAdapter: AudioListAdapter? = null
@@ -80,7 +78,10 @@ class AudioFragment : Fragment() {
 
         }, audioItemClicked = {
 
-        })
+        }){audioUrl ->
+            audioLink = audioUrl
+            downloadFile(requireActivity(), audioLink!!)
+        }
 
         recyclerView.adapter = audioListAdapter
     }
@@ -116,6 +117,23 @@ class AudioFragment : Fragment() {
         super.onPause()
         //reset the top menu by removing the "Change Image" item:
         sharedViewModel.topMenuController.value = null
+    }
+
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+        if(requestCode == REQUEST_DOWNLOAD_PERMISSIONS){
+            if (grantResults.isNotEmpty()) {
+                for (value in grantResults) {
+                    if (value == -1) {
+                        showAlert( "Permissions", "Please grant all permissions")
+                        return
+                    }
+                }
+                downloadFile(requireActivity(), audioLink!!)
+            }
+        }
     }
 
 }

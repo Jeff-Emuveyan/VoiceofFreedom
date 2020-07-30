@@ -958,6 +958,26 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/../mtn/app/src/main/java/com/sf/biocapture/enums/SpecialDataType.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../mtn/app/src/main/java/com/sf/biocapture/fragments/AdditionalRegistrationFragment.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../mtn/app/src/main/java/com/sf/biocapture/fragments/NewMsisdnRegistrationFragment.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../mtn/app/src/main/java/com/sf/biocapture/fragments/NormalRegistrationFragment.java">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/../mtn/app/src/main/java/com/sf/biocapture/util/UUID.kt">
           <value>
             <set />
@@ -969,6 +989,31 @@
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/../mtn/app/src/main/java/com/sf/biocapture/utility/SessionUtil.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../mtn/app/src/main/java/com/sf/biocapture/utility/VisitorDataManager.kt">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../mtn/app/src/main/java/com/sf/biocapture/utility/VisitorPassportDetailsDialogFragment.kt">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../mtn/app/src/main/java/com/sf/biocapture/utility/VisitorPassportDetailsVerificationDialogFragment.kt">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../mtn/app/src/main/res/layout/new_reg_phone_number_field.xml">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../mtn/app/src/main/res/layout/phone_number_field.xml">
           <value>
             <set />
           </value>

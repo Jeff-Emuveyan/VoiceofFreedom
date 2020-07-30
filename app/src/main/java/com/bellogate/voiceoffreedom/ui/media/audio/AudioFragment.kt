@@ -13,10 +13,14 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bellogate.voiceoffreedom.R
 import com.bellogate.voiceoffreedom.model.Audio
+import com.bellogate.voiceoffreedom.model.ListUIState
 import com.bellogate.voiceoffreedom.model.User
 import com.bellogate.voiceoffreedom.ui.SharedViewModel
+import com.bellogate.voiceoffreedom.ui.media.video.setUpUIState
 import com.bellogate.voiceoffreedom.util.*
+import kotlinx.android.synthetic.main.audio_fragment.*
 import kotlinx.android.synthetic.main.video_fragment.*
+import kotlinx.android.synthetic.main.video_fragment.recyclerView
 import java.io.File
 
 class AudioFragment : Fragment() {
@@ -76,6 +80,17 @@ class AudioFragment : Fragment() {
         recyclerView?.layoutManager = LinearLayoutManager(requireContext())
         audioListAdapter = AudioListAdapter(requireContext(), viewModel.options(lifecycleOwner), user,
             uiState =  {
+                when(it){
+                    ListUIState.FOUND ->{
+                        setUpUIState(ListUIState.FOUND)
+                    }
+                    ListUIState.NO_VIDEOS ->{
+                        setUpUIState(ListUIState.NO_VIDEOS)
+                    }
+                    ListUIState.ERROR ->{
+                        setUpUIState(ListUIState.ERROR)
+                    }
+                }
 
         }, audioItemClicked = {
                 viewModel.playAudio(parentFragmentManager, it)
@@ -85,6 +100,28 @@ class AudioFragment : Fragment() {
         }
 
         recyclerView.adapter = audioListAdapter
+    }
+
+
+
+    private fun setUpUIState(state: ListUIState) {
+
+        progress.visibility = View.INVISIBLE
+
+        when(state){
+
+            ListUIState.FOUND ->{
+                tvMessage.visibility = View.INVISIBLE
+            }
+            ListUIState.NO_VIDEOS ->{
+                tvMessage.visibility = View.VISIBLE
+                tvMessage.text = getString(R.string.no_audio_files)
+            }
+            ListUIState.ERROR ->{
+                tvMessage.visibility = View.VISIBLE
+                tvMessage.text = getString(R.string.network_error)
+            }
+        }
     }
 
 

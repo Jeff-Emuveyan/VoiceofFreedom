@@ -63,4 +63,5 @@
     <string name="audio_error">Error, try again</string>
     <string name="audio_loading">Loading...</string>
     <string name="audio_playing">Now Playing...</string>
+    <string name="no_audio_files">No audio files</string>
 </resources>

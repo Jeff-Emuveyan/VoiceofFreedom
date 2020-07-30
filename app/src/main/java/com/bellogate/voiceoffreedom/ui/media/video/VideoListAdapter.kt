@@ -13,6 +13,7 @@ import com.bellogate.voiceoffreedom.model.User
 import com.bellogate.voiceoffreedom.model.Video
 import com.bellogate.voiceoffreedom.model.ListItem
 import com.bellogate.voiceoffreedom.model.ListUIState
+import com.bellogate.voiceoffreedom.ui.media.audio.AudioListAdapter
 import com.bellogate.voiceoffreedom.util.downloadFile
 import com.bellogate.voiceoffreedom.util.getSimpleDateFormat
 import com.bellogate.voiceoffreedom.util.showAlert
@@ -153,17 +154,26 @@ class VideoListAdapter(options: FirestorePagingOptions<Video>): FirestorePagingA
         when (state) {
 
             LoadingState.LOADING_INITIAL ->{// this is the first method to be called.
+                //It does not mean that a video has been found, it just means that the loading
+                //process has began
                 Log.e(VideoListAdapter::class.java.simpleName, "LOADING_INITIAL")
-                uiState.invoke(ListUIState.FOUND)
+
             }
 
-            LoadingState.LOADED ->{
-                Log.e(VideoListAdapter::class.java.simpleName, "LOADING")
+            LoadingState.LOADED ->{//this means that at least one video item has been found
+                Log.e(VideoListAdapter::class.java.simpleName, "LOADED")
+                uiState.invoke(ListUIState.FOUND)
             }
 
             LoadingState.FINISHED ->{// this is the last method to be called after it has loaded all data from firestore
                 //(pagination included)
                 Log.e(VideoListAdapter::class.java.simpleName, "LOADING FINISHED")
+
+                if(itemCount == 0){//this means that there is no data to show on the recycler view
+                    //because no data was found in the server. So:
+                    uiState.invoke(ListUIState.NO_VIDEOS)
+                    Log.e(AudioListAdapter::class.java.simpleName, "NO DATA FOUND")
+                }
             }
 
             LoadingState.LOADING_MORE ->{

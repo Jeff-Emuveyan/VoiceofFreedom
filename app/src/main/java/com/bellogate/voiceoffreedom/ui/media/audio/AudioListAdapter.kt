@@ -127,17 +127,25 @@ class AudioListAdapter(options: FirestorePagingOptions<Audio>): FirestorePagingA
         when (state) {
 
             LoadingState.LOADING_INITIAL ->{// this is the first method to be called.
+                //It does not mean that a audio has been found, it just means that the loading
+                //process has began
                 Log.e(AudioListAdapter::class.java.simpleName, "LOADING_INITIAL")
-                uiState.invoke(ListUIState.FOUND)
             }
 
-            LoadingState.LOADED ->{
-                Log.e(AudioListAdapter::class.java.simpleName, "LOADING")
+            LoadingState.LOADED ->{//this means that at least one video item has been found
+                Log.e(AudioListAdapter::class.java.simpleName, "LOADED")
+                uiState.invoke(ListUIState.FOUND)
             }
 
             LoadingState.FINISHED ->{// this is the last method to be called after it has loaded all data from firestore
                 //(pagination included)
                 Log.e(AudioListAdapter::class.java.simpleName, "LOADING FINISHED")
+
+                if(itemCount == 0){//this means that there is no data to show on the recycler view
+                    //because no data was found in the server. So:
+                    uiState.invoke(ListUIState.NO_VIDEOS)
+                    Log.e(AudioListAdapter::class.java.simpleName, "NO DATA FOUND")
+                }
             }
 
             LoadingState.LOADING_MORE ->{

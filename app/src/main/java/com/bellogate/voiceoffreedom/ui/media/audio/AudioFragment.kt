@@ -77,7 +77,7 @@ class AudioFragment : Fragment() {
             uiState =  {
 
         }, audioItemClicked = {
-
+                viewModel.playAudio(parentFragmentManager, it)
         }){audioUrl ->
             audioLink = audioUrl
             downloadFile(requireActivity(), audioLink!!)

@@ -60,4 +60,7 @@
     <string name="add_audio">Add audio</string>
     <string name="download_item">Download</string>
     <string name="delete_item">Delete</string>
+    <string name="audio_error">Error, try again</string>
+    <string name="audio_loading">Loading...</string>
+    <string name="audio_playing">Now Playing...</string>
 </resources>

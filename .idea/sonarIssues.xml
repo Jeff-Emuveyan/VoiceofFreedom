@@ -588,7 +588,22 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/java/com/bellogate/voiceoffreedom/ui/media/audio/AudioPlayerDialogFragment.kt">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/java/com/bellogate/voiceoffreedom/ui/media/audio/AudioPlayerDialogFragmentModel.kt">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/app/src/main/java/com/bellogate/voiceoffreedom/ui/media/audio/AudioViewModel.kt">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/java/com/bellogate/voiceoffreedom/ui/media/video/MediaUtil.kt">
           <value>
             <set />
           </value>
@@ -729,6 +744,11 @@
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/app/src/main/res/layout/audio_fragment.xml">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/res/layout/audio_player_layout.xml">
           <value>
             <set />
           </value>
@@ -958,6 +978,11 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/../mtn/app/src/main/java/com/sf/biocapture/datacapture/portrait/NewCameraActivity.kt">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/../mtn/app/src/main/java/com/sf/biocapture/enums/SpecialDataType.java">
           <value>
             <set />
@@ -974,6 +999,11 @@
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/../mtn/app/src/main/java/com/sf/biocapture/fragments/NormalRegistrationFragment.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../mtn/app/src/main/java/com/sf/biocapture/role/Role.java">
           <value>
             <set />
           </value>

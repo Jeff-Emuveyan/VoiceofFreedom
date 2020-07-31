@@ -9,10 +9,9 @@ import android.widget.Toast
 import com.bellogate.voiceoffreedom.R
 import com.bellogate.voiceoffreedom.data.audio.AudioRepository
 import com.bellogate.voiceoffreedom.model.*
-import com.bellogate.voiceoffreedom.util.downloadFile
 import com.bellogate.voiceoffreedom.util.getSimpleDateFormat
 import com.bellogate.voiceoffreedom.util.showAlert
-import com.bellogate.voiceoffreedom.util.showMediaPopUpMenu
+import com.bellogate.voiceoffreedom.util.showPopUpMenu
 import com.firebase.ui.firestore.paging.FirestorePagingAdapter
 import com.firebase.ui.firestore.paging.FirestorePagingOptions
 import com.firebase.ui.firestore.paging.LoadingState
@@ -104,7 +103,7 @@ class AudioListAdapter(options: FirestorePagingOptions<Audio>): FirestorePagingA
 
             holder.ivMenu.setOnClickListener {
                 val s = 10
-                showMediaPopUpMenu(context!!, user, holder.ivMenu){
+                showPopUpMenu(R.menu.popup_menu, context!!, user, holder.ivMenu){
                     when (it.itemId) {
                         R.id.delete_item -> {
                             deleteAudio()

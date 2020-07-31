@@ -405,15 +405,18 @@ private fun createNotificationChannel(context: Context) { //If you don't call th
 }
 
 
-fun showMediaPopUpMenu(context: Context, user: User?, view: View, onMenuClicked: (MenuItem)-> Unit){
+fun showPopUpMenu(menu: Int, context: Context, user: User?, view: View, onMenuClicked: (MenuItem)-> Unit){
 
     val popupMenu = PopupMenu(context, view)
-    popupMenu.menuInflater.inflate(R.menu.popup_menu, popupMenu.menu)
+    popupMenu.menuInflater.inflate(menu, popupMenu.menu)
 
-    //control menu items based on the user's privilege:
-    if(user == null || !user.isAdmin){//user should not see the delete menu:
-        popupMenu.menu.getItem(1).isVisible = false
+    if(menu == R.menu.popup_menu) {
+        //control menu items based on the user's privilege:
+        if (user == null || !user.isAdmin) {//user should not see the delete menu:
+            popupMenu.menu.getItem(1).isVisible = false
+        }
     }
+
     popupMenu.setOnMenuItemClickListener {
         onMenuClicked.invoke(it)
         true
@@ -425,7 +428,7 @@ fun showMediaPopUpMenu(context: Context, user: User?, view: View, onMenuClicked:
 
 
 
-/**** Used to download a file (audio or video) ***/
+/**** Used to download a file (audio or video or devotional) ***/
 fun Fragment.downloadFile(context: Context, title: String, url: String){
 
     if(verifyStoragePermissions(context)){
@@ -478,3 +481,15 @@ private fun Fragment.verifyStoragePermissions(context: Context?): Boolean { // C
         true
     }
 }
+
+
+fun share(context: Context, textToShare: String){
+
+        val shareIntent = Intent(Intent.ACTION_SEND);
+        shareIntent.type = "text/plain";
+        shareIntent.putExtra(Intent.EXTRA_SUBJECT, "Voice of Freedom");
+        shareIntent.putExtra(Intent.EXTRA_TEXT, textToShare);
+
+        context.startActivity(Intent.createChooser(shareIntent, "Share via"));
+
+    }

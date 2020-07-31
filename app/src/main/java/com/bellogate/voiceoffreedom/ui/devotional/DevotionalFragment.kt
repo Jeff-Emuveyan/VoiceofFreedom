@@ -12,6 +12,8 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.bellogate.voiceoffreedom.R
+import com.bellogate.voiceoffreedom.data.datasource.network.NetworkHelper.Companion.deleteVideo
+import com.bellogate.voiceoffreedom.model.Devotional
 import com.bellogate.voiceoffreedom.model.User
 import com.bellogate.voiceoffreedom.ui.SharedViewModel
 import com.bellogate.voiceoffreedom.ui.devotional.util.DevotionalUIState
@@ -30,6 +32,7 @@ class DevotionalFragment : Fragment(), OnDateSetListener {
     private var imageUrl : String? = ""
     private var imageHasSuccessfullyLoaded = false
     private var user: User? = null
+    private var devotional: Devotional? = null
 
 
     override fun onCreateView(
@@ -56,12 +59,25 @@ class DevotionalFragment : Fragment(), OnDateSetListener {
         viewModel.devotional.observe(viewLifecycleOwner, Observer {
             setUpUIState(it.first, date, it.second?.bitmapUrlLink)
 
-            val devotional = it.second
+            devotional = it.second
             buttonDelete.setOnClickListener {
                 alertWithAction("Delete", "Delete this devotional?") { confirmed ->
                     if (confirmed) {
                         setUpUIState(DevotionalUIState.DELETE_IN_PROGRESS, date, null)
                         viewModel.deleteDevotional(requireContext(), devotional)
+                    }
+                }
+            }
+
+            ivMenu.setOnClickListener { ivMenu ->
+                showPopUpMenu(R.menu.devotional_menu, requireContext(), user, ivMenu){menuItem ->
+                    when (menuItem.itemId) {
+                        R.id.download_item -> {
+                            downloadFile(requireContext(), "Devotional_${devotional!!.dateInSimpleFormat}", devotional!!.bitmapUrlLink)
+                        }
+                        R.id.share_item -> {
+                            share(requireContext(), devotional!!.bitmapUrlLink)
+                        }
                     }
                 }
             }
@@ -127,6 +143,7 @@ class DevotionalFragment : Fragment(), OnDateSetListener {
                 buttonRetry.visibility = View.INVISIBLE
                 tvNoDataFoundForDate.visibility = View.INVISIBLE
                 buttonDelete.visibility = View.INVISIBLE
+                ivMenu.visibility = View.INVISIBLE
             }
             DevotionalUIState.FOUND -> {
                 if(imageUrl != null){
@@ -151,6 +168,7 @@ class DevotionalFragment : Fragment(), OnDateSetListener {
                 buttonRetry.visibility = View.INVISIBLE
                 tvNoDataFoundForDate.visibility = View.INVISIBLE
                 buttonDelete.visibility = View.VISIBLE
+                ivMenu.visibility = View.VISIBLE
             }
             DevotionalUIState.FAILED_TO_LOAD ->{
                 shimmer.stopShimmer()
@@ -160,6 +178,7 @@ class DevotionalFragment : Fragment(), OnDateSetListener {
                 Toast.makeText(requireContext(), "Failed, try again", Toast.LENGTH_LONG).show()
                 tvNoDataFoundForDate.visibility = View.INVISIBLE
                 buttonDelete.visibility = View.INVISIBLE
+                ivMenu.visibility = View.INVISIBLE
             }
             DevotionalUIState.NO_DATA_FOR_SELECTED_DATE ->{
                 shimmer.stopShimmer()
@@ -168,6 +187,7 @@ class DevotionalFragment : Fragment(), OnDateSetListener {
                 buttonRetry.visibility = View.VISIBLE
                 tvNoDataFoundForDate.visibility = View.VISIBLE
                 buttonDelete.visibility = View.INVISIBLE
+                ivMenu.visibility = View.INVISIBLE
             }
 
             DevotionalUIState.DELETE_IN_PROGRESS ->{
@@ -175,6 +195,7 @@ class DevotionalFragment : Fragment(), OnDateSetListener {
                 buttonDelete.visibility = View.INVISIBLE
                 buttonDate.isEnabled = false
                 buttonRetry.isEnabled = false
+                ivMenu.visibility = View.INVISIBLE
             }
 
             DevotionalUIState.DELETE_COMPLETE ->{
@@ -182,6 +203,7 @@ class DevotionalFragment : Fragment(), OnDateSetListener {
                 buttonDelete.visibility = View.VISIBLE
                 buttonDate.isEnabled = true
                 buttonRetry.isEnabled = true
+                ivMenu.visibility = View.INVISIBLE
             }
         }
 
@@ -213,5 +235,22 @@ class DevotionalFragment : Fragment(), OnDateSetListener {
         super.onPause()
         //reset thr top menu by removinng the "Add devotional" item:
         sharedViewModel.topMenuController.value = null
+    }
+
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+        if(requestCode == REQUEST_DOWNLOAD_PERMISSIONS){
+            if (grantResults.isNotEmpty()) {
+                for (value in grantResults) {
+                    if (value == -1) {
+                        showAlert( "Permissions", "Please grant all permissions")
+                        return
+                    }
+                }
+                downloadFile(requireContext(), "Devotional_${devotional!!.dateInSimpleFormat}", devotional!!.bitmapUrlLink)
+            }
+        }
     }
 }

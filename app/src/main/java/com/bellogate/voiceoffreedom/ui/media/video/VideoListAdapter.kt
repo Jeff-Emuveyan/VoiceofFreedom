@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.fragment.app.FragmentActivity
 import com.bellogate.voiceoffreedom.R
 import com.bellogate.voiceoffreedom.data.video.VideoRepository
 import com.bellogate.voiceoffreedom.model.User
@@ -14,10 +13,9 @@ import com.bellogate.voiceoffreedom.model.Video
 import com.bellogate.voiceoffreedom.model.ListItem
 import com.bellogate.voiceoffreedom.model.ListUIState
 import com.bellogate.voiceoffreedom.ui.media.audio.AudioListAdapter
-import com.bellogate.voiceoffreedom.util.downloadFile
 import com.bellogate.voiceoffreedom.util.getSimpleDateFormat
 import com.bellogate.voiceoffreedom.util.showAlert
-import com.bellogate.voiceoffreedom.util.showMediaPopUpMenu
+import com.bellogate.voiceoffreedom.util.showPopUpMenu
 import com.firebase.ui.firestore.paging.FirestorePagingAdapter
 import com.firebase.ui.firestore.paging.FirestorePagingOptions
 import com.firebase.ui.firestore.paging.LoadingState
@@ -132,7 +130,7 @@ class VideoListAdapter(options: FirestorePagingOptions<Video>): FirestorePagingA
 
 
             holder.ivMenu.setOnClickListener {
-                showMediaPopUpMenu(context!!, user, holder.ivMenu){
+                showPopUpMenu(R.menu.popup_menu,context!!, user, holder.ivMenu){
                     when (it.itemId) {
                         R.id.delete_item -> {
                             deleteVideo()

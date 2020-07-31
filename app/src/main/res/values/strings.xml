@@ -53,7 +53,11 @@
     <string name="voice_of_freedom_ministries">Voice Of Freedom Ministries Intl.</string>
     <string name="change_image">Change Image</string>
     <string name="about">About</string>
-    <string name="about_message">Discovering and empowering the people with the secrets of Victorious Living.</string>
+    <string name="about_message">The Voice of Freedom Ministries is a dynamic and fast growing Church, dedicated to the total liberation of the lives of men and women from satanic bondages.
+
+The Ministry seeks to break the chains and yokes that seem inextricable in the eyes of many who have been held bound by unseen forces of evil.
+
+Bishop (Dr.) Abraham Chigbundu is the man who God has chosen to pilot the affairs of this unique ministry.</string>
     <string name="video">Video</string>
     <string name="audio_media_messages">Audio media/messages</string>
     <string name="get_to_know_us">Get to know us</string>
@@ -64,4 +68,5 @@
     <string name="audio_loading">Loading...</string>
     <string name="audio_playing">Now Playing...</string>
     <string name="no_audio_files">No audio files</string>
+    <string name="service_times">Service times::</string>
 </resources>

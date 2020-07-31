@@ -31,6 +31,17 @@
             android:icon="@drawable/ic_audio"
             android:title="@string/audio_media_messages" />
 
+        <item
+            android:id="@+id/nav_live"
+            android:icon="@drawable/ic_play_arrow"
+            android:title="@string/live_streaming" />
+
+
+        <item
+            android:id="@+id/nav_branches"
+            android:icon="@drawable/ic_branches"
+            android:title="@string/locate_a_branch" />
+
 
         <item
             android:id="@+id/nav_about"

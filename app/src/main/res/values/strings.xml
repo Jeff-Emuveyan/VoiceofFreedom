@@ -68,5 +68,6 @@ Bishop (Dr.) Abraham Chigbundu is the man who God has chosen to pilot the affair
     <string name="audio_loading">Loading...</string>
     <string name="audio_playing">Now Playing...</string>
     <string name="no_audio_files">No audio files</string>
-    <string name="service_times">Service times::</string>
+    <string name="service_times">Service times:</string>
+    <string name="about_message_long">VFMi Cathedral, Adesuwa Road.\n 21, Adesuwa Road, GRA, Benin City</string>
 </resources>

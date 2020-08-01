@@ -40,6 +40,10 @@ class MainActivity : AppCompatActivity() {
     private var user: User? = null
     private lateinit var broadcastReceiver: SyncDevotionalsReceiver
 
+    companion object{
+        lateinit var navView: NavigationView
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -47,7 +51,7 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
 
         drawerLayout = findViewById(R.id.drawer_layout)
-        val navView: NavigationView = findViewById(R.id.nav_view)
+        navView = findViewById(R.id.nav_view)
         val navController = findNavController(R.id.nav_host_fragment)
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
@@ -57,6 +61,8 @@ class MainActivity : AppCompatActivity() {
             R.id.nav_devotional,
             R.id.nav_video,
             R.id.nav_audio,
+            R.id.nav_live,
+            R.id.nav_branches,
             R.id.nav_about
         ), drawerLayout)
         setupActionBarWithNavController(navController, appBarConfiguration)
@@ -75,7 +81,6 @@ class MainActivity : AppCompatActivity() {
         // So that we can know when to delete the user from db
         //This will trigger anytime the user sign out. Successfully or not.
         sharedViewModel.listenForUserSignOut(this)
-
 
         sharedViewModel.getUser(this, 1).observe(this, Observer {
             //anytime the user has logged in or out, we regulate the menu to show the right items:

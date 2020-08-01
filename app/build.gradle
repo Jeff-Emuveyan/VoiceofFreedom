@@ -165,7 +165,7 @@ dependencies {
 
     //paystack
     implementation 'co.paystack.android.design.widget:pinpad:1.0.4'
-    implementation 'co.paystack.android:paystack:3.0.17'
+    implementation 'co.paystack.android:paystack:3.0.18'
 
     //Shimmer
     implementation 'com.facebook.shimmer:shimmer:0.5.0'

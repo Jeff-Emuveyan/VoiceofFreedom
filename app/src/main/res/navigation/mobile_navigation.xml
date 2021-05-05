@@ -13,14 +13,94 @@
     </fragment>
 
     <fragment
-        android:id="@+id/nav_gallery"
-        android:name="com.bellogate.voiceoffreedom.ui.gallery.GalleryFragment"
-        android:label="@string/menu_gallery"
-        tools:layout="@layout/fragment_gallery" />
+        android:id="@+id/nav_give"
+        android:name="com.bellogate.voiceoffreedom.ui.give.GiveFragment"
+        android:label="@string/give"
+        tools:layout="@layout/give_fragment" >
+        <action
+            android:id="@+id/action_nav_give_to_processCardFragment"
+            app:destination="@id/processCardFragment"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out" />
+    </fragment>
+    <fragment
+        android:id="@+id/processCardFragment"
+        android:name="com.bellogate.voiceoffreedom.ui.give.ProcessCardFragment"
+        android:label="@string/verify"
+        tools:layout="@layout/process_card_fragment" />
 
     <fragment
-        android:id="@+id/nav_slideshow"
-        android:name="com.bellogate.voiceoffreedom.ui.slideshow.SlideshowFragment"
-        android:label="@string/menu_slideshow"
-        tools:layout="@layout/fragment_slideshow" />
+        android:id="@+id/nav_devotional"
+        android:name="com.bellogate.voiceoffreedom.ui.devotional.DevotionalFragment"
+        android:label="@string/devotional"
+        tools:layout="@layout/devotional_fragment" >
+        <action
+            android:id="@+id/action_nav_devotional_to_fullScreenFragment"
+            app:destination="@id/fullScreenFragment"
+            app:exitAnim="@anim/fui_slide_out_left"
+            app:launchSingleTop="false"
+            app:popEnterAnim="@android:anim/slide_in_left" />
+        <action
+            android:id="@+id/action_nav_devotional_to_addDevotionalFragment"
+            app:destination="@id/addDevotionalFragment"
+            app:exitAnim="@anim/fui_slide_out_left"
+            app:popEnterAnim="@android:anim/slide_in_left" />
+    </fragment>
+    <fragment
+        android:id="@+id/fullScreenFragment"
+        android:name="com.bellogate.voiceoffreedom.ui.devotional.FullScreenFragment"
+        android:label="Enlarge"
+        tools:layout="@layout/fragment_full_screen" />
+
+    <fragment
+        android:id="@+id/addDevotionalFragment"
+        android:name="com.bellogate.voiceoffreedom.ui.devotional.add.AddDevotionalFragment"
+        android:label="Add Devotional"
+        tools:layout="@layout/add_devotional_fragment" />
+
+    <fragment
+        android:id="@+id/nav_video"
+        android:name="com.bellogate.voiceoffreedom.ui.media.video.VideoFragment"
+        android:label="Media"
+        tools:layout="@layout/video_fragment" >
+        <action
+            android:id="@+id/action_nav_media_to_addVideoFragment"
+            app:destination="@id/addVideoFragment"
+            app:exitAnim="@anim/fui_slide_out_left"
+            app:launchSingleTop="false"
+            app:popEnterAnim="@android:anim/slide_in_left"/>
+    </fragment>
+    <fragment
+        android:id="@+id/addVideoFragment"
+        android:name="com.bellogate.voiceoffreedom.ui.media.video.add.AddVideoFragment"
+        android:label="Add video"
+        tools:layout="@layout/add_video_fragment" />
+
+    <fragment
+        android:id="@+id/nav_about"
+        android:name="com.bellogate.voiceoffreedom.ui.AboutFragment"
+        android:label="About"
+        tools:layout="@layout/fragment_about" />
+
+    <fragment
+        android:id="@+id/nav_audio"
+        android:name="com.bellogate.voiceoffreedom.ui.media.audio.AudioFragment"
+        android:label="Audio media"
+        tools:layout="@layout/audio_fragment" />
+
+    <fragment
+        android:id="@+id/nav_live"
+        android:name="com.bellogate.voiceoffreedom.ui.WebViewFragment"
+        android:label="@string/app_name"
+        tools:layout="@layout/fragment_webview" />
+
+
+    <fragment
+        android:id="@+id/nav_branches"
+        android:name="com.bellogate.voiceoffreedom.ui.WebViewFragment"
+        android:label="@string/app_name"
+        tools:layout="@layout/fragment_webview" />
+
 </navigation>

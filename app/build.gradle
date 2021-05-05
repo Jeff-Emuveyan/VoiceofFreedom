@@ -3,6 +3,8 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'com.google.gms.google-services'
+// Apply the Crashlytics Gradle plugin
+apply plugin: 'com.google.firebase.crashlytics'
 
 android {
     compileSdkVersion 29
@@ -10,18 +12,23 @@ android {
 
     defaultConfig {
         applicationId "com.bellogate.voiceoffreedom"
-        minSdkVersion 19
+        minSdkVersion 21
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-    }
+        signingConfig signingConfigs.debug
 
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        android.applicationVariants.all { variant ->
+
+            def formattedDate = new Date().format('ddMMyyyy-(hh-mm a)')
+            def flavor = variant.flavorName
+
+            variant.outputs.all { output ->
+                def fileName = "VoiceOfFreedom" + "-" + defaultConfig.versionName + "-" + formattedDate + "-" + variant.getName() + ".apk"
+                outputFileName = new File(".", fileName)
+            }
         }
     }
 
@@ -35,6 +42,57 @@ android {
     }
     kotlinOptions {
         jvmTarget = "1.8"
+    }
+
+
+    lintOptions {
+        abortOnError false
+    }
+
+
+    buildTypes {
+        release {
+            minifyEnabled true
+            shrinkResources true
+            debuggable false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            multiDexEnabled = true
+        }
+
+        debug {
+            minifyEnabled false
+            shrinkResources false
+            debuggable true
+        }
+    }
+
+
+    signingConfigs {
+        release {
+            keyAlias 'key0'
+            keyPassword 'jeff2468JEFF'
+            storeFile file('/Users/jeffemuveyan/AndroidStudioProjects/VoiceofFreedom/app/vof_key')
+            storePassword 'jeff2468JEFF'
+        }
+
+        debug {
+            keyAlias 'key0'
+            keyPassword 'jeff2468JEFF'
+            storeFile file('/Users/jeffemuveyan/AndroidStudioProjects/VoiceofFreedom/app/vof_key')
+            storePassword 'jeff2468JEFF'
+        }
+    }
+
+
+    productFlavors {
+        flavorDimensions "default"
+
+        production {
+        }
+
+        staging {
+            applicationId "com.bellogate.voiceoffreedom.staging"
+        }
     }
 
 }
@@ -53,7 +111,9 @@ dependencies {
     implementation 'androidx.navigation:navigation-fragment-ktx:2.2.2'
     implementation 'androidx.navigation:navigation-ui-ktx:2.2.2'
     implementation 'com.google.firebase:firebase-auth:19.3.1'
-    implementation 'com.google.firebase:firebase-firestore:17.1.2'
+    implementation 'com.google.firebase:firebase-firestore:21.4.3'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0'
+    implementation 'com.google.firebase:firebase-storage-ktx:19.1.1'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
@@ -65,6 +125,9 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
     // Lifecycles only (without ViewModel or LiveData)
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version"
+
+    //Firebase Auth UI
+    implementation 'com.firebaseui:firebase-ui-auth:4.3.1'
 
     // Saved state module for ViewModel
     implementation "androidx.lifecycle:lifecycle-viewmodel-savedstate:$lifecycle_version"
@@ -98,4 +161,59 @@ dependencies {
 
     // Coroutines
     api "org.jetbrains.kotlinx:kotlinx-coroutines-android:$rootProject.coroutines"
+
+
+    //paystack
+    implementation 'co.paystack.android.design.widget:pinpad:1.0.4'
+    implementation 'co.paystack.android:paystack:3.0.18'
+
+    //Shimmer
+    implementation 'com.facebook.shimmer:shimmer:0.5.0'
+
+    //Picasso
+    implementation 'com.squareup.picasso:picasso:2.71828'
+
+    //Workmanager
+    implementation "androidx.work:work-runtime-ktx:2.3.4"
+    //Workmanager usually causes a duplicate class problem. The following solves it:
+    implementation 'com.google.guava:listenablefuture:9999.0-empty-to-avoid-conflict-with-guava'
+
+    //Glide
+    implementation 'com.github.bumptech.glide:glide:4.11.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
+
+    /* media picker */
+    implementation 'com.greentoad.turtlebody:media-picker:1.0.8'
+    /** The following four dependencies are used by 'com.greentoad.turtlebody:media-picker'
+     /* rxjava */
+    implementation 'io.reactivex.rxjava2:rxjava:2.2.10'
+    implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
+    // Anko Commons
+    implementation "org.jetbrains.anko:anko-commons:$anko_version"
+    // Anko Layouts
+    implementation "org.jetbrains.anko:anko-appcompat-v7:$anko_version"
+
+    //Exo player:
+    implementation 'com.google.android.exoplayer:exoplayer-core:2.11.1'
+    implementation 'com.google.android.exoplayer:exoplayer-dash:2.11.1'
+    implementation 'com.google.android.exoplayer:exoplayer-ui:2.11.1'
+
+    //FirebaseUI for Cloud Firestore
+    implementation 'com.firebaseui:firebase-ui-firestore:6.2.1'
+    implementation 'androidx.paging:paging-runtime-ktx:2.1.0'
+
+    //In-app-update
+    implementation 'com.google.android.play:core:1.7.3'
+
+    //Image slider:
+    implementation 'com.github.smarteist:autoimageslider:1.3.9-appcompat'
+
+    // Recommended: Add the Firebase SDK for Google Analytics.
+    implementation 'com.google.firebase:firebase-analytics-ktx:17.4.3'
+
+    // Add the Firebase Crashlytics SDK.
+    implementation 'com.google.firebase:firebase-crashlytics:17.1.0'
+
+    /* coroutines support for firebase operations */
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.1.1'
 }

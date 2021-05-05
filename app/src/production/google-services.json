@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "739067412288",
+    "firebase_url": "https://voiceoffreedom-9cdf9.firebaseio.com",
+    "project_id": "voiceoffreedom-9cdf9",
+    "storage_bucket": "voiceoffreedom-9cdf9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:739067412288:android:89093fa6b9e928c1dd44a5",
+        "android_client_info": {
+          "package_name": "com.bellogate.voiceoffreedom"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "739067412288-h54mphf9kq97j0k7g1n2e5m6sgvf7hlu.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.bellogate.voiceoffreedom",
+            "certificate_hash": "5c818cc8542d5449b3a8255d414512c877eb5f83"
+          }
+        },
+        {
+          "client_id": "739067412288-9g1454vl0pvdbd0erv82olsvb2j4hldf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyByyd5IJSItyskTf9-tYNO60rMF09GMIu4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "739067412288-9g1454vl0pvdbd0erv82olsvb2j4hldf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

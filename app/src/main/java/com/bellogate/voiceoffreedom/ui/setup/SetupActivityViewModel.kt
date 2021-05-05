@@ -3,16 +3,19 @@ package com.bellogate.voiceoffreedom.ui.setup
 import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.bellogate.voiceoffreedom.data.datasource.network.NetworkHelper
-import com.bellogate.voiceoffreedom.data.setup.SetupRepository
+import com.bellogate.voiceoffreedom.data.setup.AdminRepository
 import com.bellogate.voiceoffreedom.data.setup.SetupState
+import com.bellogate.voiceoffreedom.data.UserRepository
 import com.bellogate.voiceoffreedom.model.Admin
 import com.bellogate.voiceoffreedom.model.User
+import com.bellogate.voiceoffreedom.ui.BaseViewModel
+import com.bellogate.voiceoffreedom.ui.SharedViewModel
+import com.bellogate.voiceoffreedom.util.updateUserAdminStatus
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-class SetupActivityViewModel: ViewModel() {
+class SetupActivityViewModel: BaseViewModel() {
 
     private val _setUpState = MutableLiveData<SetupState>()
     val setUpState : LiveData<SetupState> = _setUpState
@@ -26,15 +29,18 @@ class SetupActivityViewModel: ViewModel() {
      * If there is, it will fetch all admin from Firebase and check if the email of the user
      * on the device is among that list. If there is no user on the device, nothing happens.
      * */
-    fun checkAndUpdateUserStatus(context: Context) = viewModelScope.launch {
-        val repository = SetupRepository(context)
+    fun checkAndUpdateUserAdminStatus(context: Context) = viewModelScope.launch {
+        val repository =
+            UserRepository(context)
+        val adminRepository = AdminRepository(context)
         //check if there is a user on the local database:
         val user = repository.getUserSynchronously(1)
         if(user != null) {
-            repository.fetchAllAdmin { success, result ->
+            adminRepository.fetchAllAdmin { success, result ->
                 if (success) {
                     //search through the list of admin and update the user if his email is on the list
-                    updateUser(context, user!!, result)
+                    updateUserAdminStatus(context, user!!, result, viewModelScope)
+                    _setUpState.postValue(SetupState.COMPLETE)
                 } else {
                     _setUpState.postValue(SetupState.NETWORK_ERROR)
                 }
@@ -43,24 +49,6 @@ class SetupActivityViewModel: ViewModel() {
             _setUpState.postValue(SetupState.COMPLETE)
         }
     }
-
-
-    private fun updateUser(context: Context, user: User, adminList: ArrayList<Admin>?) = viewModelScope.launch{
-        val repository = SetupRepository(context)
-
-        adminList?.let {
-            for(admin in it){
-                if(admin.email == user.email){//update the user to an admin
-                    user.isAdmin = true
-                    repository.updateUser(user)
-                }else{//this means that the present user should not be an admin
-                    user.isAdmin = false
-                    repository.updateUser(user)
-                }
-            }
-        }
-    }
-
 
 }
 

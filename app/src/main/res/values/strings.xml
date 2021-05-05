@@ -13,4 +13,63 @@
 
     <string name="home_second">Home Second</string>
     <string name="offline_tap_to_try_again">Offline, tap here to try again</string>
+    <string name="sign_up_sign_in">Sign up / Sign in</string>
+    <string name="log_out">Log out</string>
+    <string name="statgin">staging</string>
+    <string name="give">Give</string>
+    <string name="proceed">Proceed</string>
+    <string name="amount_ngn">Amount (NGN)</string>
+    <string name="enter_amount">Enter amount</string>
+    <string name="naira">₦</string>
+    <string name="your_givings">Your givings</string>
+    <string name="network_error">Could not connect, try again</string>
+    <string name="verify">Verify</string>
+    <string name="your_transfer_was_successful">Your transfer was successful</string>
+    <string name="successful">Successful</string>
+    <string name="devotional">Devotional</string>
+    <string name="retry">Retry</string>
+    <string name="no_data_found_for_selected_date">Network error or no devotional found for selected date</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="manage_devotionals">Manage Devotionals</string>
+    <string name="add_devotional">Add devotional</string>
+    <string name="add_new_devotionals">Add new devotionals</string>
+    <string name="post">Post</string>
+    <string name="tap_to_add_image">Tap to add image</string>
+    <string name="select_date">Select date</string>
+    <string name="media">Media</string>
+    <string name="add_video">Add video</string>
+    <string name="cancel">Cancel</string>
+    <string name="video_title">Video title</string>
+    <string name="percent">0%</string>
+    <string name="title">Title</string>
+    <string name="text_videolink">https://firebasestorage.googleapis.com/v0/b/voiceoffreedom-9cdf9.appspot.com/o/videos%2F194b928e-cce5-498b-b161-728f8582e8b6?alt=media&amp;token=a8401930-bdc5-4803-b56a-0d4b9894e984</string>
+    <string name="voice_of_freedom_ministries_int_l_inc">Voice of Freedom Ministries Int\'l. Inc</string>
+    <string name="http_www_voiceoffreedomministries_org">http://www.voiceoffreedomministries.org/</string>
+
+    <string name="complete">Update completed</string>
+    <string name="update_stopped">Update stopped</string>
+    <string name="voice_of_freedom_ministries">Voice Of Freedom Ministries Intl.</string>
+    <string name="change_image">Change Image</string>
+    <string name="about">About</string>
+    <string name="about_message">The Voice of Freedom Ministries is a dynamic and fast growing Church, dedicated to the total liberation of the lives of men and women from satanic bondages.
+
+The Ministry seeks to break the chains and yokes that seem inextricable in the eyes of many who have been held bound by unseen forces of evil.
+
+Bishop (Dr.) Abraham Chigbundu is the man who God has chosen to pilot the affairs of this unique ministry.</string>
+    <string name="video">Video</string>
+    <string name="audio_media_messages">Audio media/messages</string>
+    <string name="get_to_know_us">Get to know us</string>
+    <string name="add_audio">Add audio</string>
+    <string name="download_item">Download</string>
+    <string name="delete_item">Delete</string>
+    <string name="audio_error">Error, try again</string>
+    <string name="audio_loading">Loading...</string>
+    <string name="audio_playing">Now Playing...</string>
+    <string name="no_audio_files">No audio files</string>
+    <string name="service_times">Service times:</string>
+    <string name="about_message_long">VFMi Cathedral, Adesuwa Road.\n 21, Adesuwa Road, GRA, Benin City</string>
+    <string name="live_streaming">Live streaming</string>
+    <string name="locate_a_branch">Locate a branch</string>
 </resources>

@@ -6,15 +6,47 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_home"
-            android:icon="@drawable/ic_menu_camera"
+            android:icon="@drawable/home"
             android:title="@string/menu_home" />
+
         <item
-            android:id="@+id/nav_gallery"
-            android:icon="@drawable/ic_menu_gallery"
-            android:title="@string/menu_gallery" />
+            android:id="@+id/nav_give"
+            android:icon="@drawable/give"
+            android:title="@string/give" />
+
+
         <item
-            android:id="@+id/nav_slideshow"
-            android:icon="@drawable/ic_menu_slideshow"
-            android:title="@string/menu_slideshow" />
+            android:id="@+id/nav_devotional"
+            android:icon="@drawable/devotional"
+            android:title="@string/devotional" />
+
+
+        <item
+            android:id="@+id/nav_video"
+            android:icon="@drawable/media"
+            android:title="@string/video" />
+
+        <item
+            android:id="@+id/nav_audio"
+            android:icon="@drawable/ic_audio"
+            android:title="@string/audio_media_messages" />
+
+        <item
+            android:id="@+id/nav_live"
+            android:icon="@drawable/ic_play_arrow"
+            android:title="@string/live_streaming" />
+
+
+        <item
+            android:id="@+id/nav_branches"
+            android:icon="@drawable/ic_branches"
+            android:title="@string/locate_a_branch" />
+
+
+        <item
+            android:id="@+id/nav_about"
+            android:icon="@drawable/ic_about"
+            android:title="@string/about" />
+
     </group>
 </menu>

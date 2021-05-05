@@ -1,42 +1,79 @@
 {
   "project_info": {
-    "project_number": "739067412288",
-    "firebase_url": "https://voiceoffreedom-9cdf9.firebaseio.com",
-    "project_id": "voiceoffreedom-9cdf9",
-    "storage_bucket": "voiceoffreedom-9cdf9.appspot.com"
+    "project_number": "54142655369",
+    "firebase_url": "https://voiceoffreedom-staging.firebaseio.com",
+    "project_id": "voiceoffreedom-staging",
+    "storage_bucket": "voiceoffreedom-staging.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:739067412288:android:89093fa6b9e928c1dd44a5",
+        "mobilesdk_app_id": "1:54142655369:android:a282b0639c6de645bc5f58",
         "android_client_info": {
           "package_name": "com.bellogate.voiceoffreedom"
         }
       },
       "oauth_client": [
         {
-          "client_id": "739067412288-h54mphf9kq97j0k7g1n2e5m6sgvf7hlu.apps.googleusercontent.com",
+          "client_id": "54142655369-k5s3gptmour6j8podf8oocsvoaulsqi3.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.bellogate.voiceoffreedom",
-            "certificate_hash": "5c818cc8542d5449b3a8255d414512c877eb5f83"
+            "certificate_hash": "e19372da7cd23a01e90650f70f8b797660b45e12"
           }
         },
         {
-          "client_id": "739067412288-9g1454vl0pvdbd0erv82olsvb2j4hldf.apps.googleusercontent.com",
+          "client_id": "54142655369-qaioupo4k0b45cfnn0oo23u0jlf3df5t.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyByyd5IJSItyskTf9-tYNO60rMF09GMIu4"
+          "current_key": "AIzaSyBs_doWQsg9aATE8I2stH_5i7C8q1TwpUE"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "739067412288-9g1454vl0pvdbd0erv82olsvb2j4hldf.apps.googleusercontent.com",
+              "client_id": "54142655369-qaioupo4k0b45cfnn0oo23u0jlf3df5t.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:54142655369:android:4648edd9f7b29016bc5f58",
+        "android_client_info": {
+          "package_name": "com.bellogate.voiceoffreedom.staging"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "54142655369-c47tcjkd1kfqmqs77oae6l0lkdq9dlbb.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.bellogate.voiceoffreedom.staging",
+            "certificate_hash": "e1f88753821aa78cb86c1855348d6812b24e4849"
+          }
+        },
+        {
+          "client_id": "54142655369-qaioupo4k0b45cfnn0oo23u0jlf3df5t.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBs_doWQsg9aATE8I2stH_5i7C8q1TwpUE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "54142655369-qaioupo4k0b45cfnn0oo23u0jlf3df5t.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

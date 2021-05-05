@@ -4,11 +4,9 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import androidx.activity.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProviders
-import com.bellogate.voiceoffreedom.MainActivity
+import com.bellogate.voiceoffreedom.ui.MainActivity
 import com.bellogate.voiceoffreedom.R
 import com.bellogate.voiceoffreedom.data.setup.SetupState
 import kotlinx.android.synthetic.main.activity_setup.*
@@ -21,9 +19,9 @@ class SetupActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_setup)
 
-        tvNetworkFailure.visibility = View.GONE
+        tvNetworkFailure.visibility = View.INVISIBLE
         tvNetworkFailure.setOnClickListener{
-            checkAndUpdateUserStatus()
+            checkAndUpdateUserAdminStatus()
         }
 
         setupActivityViewModel = ViewModelProviders.of(this).get(SetupActivityViewModel::class.java)
@@ -43,12 +41,12 @@ class SetupActivity : AppCompatActivity() {
         })
 
 
-        checkAndUpdateUserStatus()
+        checkAndUpdateUserAdminStatus()
     }
 
-    private fun checkAndUpdateUserStatus() {
-        tvNetworkFailure.visibility = View.GONE
+    private fun checkAndUpdateUserAdminStatus() {
+        tvNetworkFailure.visibility = View.INVISIBLE
         progressBar.visibility = View.VISIBLE
-        setupActivityViewModel.checkAndUpdateUserStatus(this)
+        setupActivityViewModel.checkAndUpdateUserAdminStatus(this)
     }
 }
